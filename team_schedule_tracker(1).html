@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRJ0172 — Daily Schedule</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f3ef;
+    --surface: #ffffff;
+    --surface2: #f0efe9;
+    --border: #e0ddd5;
+    --border2: #ccc9be;
+    --text: #1a1916;
+    --text2: #6b6860;
+    --text3: #a09d96;
+    --green: #1D9E75;
+    --green-bg: #e8f7f1;
+    --green-text: #0d6b4e;
+    --blue: #378ADD;
+    --blue-bg: #e8f2fc;
+    --blue-text: #1a5a9a;
+    --amber: #c47d0a;
+    --amber-bg: #fdf3dc;
+    --amber-text: #7a4e06;
+    --red: #d13b3b;
+    --red-bg: #fdeaea;
+    --font: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .page { max-width: 740px; margin: 0 auto; }
+
+  /* ── Header ── */
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  .page-title {
+    font-size: 11px;
+    font-family: var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .page-heading {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text3);
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--surface);
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .sync-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--border2);
+    flex-shrink: 0;
+  }
+  .sync-dot.live { background: var(--green); animation: blink 2s ease-in-out infinite; }
+  .sync-dot.error { background: var(--red); }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  /* ── Live strip ── */
+  .live-strip {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 1.5rem;
+  }
+  .live-clock {
+    font-family: var(--mono);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .live-next {
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .live-next strong { color: var(--text); font-weight: 500; }
+  .live-date {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text3);
+    text-align: right;
+  }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+    align-items: center;
+  }
+  .btn {
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+  .btn.primary { background: var(--text); color: #fff; border-color: var(--text); }
+  .btn.primary:hover { background: #333; }
+  .progress-wrap { flex: 1; }
+  .progress-label { font-size: 11px; font-family: var(--mono); color: var(--text3); margin-bottom: 4px; }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.4s ease; }
+
+  /* ── Add form ── */
+  .add-form {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 1.25rem;
+    display: none;
+  }
+  .add-form.open { display: block; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .form-grid.full { grid-template-columns: 1fr; }
+  .form-label { font-size: 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); display: block; margin-bottom: 4px; }
+  .form-input {
+    font-family: var(--font);
+    font-size: 13px;
+    padding: 7px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--text);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .form-input:focus { border-color: var(--border2); background: var(--surface); }
+  .type-row { display: flex; gap: 6px; }
+  .type-btn {
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .type-btn.sel { background: var(--text); color: #fff; border-color: var(--text); }
+  .color-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; margin-top: 2px; }
+  .swatch {
+    width: 22px; height: 22px; border-radius: 50%;
+    cursor: pointer; border: 2px solid transparent;
+    transition: transform 0.1s;
+  }
+  .swatch:hover { transform: scale(1.15); }
+  .swatch.sel { border-color: var(--text); }
+  .form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+
+  /* ── Schedule ── */
+  .schedule { display: flex; flex-direction: column; }
+  .slot { display: grid; grid-template-columns: 78px 10px 1fr; gap: 0 12px; align-items: stretch; min-height: 50px; }
+  .slot-time {
+    font-size: 11px;
+    font-family: var(--mono);
+    color: var(--text3);
+    padding: 13px 0 0;
+    text-align: right;
+    line-height: 1.4;
+  }
+  .slot-time .end { color: var(--border2); font-size: 10px; display: block; }
+  .slot-line { display: flex; flex-direction: column; align-items: center; }
+  .slot-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 15px; }
+  .slot-vline { flex: 1; width: 1px; background: var(--border); margin-top: 3px; }
+  .slot:last-child .slot-vline { display: none; }
+
+  .slot-card {
+    margin: 5px 0;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    position: relative;
+    transition: opacity 0.2s;
+  }
+  .slot-card.is-break { background: var(--surface2); border-style: dashed; }
+  .slot-card.is-done { opacity: 0.4; }
+  .slot-card.is-active { border-width: 1.5px; }
+
+  .card-top { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 2px; }
+  .card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    flex: 1;
+    outline: none;
+    background: transparent;
+    border: none;
+    cursor: text;
+    font-family: var(--font);
+    line-height: 1.4;
+    min-width: 0;
+    word-break: break-word;
+  }
+  .card-title:focus { color: var(--text); }
+  .card-detail {
+    font-size: 11px;
+    color: var(--text2);
+    line-height: 1.6;
+    outline: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    cursor: text;
+    resize: none;
+    font-family: var(--font);
+  }
+  .card-note {
+    font-size: 11px;
+    color: var(--green-text);
+    margin-top: 4px;
+    outline: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    font-family: var(--font);
+  }
+  .card-note::before { content: "✓ "; }
+
+  .dur { font-size: 10px; font-family: var(--mono); color: var(--text3); position: absolute; top: 10px; right: 12px; }
+
+  .badge {
+    font-size: 10px;
+    font-family: var(--mono);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .badge-now { background: var(--blue-bg); color: var(--blue-text); }
+  .badge-done { background: var(--green-bg); color: var(--green-text); }
+  .badge-break { background: var(--amber-bg); color: var(--amber-text); }
+
+  .card-actions {
+    position: absolute; top: 8px; right: 8px;
+    display: none; gap: 4px; align-items: center;
+  }
+  .slot-card:hover .card-actions { display: flex; }
+  .act {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text2);
+    cursor: pointer;
+    font-family: var(--font);
+    line-height: 1.6;
+    transition: all 0.1s;
+  }
+  .act:hover { background: var(--surface); color: var(--text); }
+  .act.done-btn { color: var(--green-text); border-color: var(--green); }
+  .act.del-btn:hover { color: var(--red); border-color: var(--red); }
+
+  /* ── Config overlay ── */
+  .overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(26,25,22,0.55);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 520px;
+    width: 100%;
+    border: 1px solid var(--border2);
+  }
+  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .modal p { font-size: 13px; color: var(--text2); margin-bottom: 16px; line-height: 1.6; }
+  .modal code {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    color: var(--text2);
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* ── Firebase config section ── */
+  .config-section {
+    background: var(--amber-bg);
+    border: 1px solid #f5d88a;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 1.25rem;
+    font-size: 12px;
+    color: var(--amber-text);
+    display: none;
+  }
+  .config-section.show { display: block; }
+  .config-section strong { display: block; margin-bottom: 4px; font-size: 13px; }
+
+  @media (max-width: 500px) {
+    .live-strip { grid-template-columns: auto 1fr; }
+    .live-date { display: none; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div>
+      <div class="page-title">PRJ0172 · McPhee Creek · Marble Bar Rd</div>
+      <div class="page-heading">Daily Schedule</div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+      <div class="sync-badge">
+        <div class="sync-dot" id="syncDot"></div>
+        <span id="syncLabel">not connected</span>
+      </div>
+      <button class="btn" onclick="document.getElementById('cfgOverlay').classList.add('open')" style="font-size:11px;padding:4px 12px;">⚙ Firebase setup</button>
+    </div>
+  </div>
+
+  <!-- Firebase not configured warning -->
+  <div class="config-section" id="cfgWarn">
+    <strong>⚠ Firebase not configured — changes are local only</strong>
+    Click "Firebase setup" above to connect live sync so your whole team sees updates in real time.
+  </div>
+
+  <!-- Live strip -->
+  <div class="live-strip">
+    <div class="live-clock" id="liveClock">--:--</div>
+    <div class="live-next" id="liveNext">—</div>
+    <div class="live-date" id="liveDate"></div>
+  </div>
+
+  <!-- Progress -->
+  <div class="toolbar">
+    <button class="btn primary" onclick="toggleForm()">+ Add task</button>
+    <div class="progress-wrap">
+      <div class="progress-label" id="progressLabel">0 / 0 done</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- Add form -->
+  <div class="add-form" id="addForm">
+    <div class="form-grid">
+      <div><label class="form-label">Start</label><input class="form-input" type="time" id="f-start" value="08:00"></div>
+      <div><label class="form-label">End</label><input class="form-input" type="time" id="f-end" value="09:00"></div>
+    </div>
+    <div class="form-grid full" style="margin-bottom:10px;">
+      <div><label class="form-label">Title</label><input class="form-input" id="f-title" placeholder="Task title"></div>
+    </div>
+    <div class="form-grid full" style="margin-bottom:10px;">
+      <div><label class="form-label">Detail (optional)</label><input class="form-input" id="f-detail" placeholder="Additional detail"></div>
+    </div>
+    <div class="form-grid" style="margin-bottom:0;">
+      <div>
+        <label class="form-label">Type</label>
+        <div class="type-row">
+          <button class="type-btn sel" id="tb-work" onclick="selType('work')">Work</button>
+          <button class="type-btn" id="tb-break" onclick="selType('break')">Break</button>
+        </div>
+      </div>
+      <div>
+        <label class="form-label">Colour</label>
+        <div class="color-row" id="colorPicker"></div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn" onclick="toggleForm()">Cancel</button>
+      <button class="btn primary" onclick="addTask()">Add task</button>
+    </div>
+  </div>
+
+  <!-- Schedule -->
+  <div class="schedule" id="schedule"></div>
+
+</div>
+
+<!-- Firebase setup modal -->
+<div class="overlay" id="cfgOverlay">
+  <div class="modal">
+    <h3>Connect Firebase live sync</h3>
+    <p>Follow these steps once, then paste your config below and save. Anyone who opens this file with the same config will see live updates.</p>
+    <p style="margin-bottom:8px;"><strong>Steps:</strong><br>
+    1. Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--blue);">console.firebase.google.com</a><br>
+    2. Create a project → Add a web app → copy the firebaseConfig object<br>
+    3. In the console go to <em>Realtime Database → Create database → Start in test mode</em><br>
+    4. Paste your config values below and click Save</p>
+    <div class="form-grid full" style="margin-bottom:8px;">
+      <div><label class="form-label">apiKey</label><input class="form-input" id="cfg-apiKey" placeholder="AIzaSy..."></div>
+    </div>
+    <div class="form-grid full" style="margin-bottom:8px;">
+      <div><label class="form-label">databaseURL</label><input class="form-input" id="cfg-dbUrl" placeholder="https://your-project-default-rtdb.firebaseio.com"></div>
+    </div>
+    <div class="form-grid full" style="margin-bottom:8px;">
+      <div><label class="form-label">projectId</label><input class="form-input" id="cfg-projectId" placeholder="your-project-id"></div>
+    </div>
+    <div class="form-grid full" style="margin-bottom:8px;">
+      <div><label class="form-label">appId</label><input class="form-input" id="cfg-appId" placeholder="1:123456789:web:abc..."></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById('cfgOverlay').classList.remove('open')">Cancel</button>
+      <button class="btn primary" onclick="saveConfig()">Save &amp; connect</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+<script>
+// ── Default schedule data ──────────────────────────────────────────
+const DEFAULTS = [
+  {id:"s1",start:"08:00",end:"08:30",type:"work",color:"#1D9E75",title:"QR scanner for JMP — developed and laminated",detail:"QR code developed, laminated and displayed at site entry.",done:true,note:"Done — QR code live at site entry"},
+  {id:"s2",start:"08:30",end:"09:05",type:"work",color:"#1D9E75",title:"Emails — JMP reply to Scott + toolbox review",detail:"Replied to Scott re JMP QR code. Reviewed Line of Fire toolbox talk content.",done:true,note:"Done — emails actioned"},
+  {id:"s3",start:"09:05",end:"09:45",type:"work",color:"#1D9E75",title:"Emergency response team poster + First Aider poster",detail:"Updated and displayed Emergency Response Team poster and First Aider poster on site.",done:true,note:"Done — posters updated and displayed"},
+  {id:"s4",start:"09:45",end:"10:30",type:"work",color:"#378ADD",title:"SAI360 — Safety observations (×2)",detail:"Complete and submit 2 safety observations in SAI360.",done:false,note:""},
+  {id:"s5",start:"10:30",end:"11:00",type:"break",color:"#c47d0a",title:"Morning break",detail:"",done:false,note:""},
+  {id:"s6",start:"11:00",end:"11:45",type:"work",color:"#378ADD",title:"SAI360 — HSE inspections (×2) + Environmental (×1)",detail:"Complete 2 HSE inspections and 1 environmental inspection in SAI360.",done:false,note:""},
+  {id:"s7",start:"11:45",end:"12:30",type:"work",color:"#378ADD",title:"SAI360 — Critical risk inspections (×2)",detail:"Complete 2 critical risk inspections. Clears all monthly KPI targets.",done:false,note:""},
+  {id:"s8",start:"12:30",end:"13:30",type:"work",color:"#c47d0a",title:"ACT-0007628 — Close out with Frazer",detail:"Confirm reflective tape applied to all SJ Traffic LVs on night shift. Close action in SAI360.",done:false,note:""},
+  {id:"s9",start:"13:30",end:"14:00",type:"work",color:"#D85A30",title:"Field visit — work front walk",detail:"Get out to the active work fronts. Catch up with supervisors.",done:false,note:""},
+  {id:"s10",start:"14:00",end:"14:30",type:"break",color:"#c47d0a",title:"Afternoon break",detail:"",done:false,note:""},
+  {id:"s11",start:"14:30",end:"15:30",type:"work",color:"#D85A30",title:"Field visit continued — supervisor catch-ups",detail:"Continue work front walk. Observe plant and TTM controls.",done:false,note:""},
+  {id:"s12",start:"15:30",end:"16:00",type:"work",color:"#7F77DD",title:"Subcontractor SWMS review follow-up",detail:"Follow up on action items from SWMS review. Confirm with relevant parties.",done:false,note:""},
+  {id:"s13",start:"16:00",end:"16:30",type:"work",color:"#888780",title:"Admin — SAI360 wrap-up",detail:"Ensure all SAI360 entries submitted. Check open notifications or assigned actions.",done:false,note:""},
+  {id:"s14",start:"16:30",end:"17:00",type:"work",color:"#888780",title:"End of day — review and plan tomorrow",detail:"Log completed tasks, update KPI tracker, note anything carried forward.",done:false,note:""}
+];
+
+const COLORS = ["#1D9E75","#378ADD","#D85A30","#7F77DD","#c47d0a","#888780","#d13b3b","#0d6b4e","#185fa5"];
+let selColor = COLORS[0];
+let selTypeVal = "work";
+let slots = [];
+let db = null;
+let dbRef = null;
+let saveTimer = null;
+let ignoreNext = false;
+
+// ── Config ────────────────────────────────────────────────────────
+function loadConfig() {
+  try { return JSON.parse(localStorage.getItem("fb_cfg") || "null"); } catch(e) { return null; }
+}
+function saveConfig() {
+  const cfg = {
+    apiKey: document.getElementById("cfg-apiKey").value.trim(),
+    databaseURL: document.getElementById("cfg-dbUrl").value.trim(),
+    projectId: document.getElementById("cfg-projectId").value.trim(),
+    appId: document.getElementById("cfg-appId").value.trim()
+  };
+  if (!cfg.apiKey || !cfg.databaseURL || !cfg.projectId || !cfg.appId) {
+    alert("Please fill in all four fields."); return;
+  }
+  localStorage.setItem("fb_cfg", JSON.stringify(cfg));
+  document.getElementById("cfgOverlay").classList.remove("open");
+  initFirebase(cfg);
+}
+
+// ── Firebase ──────────────────────────────────────────────────────
+function initFirebase(cfg) {
+  try {
+    if (firebase.apps.length) firebase.app().delete();
+    firebase.initializeApp({ ...cfg, authDomain: cfg.projectId+".firebaseapp.com", storageBucket: cfg.projectId+".appspot.com", messagingSenderId: "000000000000" });
+    db = firebase.database();
+    dbRef = db.ref("schedule_prj0172");
+    setSyncState("connecting...", "connecting");
+    dbRef.once("value").then(snap => {
+      const val = snap.val();
+      if (val && val.slots) {
+        slots = val.slots;
+      } else {
+        slots = DEFAULTS.map(s => ({...s}));
+        pushToDb();
+      }
+      render();
+      setSyncState("live", "live");
+      document.getElementById("cfgWarn").classList.remove("show");
+      dbRef.on("value", snap => {
+        if (ignoreNext) { ignoreNext = false; return; }
+        const v = snap.val();
+        if (v && v.slots) { slots = v.slots; render(); setSyncState("updated", "live"); setTimeout(()=>setSyncState("live","live"),1200); }
+      });
+    }).catch(e => {
+      setSyncState("connection failed", "error");
+      document.getElementById("cfgWarn").classList.add("show");
+    });
+  } catch(e) {
+    setSyncState("error", "error");
+    document.getElementById("cfgWarn").classList.add("show");
+  }
+}
+
+function pushToDb() {
+  if (!dbRef) return;
+  ignoreNext = true;
+  dbRef.set({ slots, updatedAt: Date.now() }).catch(e => setSyncState("save error","error"));
+}
+function queueSave() { clearTimeout(saveTimer); saveTimer = setTimeout(pushToDb, 700); }
+
+function setSyncState(label, state) {
+  document.getElementById("syncLabel").textContent = label;
+  const dot = document.getElementById("syncDot");
+  dot.className = "sync-dot" + (state === "live" ? " live" : state === "error" ? " error" : "");
+}
+
+// ── Time helpers ───────────────────────────────────────────────────
+function toMins(t) { const [h,m] = t.split(":").map(Number); return h*60+m; }
+function fmtDur(s,e) { const d=toMins(e)-toMins(s); return d>=60?(d/60)+"h":d+"m"; }
+function uid() { return "t"+Date.now()+Math.random().toString(36).slice(2,5); }
+function status(slot) {
+  if (slot.done) return "done";
+  const now = new Date(); const cur = now.getHours()*60+now.getMinutes();
+  const s=toMins(slot.start), e=toMins(slot.end);
+  if(cur>=e) return "done";
+  if(cur>=s) return slot.type==="break"?"break":"active";
+  return "future";
+}
+
+// ── Render ─────────────────────────────────────────────────────────
+function render() {
+  const now = new Date();
+  const cur = now.getHours()*60+now.getMinutes();
+  document.getElementById("liveClock").textContent = String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+  document.getElementById("liveDate").textContent = now.toLocaleDateString("en-AU",{weekday:"long",day:"2-digit",month:"long"});
+
+  const sorted = [...slots].sort((a,b)=>toMins(a.start)-toMins(b.start));
+
+  const next = sorted.find(s=>!s.done&&toMins(s.start)>cur);
+  if (next) { const mins=toMins(next.start)-cur; document.getElementById("liveNext").innerHTML=`Next: <strong>${esc(next.title)}</strong> in ${mins}m`; }
+  else if(cur>=toMins("17:00")) { document.getElementById("liveNext").innerHTML=`<strong>Day complete — well done!</strong>`; }
+  else { document.getElementById("liveNext").textContent="—"; }
+
+  const total = sorted.filter(s=>s.type==="work").length;
+  const done = sorted.filter(s=>s.type==="work"&&s.done).length;
+  document.getElementById("progressLabel").textContent=`${done} / ${total} tasks done`;
+  document.getElementById("progressFill").style.width=(total?Math.round(done/total*100):0)+"%";
+
+  const sched = document.getElementById("schedule");
+  sched.innerHTML = "";
+
+  sorted.forEach(slot => {
+    const st = status(slot);
+    const isActive = st==="active", isDone = st==="done", isBreak = slot.type==="break";
+    const dotColor = isDone?"#1D9E75":isActive?slot.color:isBreak?"#c47d0a":slot.color+"99";
+    const cardStyle = isActive?`background:${slot.color}12;border-color:${slot.color};`:"";
+    const badge = slot.done?`<span class="badge badge-done">done</span>`
+      :isActive?`<span class="badge badge-now">now</span>`
+      :isDone?`<span class="badge badge-done">done</span>`
+      :isBreak?`<span class="badge badge-break">break</span>`:"";
+    const doneLabel = slot.done?"Undo":"Done";
+
+    const div = document.createElement("div");
+    div.className="slot";
+    div.innerHTML=`
+      <div class="slot-time">${slot.start}<span class="end">${slot.end}</span></div>
+      <div class="slot-line">
+        <div class="slot-dot" style="background:${dotColor}"></div>
+        <div class="slot-vline"></div>
+      </div>
+      <div class="slot-card${isDone?" is-done":""}${isBreak?" is-break":""}${isActive?" is-active":""}" style="${cardStyle}">
+        <div class="card-actions">
+          <button class="act done-btn" onclick="toggleDone('${slot.id}')">${doneLabel}</button>
+          <button class="act del-btn" onclick="deleteSlot('${slot.id}')">✕</button>
+        </div>
+        <div class="card-top">
+          <span class="card-title" contenteditable="true" data-id="${slot.id}" data-field="title" onblur="updateField(this)">${esc(slot.title)}</span>
+          ${badge}
+          <span class="dur" style="position:static;margin-left:auto;flex-shrink:0;">${fmtDur(slot.start,slot.end)}</span>
+        </div>
+        ${slot.detail!==undefined?`<div class="card-detail" contenteditable="true" data-id="${slot.id}" data-field="detail" onblur="updateField(this)">${esc(slot.detail)}</div>`:""}
+        ${slot.note?`<div class="card-note" contenteditable="true" data-id="${slot.id}" data-field="note" onblur="updateField(this)">${esc(slot.note)}</div>`:""}
+      </div>`;
+    sched.appendChild(div);
+  });
+}
+
+function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+// ── Actions ────────────────────────────────────────────────────────
+function updateField(el) {
+  const s = slots.find(x=>x.id===el.dataset.id);
+  if(s){s[el.dataset.field]=el.innerText.trim();queueSave();}
+}
+function toggleDone(id) {
+  const s=slots.find(x=>x.id===id);
+  if(s){s.done=!s.done;render();pushToDb();}
+}
+function deleteSlot(id) {
+  if(!confirm("Remove this task?"))return;
+  slots=slots.filter(x=>x.id!==id);render();pushToDb();
+}
+function toggleForm() { document.getElementById("addForm").classList.toggle("open"); }
+function selType(t) {
+  selTypeVal=t;
+  document.getElementById("tb-work").classList.toggle("sel",t==="work");
+  document.getElementById("tb-break").classList.toggle("sel",t==="break");
+}
+function addTask() {
+  const start=document.getElementById("f-start").value;
+  const end=document.getElementById("f-end").value;
+  const title=document.getElementById("f-title").value.trim();
+  const detail=document.getElementById("f-detail").value.trim();
+  if(!title||!start||!end){alert("Please fill in start time, end time and title.");return;}
+  slots.push({id:uid(),start,end,type:selTypeVal,color:selColor,title,detail,done:false,note:""});
+  document.getElementById("f-title").value="";
+  document.getElementById("f-detail").value="";
+  toggleForm();render();pushToDb();
+}
+
+// ── Init ────────────────────────────────────────────────────────────
+function buildColorPicker() {
+  const row=document.getElementById("colorPicker");
+  COLORS.forEach(c=>{
+    const sw=document.createElement("div");
+    sw.className="swatch"+(c===selColor?" sel":"");
+    sw.style.background=c;
+    sw.onclick=()=>{selColor=c;document.querySelectorAll(".swatch").forEach(s=>s.classList.toggle("sel",s===sw));};
+    row.appendChild(sw);
+  });
+}
+
+// Pre-fill modal if config exists
+function prefillConfig() {
+  const cfg=loadConfig();
+  if(!cfg)return;
+  document.getElementById("cfg-apiKey").value=cfg.apiKey||"";
+  document.getElementById("cfg-dbUrl").value=cfg.databaseURL||"";
+  document.getElementById("cfg-projectId").value=cfg.projectId||"";
+  document.getElementById("cfg-appId").value=cfg.appId||"";
+}
+
+buildColorPicker();
+prefillConfig();
+
+const savedCfg = loadConfig();
+if(savedCfg && savedCfg.apiKey && savedCfg.databaseURL){
+  initFirebase(savedCfg);
+} else {
+  slots = DEFAULTS.map(s=>({...s}));
+  document.getElementById("cfgWarn").classList.add("show");
+  setSyncState("not connected","");
+  render();
+}
+
+setInterval(render,30000);
+</script>
+</body>
+</html>

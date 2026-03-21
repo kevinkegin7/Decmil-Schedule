@@ -471,9 +471,9 @@
 <script>
 // ── Default schedule data ──────────────────────────────────────────
 const DEFAULTS = [
-  {id:"s1",start:"08:00",end:"08:30",type:"work",color:"#1D9E75",title:"QR scanner for JMP — developed and laminated",detail:"QR code developed, laminated and displayed at site entry.",done:true,note:"Done — QR code live at site entry"},
-  {id:"s2",start:"08:30",end:"09:05",type:"work",color:"#1D9E75",title:"Emails — JMP reply to Scott + toolbox review",detail:"Replied to Scott re JMP QR code. Reviewed Line of Fire toolbox talk content.",done:true,note:"Done — emails actioned"},
-  {id:"s3",start:"09:05",end:"09:45",type:"work",color:"#1D9E75",title:"Emergency response team poster + First Aider poster",detail:"Updated and displayed Emergency Response Team poster and First Aider poster on site.",done:true,note:"Done — posters updated and displayed"},
+  {id:"s1",start:"08:00",end:"08:30",type:"work",color:"#1D9E75",title:"QR scanner for JMP — developed and laminated",detail:"QR code developed, laminated and displayed at site entry.",done:false,note:""},
+  {id:"s2",start:"08:30",end:"09:05",type:"work",color:"#1D9E75",title:"Emails — JMP reply to Scott + toolbox review",detail:"Replied to Scott re JMP QR code. Reviewed Line of Fire toolbox talk content.",done:false,note:""},
+  {id:"s3",start:"09:05",end:"09:45",type:"work",color:"#1D9E75",title:"Emergency response team poster + First Aider poster",detail:"Updated and displayed Emergency Response Team poster and First Aider poster on site.",done:false,note:""},
   {id:"s4",start:"09:45",end:"10:30",type:"work",color:"#378ADD",title:"SAI360 — Safety observations (×2)",detail:"Complete and submit 2 safety observations in SAI360.",done:false,note:""},
   {id:"s5",start:"10:30",end:"11:00",type:"break",color:"#c47d0a",title:"Morning break",detail:"",done:false,note:""},
   {id:"s6",start:"11:00",end:"11:45",type:"work",color:"#378ADD",title:"SAI360 — HSE inspections (×2) + Environmental (×1)",detail:"Complete 2 HSE inspections and 1 environmental inspection in SAI360.",done:false,note:""},
@@ -570,8 +570,7 @@ function status(slot) {
   if (slot.done) return "done";
   const now = new Date(); const cur = now.getHours()*60+now.getMinutes();
   const s=toMins(slot.start), e=toMins(slot.end);
-  if(cur>=e) return "done";
-  if(cur>=s) return slot.type==="break"?"break":"active";
+  if(cur>=s && cur<e) return slot.type==="break"?"break":"active";
   return "future";
 }
 

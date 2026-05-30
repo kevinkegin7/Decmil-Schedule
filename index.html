@@ -7,100 +7,89 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#03070d; --bg2:#070f1a;
-  --panel:rgba(8,18,32,.7); --panel2:rgba(12,24,40,.9);
-  --line:rgba(0,212,255,.15); --line2:rgba(0,212,255,.35);
-  --cyan:#00d4ff; --cyan-dim:#0891b2;
-  --txt:#e0f2fe; --txt2:#7dd3fc; --txt3:#475569;
-  --amber:#fbbf24; --red:#ff3355; --green:#22ff88;
-  --purple:#c084fc; --orange:#ff8533;
+  --bg:#03070d;--bg2:#070f1a;--panel:rgba(8,18,32,.7);--panel2:rgba(12,24,40,.9);
+  --line:rgba(0,212,255,.15);--line2:rgba(0,212,255,.35);
+  --cyan:#00d4ff;--cyan-dim:#0891b2;--txt:#e0f2fe;--txt2:#7dd3fc;--txt3:#475569;
+  --amber:#fbbf24;--red:#ff3355;--green:#22ff88;--purple:#c084fc;--orange:#ff8533;
+  --gemini:#4285f4;--claude:#cc785c;--openai:#10a37f;
   --glow:0 0 8px rgba(0,212,255,.6),0 0 20px rgba(0,212,255,.2);
-  --glow-g:0 0 8px rgba(34,255,136,.6),0 0 20px rgba(34,255,136,.2);
-  --glow-r:0 0 8px rgba(255,51,85,.6),0 0 20px rgba(255,51,85,.2);
-  --glow-a:0 0 8px rgba(251,191,36,.6),0 0 20px rgba(251,191,36,.2);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{background:var(--bg)}
-body{
-  font-family:'Rajdhani',sans-serif;color:var(--txt);padding:14px;padding-bottom:140px;max-width:720px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden;
-  background:radial-gradient(ellipse at top,rgba(0,212,255,.06),transparent 60%),radial-gradient(ellipse at bottom,rgba(168,85,247,.04),transparent 60%),linear-gradient(180deg,#03070d 0%,#050a14 100%);
-}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.4;background-image:linear-gradient(rgba(0,212,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.06) 1px,transparent 1px);background-size:40px 40px;animation:gd 60s linear infinite}
-@keyframes gd{to{background-position:40px 40px,40px 40px}}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at center,transparent 30%,rgba(3,7,13,.7) 100%)}
-body > *{position:relative;z-index:1}
+html,body{background:var(--bg);height:100%;overflow:hidden}
+body{font-family:'Rajdhani',sans-serif;color:var(--txt);min-height:100vh;position:relative;background:radial-gradient(ellipse at top,rgba(0,212,255,.05),transparent 60%),linear-gradient(180deg,#03070d 0%,#050a14 100%)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;background-image:linear-gradient(rgba(0,212,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.05) 1px,transparent 1px);background-size:50px 50px;animation:gd 60s linear infinite}
+@keyframes gd{to{background-position:50px 50px,50px 50px}}
 
-.frame{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px}
-.frame::before,.frame::after,.brkA,.brkB{position:absolute;width:14px;height:14px;pointer-events:none;content:""}
-.frame::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);box-shadow:var(--glow)}
-.frame::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);box-shadow:var(--glow)}
-.brkA{top:-1px;right:-1px;border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);box-shadow:var(--glow)}
-.brkB{bottom:-1px;left:-1px;border-bottom:2px solid var(--cyan);border-left:2px solid var(--cyan);box-shadow:var(--glow)}
+/* Full-screen dashboard grid */
+.app{position:relative;z-index:1;height:100vh;display:grid;grid-template-areas:"hdr hdr hdr" "side main intel" "dock dock dock";grid-template-columns:300px 1fr 340px;grid-template-rows:54px 1fr 64px;gap:10px;padding:10px}
+.hdr{grid-area:hdr;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--panel2);border:1px solid var(--line2);border-radius:6px;position:relative}
+.side{grid-area:side;overflow-y:auto;overflow-x:hidden;padding-right:4px}
+.main{grid-area:main;overflow-y:auto;overflow-x:hidden;padding-right:4px}
+.intel{grid-area:intel;overflow:hidden;display:flex;flex-direction:column;gap:10px}
+.dock-area{grid-area:dock}
 
-.hdr-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:8px 4px;border-bottom:1px solid var(--line);position:relative}
-.hdr-bar::after{content:"";position:absolute;bottom:-1px;left:0;width:80px;height:1px;background:var(--cyan);box-shadow:var(--glow)}
+/* Scrollbars */
+.side::-webkit-scrollbar,.main::-webkit-scrollbar,.intel-list::-webkit-scrollbar,.jc-msgs::-webkit-scrollbar{width:5px}
+.side::-webkit-scrollbar-thumb,.main::-webkit-scrollbar-thumb,.intel-list::-webkit-scrollbar-thumb,.jc-msgs::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
+
 .hdr-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow);display:flex;align-items:center;gap:10px}
 .dot{position:relative;width:10px;height:10px;border-radius:50%;background:var(--txt3)}
 .dot.on{background:var(--green);box-shadow:0 0 8px var(--green)}
 .dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
 .dot.on::before,.dot.off::before{content:"";position:absolute;inset:-6px;border-radius:50%;animation:pr 2s ease-out infinite}
-.dot.on::before{border:1px solid var(--green)} .dot.off::before{border:1px solid var(--red);animation-duration:1.2s}
+.dot.on::before{border:1px solid var(--green)}.dot.off::before{border:1px solid var(--red)}
 @keyframes pr{to{transform:scale(2);opacity:0}}
+.hdr-strip{display:flex;gap:14px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);letter-spacing:.5px}
+.hdr-strip span b{color:var(--cyan);font-weight:400}
+.brain-pill{display:inline-block;padding:1px 7px;border-radius:99px;font-weight:700;letter-spacing:1px}
+.brain-pill.gemini{background:rgba(66,133,244,.18);color:var(--gemini);border:1px solid rgba(66,133,244,.4)}
+.brain-pill.claude{background:rgba(204,120,92,.18);color:var(--claude);border:1px solid rgba(204,120,92,.4)}
+.brain-pill.openai{background:rgba(16,163,127,.18);color:var(--openai);border:1px solid rgba(16,163,127,.4)}
+.brain-pill.off{background:rgba(71,85,105,.18);color:var(--txt3);border:1px solid var(--line)}
 .hdr-btns{display:flex;gap:6px}
-.hbtn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--cyan);background:transparent;border:1px solid var(--line2);padding:6px 12px;border-radius:3px;cursor:pointer;text-transform:uppercase}
+.hbtn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--cyan);background:transparent;border:1px solid var(--line2);padding:6px 11px;border-radius:3px;cursor:pointer;text-transform:uppercase}
 .hbtn:hover{background:rgba(0,212,255,.08);box-shadow:var(--glow)}
 .hbtn.ai{color:var(--purple);border-color:rgba(192,132,252,.4)}
-.hbtn.ai:hover{background:rgba(192,132,252,.08);box-shadow:0 0 8px rgba(192,132,252,.4)}
+.hbtn.mail{color:var(--amber);border-color:rgba(251,191,36,.4)}
+.menu-btn{display:none;background:transparent;border:1px solid var(--line2);color:var(--cyan);padding:6px 10px;border-radius:3px;cursor:pointer;font-size:14px}
 
-.sys-strip{display:flex;gap:14px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);margin-bottom:14px;padding:0 4px;flex-wrap:wrap;letter-spacing:.5px}
-.sys-strip span b{color:var(--cyan);font-weight:400}
+/* Frame baseline */
+.frame{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:12px;margin-bottom:10px}
+.frame::before,.frame::after{content:"";position:absolute;width:10px;height:10px;pointer-events:none}
+.frame::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan)}
+.frame::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan)}
+.frame .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);margin-bottom:6px}
 
-.time-row{display:grid;grid-template-columns:auto 1fr;gap:10px;margin-bottom:14px}
-.time-panel{padding:14px 18px}
-.time-panel .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);margin-bottom:4px}
-.clock{font-family:'Orbitron',sans-serif;font-size:34px;font-weight:700;color:var(--cyan);text-shadow:var(--glow);font-variant-numeric:tabular-nums;line-height:1}
-.shift-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);margin-top:6px;letter-spacing:.5px}
-.shift-meta b{color:var(--amber);font-weight:400}
-.status-panel{padding:12px 16px;display:flex;flex-direction:column;justify-content:center}
-.status-panel .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);margin-bottom:4px}
-.status-now{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--cyan);line-height:1.3;margin-bottom:3px}
-.status-next{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);letter-spacing:.5px}
+/* Side panel widgets */
+.clock-wrap{text-align:center;padding:4px 0 8px}
+.clock{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:700;color:var(--cyan);text-shadow:var(--glow);font-variant-numeric:tabular-nums;line-height:1}
+.shift-meta{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px;letter-spacing:.5px}
+.shift-meta b{color:var(--amber)}
+.prog-track{height:5px;background:rgba(0,212,255,.08);border-radius:1px;overflow:hidden;margin:6px 0 4px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan));box-shadow:var(--glow);transition:width .5s}
+.prog-meta{display:flex;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:.5px}
+
+.status-now{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:var(--cyan);line-height:1.3;margin-bottom:3px}
+.status-next{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);letter-spacing:.5px}
 .status-next b{color:var(--txt)}
 
-.prog-strip{margin-bottom:14px;padding:8px 12px;display:flex;align-items:center;gap:12px}
-.prog-strip .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);white-space:nowrap}
-.prog-track{flex:1;height:6px;background:rgba(0,212,255,.08);border-radius:1px;overflow:hidden;position:relative}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan));box-shadow:var(--glow);transition:width .5s;position:relative}
-.prog-fill::after{content:"";position:absolute;right:0;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 8px #fff}
-.prog-pct{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);font-weight:600;min-width:42px;text-align:right}
+.mini-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.ms{background:rgba(0,212,255,.04);border:1px solid var(--line);border-radius:3px;padding:8px 4px;text-align:center}
+.ms .l{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:1px;color:var(--txt3);margin-bottom:3px}
+.ms .v{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--cyan);line-height:1}
+.ms .v small{font-size:8px;color:var(--txt3)}
+.ms .s{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--txt3);margin-top:3px}
 
-.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
-.stat{padding:11px 12px;text-align:center}
-.stat .lbl{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--txt2);margin-bottom:6px}
-.stat .big{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;color:var(--cyan);text-shadow:var(--glow);line-height:1;margin-bottom:6px}
-.stat .big small{font-size:11px;color:var(--txt2);font-weight:500}
-.stat .sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:.5px;line-height:1.3;margin-top:6px}
-.dot-strip{display:flex;gap:3px;justify-content:center}
-.dot-strip .d{width:18px;height:4px;background:rgba(0,212,255,.15);border-radius:1px}
-.dot-strip .d.past{background:var(--cyan);box-shadow:0 0 4px var(--cyan)}
-.dot-strip .d.now{background:#fff;box-shadow:0 0 6px #fff;animation:pn 1.5s ease-in-out infinite}
+.dot-strip{display:flex;gap:2px;justify-content:center;margin-top:4px}
+.dot-strip .d{flex:1;height:3px;background:rgba(0,212,255,.15);border-radius:1px;max-width:6px}
+.dot-strip .d.past{background:var(--cyan)}
+.dot-strip .d.now{background:#fff;box-shadow:0 0 4px #fff;animation:pn 1.5s ease-in-out infinite}
 @keyframes pn{50%{opacity:.4}}
-.stat-mini{display:flex;gap:3px;justify-content:center;margin-top:4px}
-.stat-mini .seg{flex:1;height:3px;background:rgba(0,212,255,.15);border-radius:1px;max-width:8px}
-.stat-mini .seg.on{background:var(--amber);box-shadow:0 0 4px var(--amber)}
 
-.alert{margin-bottom:14px;padding:10px 14px;background:rgba(255,133,51,.06);border:1px solid rgba(255,133,51,.35);border-left:3px solid var(--orange);border-radius:3px;font-size:13px;color:#fdba74;display:flex;gap:10px;align-items:center}
-.alert .icon{font-family:'Orbitron',sans-serif;font-size:14px;color:var(--orange);text-shadow:var(--glow-a)}
-.alert b{color:#fed7aa}
-
-.kpi-wrap{margin-bottom:16px;padding:14px}
-.kpi-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.kpi-head h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow)}
-.kpi-head .month{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2)}
-.kpi-head .month b{color:var(--amber)}
-.rings{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.ring-card{position:relative;text-align:center;padding:6px 4px}
-.ring-svg{width:80px;height:80px;margin:0 auto;position:relative}
+/* KPI rings compact */
+.rings{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.ring-card{text-align:center;padding:4px}
+.ring-svg{width:62px;height:62px;margin:0 auto;position:relative}
 .ring-svg svg{transform:rotate(-90deg)}
 .ring-bg{fill:none;stroke:rgba(0,212,255,.12);stroke-width:6}
 .ring-fill{fill:none;stroke:var(--cyan);stroke-width:6;stroke-linecap:round;transition:.8s ease}
@@ -108,58 +97,37 @@ body > *{position:relative;z-index:1}
 .ring-fill.prog{stroke:var(--amber);filter:drop-shadow(0 0 4px var(--amber))}
 .ring-fill.met{stroke:var(--green);filter:drop-shadow(0 0 6px var(--green))}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.ring-val{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:var(--txt)}
-.ring-val .target{font-size:10px;color:var(--txt3);font-weight:400}
-.ring-pct{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt2);margin-top:2px}
-.ring-lbl{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;color:var(--txt2);margin-top:8px;line-height:1.3;min-height:22px}
-.ring-ctrl{display:flex;gap:4px;justify-content:center;margin-top:6px}
-.ring-btn{width:22px;height:22px;border:1px solid var(--line2);background:transparent;color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:13px;cursor:pointer;border-radius:2px}
+.ring-val{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--txt)}
+.ring-val .target{font-size:8px;color:var(--txt3);font-weight:400}
+.ring-lbl{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:1px;color:var(--txt2);margin-top:4px;line-height:1.3}
+.ring-ctrl{display:flex;gap:3px;justify-content:center;margin-top:4px}
+.ring-btn{width:18px;height:18px;border:1px solid var(--line2);background:transparent;color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer;border-radius:2px;line-height:1;padding:0}
 .ring-btn:hover{background:rgba(0,212,255,.1)}
 
-/* Charts */
-.charts-wrap{margin-bottom:16px;padding:14px}
-.charts-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.charts-head h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow)}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.chart-box{position:relative;min-height:140px}
-.chart-lbl{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt2);letter-spacing:.5px;margin-bottom:6px}
+.alert{padding:8px 12px;background:rgba(255,133,51,.06);border:1px solid rgba(255,133,51,.35);border-left:3px solid var(--orange);border-radius:3px;font-size:11px;color:#fdba74;display:flex;gap:8px;align-items:flex-start;line-height:1.4;margin-bottom:10px}
+.alert .icon{font-family:'Orbitron',sans-serif;font-size:13px;color:var(--orange);flex-shrink:0}
+.alert b{color:#fed7aa}
 
-/* Intel feed */
-.intel-wrap{margin-bottom:16px;padding:14px}
-.intel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.intel-head h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow)}
-.intel-tabs{display:flex;gap:4px}
-.intel-tab{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;color:var(--txt2);background:transparent;border:1px solid var(--line);padding:4px 8px;border-radius:2px;cursor:pointer;text-transform:uppercase}
-.intel-tab.active{background:rgba(0,212,255,.1);color:var(--cyan);border-color:var(--line2)}
-.intel-list{max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
-.intel-list::-webkit-scrollbar{width:4px}
-.intel-list::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
-.intel-item{padding:6px 8px;background:rgba(0,212,255,.03);border-left:2px solid var(--cyan-dim);font-size:12px;line-height:1.35;display:block;color:var(--txt);text-decoration:none}
-.intel-item:hover{background:rgba(0,212,255,.08)}
-.intel-item .meta{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);margin-top:3px;letter-spacing:.3px}
-.intel-loading{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt3);text-align:center;padding:14px;letter-spacing:1px}
-
-/* Mission */
+/* Main mission queue */
 .queue-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;padding:0 4px}
-.queue-head h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow)}
-.queue-head .cnt{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2)}
+.queue-head h3{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow)}
+.queue-head .cnt{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2)}
 .queue-head .cnt b{color:var(--cyan)}
 .slots{display:flex;flex-direction:column;gap:6px}
 .slot{display:grid;grid-template-columns:54px 1fr;gap:10px}
-.t-col{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);text-align:right;padding-top:11px;letter-spacing:.5px}
+.t-col{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);text-align:right;padding-top:11px}
 .t-col .dur{display:block;font-size:9px;color:var(--txt3);margin-top:2px}
-.task{position:relative;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--cyan-dim);padding:10px 12px;border-radius:2px;overflow:hidden;transition:.2s}
+.task{position:relative;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--cyan-dim);padding:10px 12px;border-radius:2px;overflow:hidden}
 .task.done{border-left-color:var(--green);background:rgba(34,255,136,.04)}
 .task.done .title{color:var(--green);text-decoration:line-through;opacity:.7}
 .task.now{border-left-color:var(--cyan);background:rgba(0,212,255,.05);box-shadow:var(--glow)}
 .task.now::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:sl 2.5s linear infinite}
 @keyframes sl{to{transform:translateY(60px)}}
 .task.blocked{border-left-color:var(--orange);background:rgba(255,133,51,.04)}
-.task.p1{border-left-color:var(--red)} .task.p2{border-left-color:var(--amber)} .task.p3{border-left-color:var(--green)}
-.task.meet{border-left-color:var(--purple)} .task.break{border-left-color:var(--txt3)}
+.task.p1{border-left-color:var(--red)}.task.p2{border-left-color:var(--amber)}.task.p3{border-left-color:var(--green)}
+.task.meet{border-left-color:var(--purple)}.task.break{border-left-color:var(--txt3)}
 .task-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .title{font-size:14px;font-weight:600;color:var(--txt);line-height:1.3}
-.task.done .title{color:var(--green)}
 .badge{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;padding:2px 6px;border-radius:2px;text-transform:uppercase}
 .b-p1{background:rgba(255,51,85,.15);color:var(--red);border:1px solid rgba(255,51,85,.4)}
 .b-p2{background:rgba(251,191,36,.15);color:var(--amber);border:1px solid rgba(251,191,36,.4)}
@@ -170,64 +138,79 @@ body > *{position:relative;z-index:1}
 .b-blocked{background:rgba(255,133,51,.15);color:var(--orange);border:1px solid rgba(255,133,51,.4)}
 .now-tag{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;background:var(--cyan);color:#000;padding:2px 7px;border-radius:2px;letter-spacing:1.5px;animation:pt 1.2s ease-in-out infinite}
 @keyframes pt{50%{opacity:.5}}
-.kpi-tag{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--cyan);padding:1px 5px;background:rgba(0,212,255,.08);border:1px solid var(--line2);border-radius:2px}
+.kpi-tag,.src-tag{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--cyan);padding:1px 5px;background:rgba(0,212,255,.08);border:1px solid var(--line2);border-radius:2px}
+.src-tag{color:var(--amber);background:rgba(251,191,36,.08);border-color:rgba(251,191,36,.3)}
 .sub{font-size:12px;color:var(--txt2);margin-top:4px;line-height:1.4}
-.actions{display:flex;gap:6px;margin-top:8px}
+.actions{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
 .act{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:1px;border:1px solid var(--line2);background:transparent;color:var(--txt2);padding:5px 10px;border-radius:2px;cursor:pointer;text-transform:uppercase}
 .act.done-btn{color:var(--green);border-color:rgba(34,255,136,.4)}
 .act.done-btn.is-done{background:rgba(34,255,136,.1)}
-
 .addbtn{width:100%;margin-top:12px;padding:11px;border:1px dashed var(--line2);background:transparent;color:var(--cyan);border-radius:3px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
 
-/* JARVIS Console — floating bottom */
-.jarvis-dock{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,rgba(3,7,13,.95) 30%);padding:14px;z-index:30;display:flex;justify-content:center;pointer-events:none}
-.jarvis-bar{pointer-events:auto;max-width:700px;width:100%;background:var(--panel2);border:1px solid var(--line2);border-radius:50px;padding:6px 8px 6px 18px;display:flex;align-items:center;gap:10px;backdrop-filter:blur(10px);box-shadow:0 0 20px rgba(0,212,255,.15)}
+/* Intel column */
+.intel-frame{flex:0 0 auto}
+.intel-frame.chat{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+.intel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.intel-head h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan)}
+.intel-tabs{display:flex;gap:3px}
+.intel-tab{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.2px;color:var(--txt2);background:transparent;border:1px solid var(--line);padding:3px 7px;border-radius:2px;cursor:pointer;text-transform:uppercase}
+.intel-tab.active{background:rgba(0,212,255,.1);color:var(--cyan);border-color:var(--line2)}
+.intel-list{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:5px}
+.intel-item{padding:6px 8px;background:rgba(0,212,255,.03);border-left:2px solid var(--cyan-dim);font-size:11px;line-height:1.3;display:block;color:var(--txt);text-decoration:none}
+.intel-item:hover{background:rgba(0,212,255,.08)}
+.intel-item .meta{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--txt3);margin-top:2px}
+.intel-loading{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt3);text-align:center;padding:12px}
+
+.jc-msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding:4px 0;min-height:80px}
+.jc-msgs.empty::before{content:"// Awaiting query…";font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt3);align-self:center;margin:auto}
+.jc-msg{font-size:12px;line-height:1.4;padding:7px 10px;border-radius:6px;max-width:92%;word-wrap:break-word}
+.jc-msg.user{align-self:flex-end;background:rgba(0,212,255,.1);border:1px solid var(--line2)}
+.jc-msg.jarvis{align-self:flex-start;background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.25)}
+.jc-msg.jarvis::before{content:attr(data-brain) " ▸ ";font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;color:var(--purple)}
+.jc-msg.jarvis[data-brain="GEMINI"]::before{color:var(--gemini)}
+.jc-msg.jarvis[data-brain="CLAUDE"]::before{color:var(--claude)}
+.jc-msg.jarvis[data-brain="OPENAI"]::before{color:var(--openai)}
+.jc-msg.jarvis[data-brain="JARVIS"]::before{color:var(--cyan)}
+
+/* Dock */
+.dock-area{display:flex;justify-content:center;align-items:center}
+.jarvis-bar{width:100%;max-width:1200px;background:var(--panel2);border:1px solid var(--line2);border-radius:50px;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px;backdrop-filter:blur(10px);box-shadow:0 0 20px rgba(0,212,255,.15)}
+.brain-switch{display:flex;gap:3px;background:rgba(0,0,0,.3);padding:3px;border-radius:99px;flex-shrink:0;border:1px solid var(--line)}
+.bsw{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;color:var(--txt3);background:transparent}
+.bsw.g{color:var(--gemini)}.bsw.c{color:var(--claude)}.bsw.o{color:var(--openai)}
+.bsw.active{background:rgba(0,212,255,.1);box-shadow:0 0 6px currentColor}
+.bsw.active.g{background:rgba(66,133,244,.2)}.bsw.active.c{background:rgba(204,120,92,.2)}.bsw.active.o{background:rgba(16,163,127,.2)}
 .j-input{flex:1;background:transparent;border:none;outline:none;color:var(--txt);font-family:'Rajdhani',sans-serif;font-size:14px;min-width:0}
 .j-input::placeholder{color:var(--txt3)}
-.j-btn{width:40px;height:40px;border-radius:50%;border:none;background:rgba(0,212,255,.1);color:var(--cyan);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:.2s;flex-shrink:0;border:1px solid var(--line2)}
-.j-btn:hover{background:rgba(0,212,255,.2);box-shadow:var(--glow)}
+.j-btn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line2);background:rgba(0,212,255,.1);color:var(--cyan);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.j-btn:hover{background:rgba(0,212,255,.2)}
 .j-btn.mic{background:var(--cyan);color:#000}
 .j-btn.mic.listening{background:var(--red);color:#fff;animation:lst 1s ease-in-out infinite;border-color:var(--red)}
 @keyframes lst{50%{box-shadow:0 0 0 8px rgba(255,51,85,.3)}}
 .j-btn.brief{background:rgba(192,132,252,.1);color:var(--purple);border-color:rgba(192,132,252,.4)}
-
-/* Jarvis chat panel */
-.jarvis-chat{position:fixed;bottom:80px;left:14px;right:14px;max-width:692px;margin:0 auto;max-height:55vh;background:var(--panel2);border:1px solid var(--line2);border-radius:8px;display:none;flex-direction:column;z-index:25;backdrop-filter:blur(12px);box-shadow:0 -10px 40px rgba(0,212,255,.15)}
-.jarvis-chat.open{display:flex}
-.jc-head{padding:10px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-.jc-head h4{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan)}
-.jc-close{background:transparent;border:none;color:var(--txt2);cursor:pointer;font-size:18px;padding:0 4px}
-.jc-msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:120px}
-.jc-msgs::-webkit-scrollbar{width:4px} .jc-msgs::-webkit-scrollbar-thumb{background:var(--line2)}
-.jc-msg{font-size:13px;line-height:1.45;padding:8px 12px;border-radius:8px;max-width:85%;word-wrap:break-word}
-.jc-msg.user{align-self:flex-end;background:rgba(0,212,255,.1);border:1px solid var(--line2);color:var(--txt)}
-.jc-msg.jarvis{align-self:flex-start;background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.25);color:var(--txt)}
-.jc-msg.jarvis::before{content:"JARVIS ▸ ";font-family:'Orbitron',sans-serif;font-size:9px;color:var(--purple);letter-spacing:1.5px}
-
-/* Speech viz */
-.speech-viz{display:flex;align-items:center;gap:2px;height:24px;padding:0 6px}
+.speech-viz{display:flex;align-items:center;gap:2px;height:20px;padding:0 4px}
 .speech-viz.hidden{display:none}
-.speech-viz .bar{width:3px;background:var(--cyan);border-radius:2px;box-shadow:0 0 4px var(--cyan);animation:bv 0.6s ease-in-out infinite}
-.speech-viz .bar:nth-child(1){animation-delay:0s} .speech-viz .bar:nth-child(2){animation-delay:.1s}
-.speech-viz .bar:nth-child(3){animation-delay:.2s} .speech-viz .bar:nth-child(4){animation-delay:.3s}
+.speech-viz .bar{width:3px;background:var(--cyan);border-radius:2px;box-shadow:0 0 4px var(--cyan);animation:bv .6s ease-in-out infinite}
+.speech-viz .bar:nth-child(1){animation-delay:0s}.speech-viz .bar:nth-child(2){animation-delay:.1s}
+.speech-viz .bar:nth-child(3){animation-delay:.2s}.speech-viz .bar:nth-child(4){animation-delay:.3s}
 .speech-viz .bar:nth-child(5){animation-delay:.4s}
-@keyframes bv{0%,100%{height:4px}50%{height:18px}}
+@keyframes bv{0%,100%{height:4px}50%{height:14px}}
 
 /* Greeting overlay */
-.greeting{position:fixed;inset:0;background:rgba(3,7,13,.95);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;backdrop-filter:blur(8px);transition:opacity 1s}
+.greeting{position:fixed;inset:0;background:rgba(3,7,13,.95);z-index:300;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;backdrop-filter:blur(8px);transition:opacity 1s}
 .greeting.fade{opacity:0;pointer-events:none}
 .greeting-orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,212,255,.3),transparent 70%);position:relative;display:flex;align-items:center;justify-content:center}
 .greeting-orb::before,.greeting-orb::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--cyan);animation:go 3s ease-out infinite}
 .greeting-orb::after{animation-delay:1.5s}
 @keyframes go{from{transform:scale(.5);opacity:1}to{transform:scale(1.5);opacity:0}}
 .greeting-orb .core{width:40px;height:40px;border-radius:50%;background:var(--cyan);box-shadow:0 0 30px var(--cyan)}
-.greeting-text{font-family:'Orbitron',sans-serif;color:var(--cyan);font-size:14px;letter-spacing:3px;text-align:center;text-shadow:var(--glow);max-width:80%}
-.greeting-text .sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);letter-spacing:1px;margin-top:8px;display:block}
+.greeting-text{font-family:'Orbitron',sans-serif;color:var(--cyan);font-size:14px;letter-spacing:3px;text-align:center}
 
-/* Modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:18px;z-index:200;backdrop-filter:blur(8px)}
+/* Modals */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:18px;z-index:400;backdrop-filter:blur(8px)}
 .modal.open{display:flex}
-.modal-box{background:var(--bg2);border:1px solid var(--line2);border-radius:4px;padding:22px;width:100%;max-width:420px;max-height:90vh;overflow:auto;position:relative}
+.modal-box{background:var(--bg2);border:1px solid var(--line2);border-radius:4px;padding:22px;width:100%;max-width:520px;max-height:90vh;overflow:auto;position:relative}
+.modal-box.wide{max-width:720px}
 .modal-box::before,.modal-box::after{content:"";position:absolute;width:18px;height:18px}
 .modal-box::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);box-shadow:var(--glow)}
 .modal-box::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);box-shadow:var(--glow)}
@@ -235,26 +218,52 @@ body > *{position:relative;z-index:1}
 .fld{margin-bottom:11px}
 .fld label{display:block;font-family:'Orbitron',sans-serif;font-size:9px;color:var(--txt2);margin-bottom:4px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
 .fld input,.fld select,.fld textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--line2);border-radius:2px;color:var(--txt);padding:9px 11px;font-size:13px;font-family:'Rajdhani',sans-serif}
-.fld input:focus{outline:none;border-color:var(--cyan);box-shadow:var(--glow)}
-.fld textarea{resize:vertical;min-height:48px}
+.fld textarea{resize:vertical;min-height:140px;font-family:'Share Tech Mono',monospace;font-size:11px;line-height:1.5}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--cyan);box-shadow:var(--glow)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .modal-btns{display:flex;gap:8px;margin-top:16px}
 .mbtn{flex:1;padding:11px;border-radius:2px;border:1px solid var(--line2);font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:1.5px;text-transform:uppercase}
 .mbtn.primary{background:var(--cyan);color:#000;border-color:var(--cyan);box-shadow:var(--glow)}
 .mbtn.ghost{background:transparent;color:var(--txt2)}
 .mbtn.danger{background:transparent;color:var(--red);border-color:rgba(255,51,85,.4);flex:0 0 auto;padding:11px 16px}
-.hint{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt3);margin-top:10px;line-height:1.5;letter-spacing:.5px}
+.brain-section{border:1px solid var(--line);border-radius:4px;padding:12px;margin-bottom:10px}
+.brain-section.gemini{border-color:rgba(66,133,244,.3)}
+.brain-section.claude{border-color:rgba(204,120,92,.3)}
+.brain-section.openai{border-color:rgba(16,163,127,.3)}
+.brain-section h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.brain-section.gemini h3{color:var(--gemini)}.brain-section.claude h3{color:var(--claude)}.brain-section.openai h3{color:var(--openai)}
+.brain-active-toggle{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);cursor:pointer;padding:2px 7px;border-radius:99px;border:1px solid var(--line)}
+.brain-active-toggle.on{color:var(--green);border-color:var(--green);background:rgba(34,255,136,.1)}
+.hint{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt3);margin-top:6px;line-height:1.5}
 .hint a{color:var(--cyan);text-decoration:none}
 
-.foot{text-align:center;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:1px;line-height:1.6}
-.foot b{color:var(--cyan)}
+/* Email extracted tasks preview */
+.extracted{margin-top:12px;display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
+.ext-task{background:rgba(0,212,255,.04);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:3px;padding:8px 10px;display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+.ext-task.p1{border-left-color:var(--red)}.ext-task.p2{border-left-color:var(--amber)}.ext-task.p3{border-left-color:var(--green)}
+.ext-task input[type=checkbox]{margin-top:3px;flex-shrink:0;accent-color:var(--cyan);width:14px;height:14px}
+.ext-task .et-body{flex:1;min-width:0}
+.ext-task .et-title{font-size:13px;font-weight:600;color:var(--txt);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ext-task .et-meta{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);margin-top:3px;letter-spacing:.3px}
+.ext-task .et-detail{font-size:11px;color:var(--txt2);margin-top:3px;line-height:1.4}
+.ext-status{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);padding:10px;text-align:center;letter-spacing:.5px}
+.ext-status.err{color:var(--red)}
 
-@media (max-width:520px){
-  .stat-grid{grid-template-columns:1fr 1fr}
-  .stat-grid .stat:nth-child(3){grid-column:span 2}
-  .rings{grid-template-columns:1fr 1fr}
-  .time-row{grid-template-columns:1fr}
-  .charts-grid{grid-template-columns:1fr}
+/* Mobile / tablet */
+@media (max-width:1100px){
+  .app{grid-template-areas:"hdr hdr" "side main" "dock dock";grid-template-columns:280px 1fr}
+  .intel{display:none}
+  .intel.mobile-open{display:flex;position:fixed;top:64px;right:10px;bottom:74px;width:340px;z-index:50;background:var(--bg2);border:1px solid var(--line2);border-radius:6px;padding:10px}
+  .menu-btn{display:inline-block}
+}
+@media (max-width:720px){
+  html,body{overflow:auto}
+  .app{height:auto;min-height:100vh;grid-template-areas:"hdr" "main" "dock";grid-template-columns:1fr;grid-template-rows:54px 1fr 64px}
+  .side{display:none}
+  .side.mobile-open{display:block;position:fixed;top:64px;left:10px;bottom:74px;width:300px;max-width:90vw;z-index:50;background:var(--bg2);border:1px solid var(--line2);border-radius:6px;padding:10px;overflow-y:auto}
+  .hdr-strip{display:none}
+  .hdr-title{font-size:12px}
+  .hbtn{padding:5px 8px;font-size:10px}
 }
 </style>
 </head>
@@ -262,199 +271,160 @@ body > *{position:relative;z-index:1}
 
 <div class="greeting" id="greeting">
   <div class="greeting-orb"><div class="core"></div></div>
-  <div class="greeting-text" id="greetingText">JARVIS INITIALISING<span class="sub" id="greetingSub">Loading tactical overlay…</span></div>
+  <div class="greeting-text">JARVIS INITIALISING</div>
 </div>
 
-<div class="hdr-bar">
-  <div class="hdr-title">
-    <span class="dot" id="dot"></span> JARVIS · DECMIL HSE
+<div class="app">
+
+<div class="hdr">
+  <div class="hdr-title"><span class="dot" id="dot"></span> JARVIS · DECMIL</div>
+  <div class="hdr-strip">
+    <span>OP: <b>KEVIN KEGIN</b></span>
+    <span>PRJ: <b>PRJ0172</b></span>
+    <span>LINK: <b id="sysLink">--</b></span>
+    <span>BRAIN: <b id="sysBrain" class="brain-pill off">OFFLINE</b></span>
   </div>
   <div class="hdr-btns">
-    <button class="hbtn ai" onclick="openAISetup()">🧠 AI</button>
+    <button class="menu-btn" onclick="toggleSide()">☰</button>
+    <button class="hbtn mail" onclick="openMail()">📧 MAIL</button>
+    <button class="hbtn ai" onclick="openAISetup()">🧠 BRAINS</button>
     <button class="hbtn" onclick="openSetup()">⚙ SYS</button>
+    <button class="menu-btn" onclick="toggleIntel()" title="Intel/chat">▸</button>
   </div>
 </div>
 
-<div class="sys-strip">
-  <span>OP: <b>KEVIN KEGIN</b></span>
-  <span>MODE: <b id="sysMode">NS</b></span>
-  <span>PRJ: <b>PRJ0172</b></span>
-  <span>DATE: <b id="sysDate">--</b></span>
-  <span>LINK: <b id="sysLink">--</b></span>
-  <span>AI: <b id="sysAI">OFFLINE</b></span>
-</div>
-
-<div class="time-row">
-  <div class="frame time-panel"><span class="brkA"></span><span class="brkB"></span>
-    <div class="lbl">CHRONO</div>
-    <div class="clock" id="clock">--:--</div>
-    <div class="shift-meta">SHIFT <b id="shiftRem">--:--</b> REMAINING</div>
+<aside class="side" id="sidePanel">
+  <div class="frame">
+    <div class="clock-wrap">
+      <div class="clock" id="clock">--:--</div>
+      <div class="shift-meta" id="shiftDate">Loading…</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progfill" style="width:0%"></div></div>
+    <div class="prog-meta"><span id="shiftpct">0%</span><span id="shiftRem">--:-- left</span></div>
   </div>
-  <div class="frame status-panel"><span class="brkA"></span><span class="brkB"></span>
-    <div class="lbl">CURRENT OPERATION</div>
+
+  <div class="frame">
+    <div class="lbl">▸ CURRENT OPERATION</div>
     <div class="status-now" id="statusNow">Initialising…</div>
     <div class="status-next" id="statusNext"></div>
   </div>
-</div>
 
-<div class="frame prog-strip"><span class="brkA"></span><span class="brkB"></span>
-  <span class="lbl">SHIFT</span>
-  <div class="prog-track"><div class="prog-fill" id="progfill" style="width:0%"></div></div>
-  <span class="prog-pct" id="shiftpct">0%</span>
-</div>
-
-<div class="stat-grid">
-  <div class="frame stat"><span class="brkA"></span><span class="brkB"></span>
-    <div class="lbl">ROSTER · NS</div>
-    <div class="big">D<span id="rosDay">-</span><small>/7</small></div>
-    <div class="dot-strip" id="rosDots"></div>
-    <div class="sub" id="rosSub">-</div>
-  </div>
-  <div class="frame stat"><span class="brkA"></span><span class="brkB"></span>
-    <div class="lbl">FINAL SHIFT</div>
-    <div class="big"><span id="prjDays">-</span><small> DAYS</small></div>
-    <div class="dot-strip" id="prjStrip"></div>
-    <div class="sub">5 JUN · LEAD HSE</div>
-  </div>
-  <div class="frame stat"><span class="brkA"></span><span class="brkB"></span>
-    <div class="lbl">MAY 2026</div>
-    <div class="big">D<span id="monthDay">-</span><small>/31</small></div>
-    <div class="stat-mini" id="monthSegs"></div>
-    <div class="sub">MONTH-END</div>
-  </div>
-</div>
-
-<div class="alert">
-  <span class="icon">⚠</span>
-  <div><b>SCANNER OFFLINE</b> — Fatigue SA upload pending. Interim: photograph forms, upload to SharePoint <b>10.5 folder</b>. Flag IT.</div>
-</div>
-
-<div class="frame kpi-wrap"><span class="brkA"></span><span class="brkB"></span>
-  <div class="kpi-head">
-    <h3>▸ KPI MATRIX · MAY 2026</h3>
-    <span class="month">DAY <b id="kpiMonthDay">-</b>/31</span>
-  </div>
-  <div class="rings" id="rings"></div>
-</div>
-
-<div class="frame charts-wrap"><span class="brkA"></span><span class="brkB"></span>
-  <div class="charts-head"><h3>▸ ANALYTICS</h3></div>
-  <div class="charts-grid">
-    <div class="chart-box">
-      <div class="chart-lbl">MISSION COMPLETION CURVE</div>
-      <canvas id="ch1" height="120"></canvas>
-    </div>
-    <div class="chart-box">
-      <div class="chart-lbl">KPI VS TARGET</div>
-      <canvas id="ch2" height="120"></canvas>
+  <div class="frame">
+    <div class="lbl">▸ TACTICAL STATUS</div>
+    <div class="mini-stats">
+      <div class="ms"><div class="l">ROSTER</div><div class="v">D<span id="rosDay">-</span><small>/7</small></div><div class="dot-strip" id="rosDots"></div></div>
+      <div class="ms"><div class="l">FLYOUT</div><div class="v"><span id="prjDays">-</span><small>d</small></div><div class="s">5 JUN</div></div>
+      <div class="ms"><div class="l">MAY</div><div class="v">D<span id="monthDay">-</span><small>/31</small></div><div class="s">MONTH-END</div></div>
     </div>
   </div>
-</div>
 
-<div class="frame intel-wrap"><span class="brkA"></span><span class="brkB"></span>
-  <div class="intel-head">
-    <h3>▸ INTEL FEED</h3>
-    <div class="intel-tabs">
-      <button class="intel-tab active" data-feed="world" onclick="switchFeed('world')">WORLD</button>
-      <button class="intel-tab" data-feed="aus" onclick="switchFeed('aus')">AUS</button>
-      <button class="intel-tab" data-feed="biz" onclick="switchFeed('biz')">MARKETS</button>
-    </div>
+  <div class="alert"><span class="icon">⚠</span><div><b>SCANNER OFFLINE</b> · Fatigue SA upload pending. Photograph → SharePoint 10.5. Flag IT.</div></div>
+
+  <div class="frame">
+    <div class="lbl">▸ KPI · MAY 2026</div>
+    <div class="rings" id="rings"></div>
   </div>
-  <div class="intel-list" id="intelList"><div class="intel-loading">▸ ESTABLISHING UPLINK…</div></div>
-</div>
+</aside>
 
-<div class="queue-head">
-  <h3>▸ MISSION QUEUE</h3>
-  <span class="cnt"><b id="qDone">0</b>/<span id="qTotal">0</span></span>
-</div>
+<main class="main">
+  <div class="queue-head">
+    <h3>▸ MISSION QUEUE</h3>
+    <span class="cnt"><b id="qDone">0</b>/<span id="qTotal">0</span> COMPLETE</span>
+  </div>
+  <div class="slots" id="slots"></div>
+  <button class="addbtn" onclick="openTask()">+ ADD MISSION</button>
+</main>
 
-<div class="slots" id="slots"></div>
-<button class="addbtn" onclick="openTask()">+ ADD MISSION</button>
+<aside class="intel" id="intelPanel">
+  <div class="frame intel-frame">
+    <div class="intel-head">
+      <h3>▸ INTEL FEED</h3>
+      <div class="intel-tabs">
+        <button class="intel-tab active" data-feed="world" onclick="switchFeed('world')">WORLD</button>
+        <button class="intel-tab" data-feed="aus" onclick="switchFeed('aus')">AUS</button>
+        <button class="intel-tab" data-feed="biz" onclick="switchFeed('biz')">BIZ</button>
+      </div>
+    </div>
+    <div class="intel-list" id="intelList"><div class="intel-loading">▸ FETCHING…</div></div>
+  </div>
 
-<div class="foot">◉ LIVE · JARVIS v3 · GEMINI BRAIN<br><b>kevinkegin7.github.io/Decmil-Schedule</b></div>
+  <div class="frame intel-frame chat">
+    <div class="intel-head">
+      <h3>▸ JARVIS CONSOLE</h3>
+    </div>
+    <div class="jc-msgs empty" id="jcMsgs"></div>
+  </div>
+</aside>
 
-<!-- Jarvis chat panel -->
-<div class="jarvis-chat" id="jChat">
-  <div class="jc-head"><h4>▸ JARVIS CONSOLE</h4><button class="jc-close" onclick="toggleChat()">✕</button></div>
-  <div class="jc-msgs" id="jcMsgs"></div>
-</div>
-
-<!-- Jarvis dock -->
-<div class="jarvis-dock">
+<div class="dock-area">
   <div class="jarvis-bar">
+    <div class="brain-switch">
+      <button class="bsw g" data-brain="gemini" onclick="setBrain('gemini')" title="Gemini">G</button>
+      <button class="bsw c" data-brain="claude" onclick="setBrain('claude')" title="Claude">C</button>
+      <button class="bsw o" data-brain="openai" onclick="setBrain('openai')" title="OpenAI / Copilot">O</button>
+    </div>
     <div class="speech-viz hidden" id="speechViz"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-    <input class="j-input" id="jInput" placeholder="Ask Jarvis… (try: brief me)" onkeydown="if(event.key==='Enter')jSend()">
+    <input class="j-input" id="jInput" placeholder="Ask Jarvis…" onkeydown="if(event.key==='Enter')jSend()">
     <button class="j-btn brief" onclick="briefing()" title="Daily briefing">📊</button>
-    <button class="j-btn mic" id="micBtn" onclick="toggleMic()" title="Voice command">🎙</button>
+    <button class="j-btn mic" id="micBtn" onclick="toggleMic()" title="Voice">🎙</button>
     <button class="j-btn" onclick="jSend()" title="Send">▸</button>
   </div>
 </div>
 
+</div>
+
 <!-- Modals -->
-<div class="modal" id="taskModal">
-  <div class="modal-box">
-    <h2>▸ Mission Detail</h2>
-    <div class="row2">
-      <div class="fld"><label>Start</label><input id="f_start"></div>
-      <div class="fld"><label>End</label><input id="f_end"></div>
-    </div>
-    <div class="fld"><label>Title</label><input id="f_title"></div>
-    <div class="fld"><label>Detail</label><textarea id="f_sub"></textarea></div>
-    <div class="row2">
-      <div class="fld"><label>Priority</label>
-        <select id="f_type">
-          <option value="p1">P1</option><option value="p2">P2</option><option value="p3">P3</option>
-          <option value="fixed">Fixed</option><option value="meet">Meet</option><option value="break">Break</option>
-          <option value="admin">Admin</option><option value="blocked">Blocked</option>
-        </select></div>
-      <div class="fld"><label>KPI</label>
-        <select id="f_kpi">
-          <option value="">None</option><option value="so">Safety Obs</option>
-          <option value="hse">HSE Insp</option><option value="env">Env Insp</option>
-          <option value="cri">Critical Risk</option>
-        </select></div>
-    </div>
-    <div class="modal-btns">
-      <button class="mbtn danger" id="delBtn" onclick="delTask()" style="display:none">Delete</button>
-      <button class="mbtn ghost" onclick="closeTask()">Cancel</button>
-      <button class="mbtn primary" onclick="saveTask()">Save</button>
-    </div>
-  </div>
-</div>
+<div class="modal" id="taskModal"><div class="modal-box"><h2>▸ Mission Detail</h2>
+  <div class="row2"><div class="fld"><label>Start</label><input id="f_start"></div><div class="fld"><label>End</label><input id="f_end"></div></div>
+  <div class="fld"><label>Title</label><input id="f_title"></div>
+  <div class="fld"><label>Detail</label><input id="f_sub"></div>
+  <div class="row2"><div class="fld"><label>Priority</label><select id="f_type"><option value="p1">P1</option><option value="p2">P2</option><option value="p3">P3</option><option value="fixed">Fixed</option><option value="meet">Meet</option><option value="break">Break</option><option value="admin">Admin</option><option value="blocked">Blocked</option></select></div><div class="fld"><label>KPI</label><select id="f_kpi"><option value="">None</option><option value="so">Safety Obs</option><option value="hse">HSE Insp</option><option value="env">Env Insp</option><option value="cri">Critical Risk</option></select></div></div>
+  <div class="modal-btns"><button class="mbtn danger" id="delBtn" onclick="delTask()" style="display:none">Delete</button><button class="mbtn ghost" onclick="closeTask()">Cancel</button><button class="mbtn primary" onclick="saveTask()">Save</button></div>
+</div></div>
 
-<div class="modal" id="fbModal">
-  <div class="modal-box">
-    <h2>▸ Firebase Uplink</h2>
-    <div class="fld"><label>apiKey</label><input id="cfg_api"></div>
-    <div class="fld"><label>databaseURL</label><input id="cfg_db"></div>
-    <div class="fld"><label>projectId</label><input id="cfg_pid"></div>
-    <div class="fld"><label>appId</label><input id="cfg_app"></div>
-    <div class="modal-btns">
-      <button class="mbtn ghost" onclick="closeSetup()">Cancel</button>
-      <button class="mbtn primary" onclick="saveSetup()">Connect</button>
-    </div>
-    <div class="hint">// pre-filled · one-tap connect</div>
-  </div>
-</div>
+<div class="modal" id="fbModal"><div class="modal-box"><h2>▸ Firebase Uplink</h2>
+  <div class="fld"><label>apiKey</label><input id="cfg_api"></div>
+  <div class="fld"><label>databaseURL</label><input id="cfg_db"></div>
+  <div class="fld"><label>projectId</label><input id="cfg_pid"></div>
+  <div class="fld"><label>appId</label><input id="cfg_app"></div>
+  <div class="modal-btns"><button class="mbtn ghost" onclick="closeSetup()">Cancel</button><button class="mbtn primary" onclick="saveSetup()">Connect</button></div>
+</div></div>
 
-<div class="modal" id="aiModal">
-  <div class="modal-box">
-    <h2>▸ AI Brain · Gemini</h2>
-    <div class="fld"><label>Gemini API Key</label><input id="ai_key" placeholder="paste here"></div>
-    <div class="modal-btns">
-      <button class="mbtn ghost" onclick="closeAISetup()">Cancel</button>
-      <button class="mbtn primary" onclick="saveAISetup()">Activate</button>
-    </div>
-    <div class="hint">
-      Free key in 2 min: <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a><br>
-      Stored locally · never on GitHub · powers Jarvis conversations.
-    </div>
+<div class="modal" id="aiModal"><div class="modal-box"><h2>▸ AI Brain Configuration</h2>
+  <div class="brain-section gemini"><h3>GEMINI <span class="brain-active-toggle" id="tog-gemini" onclick="setBrain('gemini')">SET ACTIVE</span></h3>
+    <div class="fld"><label>API Key</label><input id="key_gemini" placeholder="AIza..."></div>
+    <div class="hint">Free · <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a></div>
   </div>
-</div>
+  <div class="brain-section claude"><h3>CLAUDE <span class="brain-active-toggle" id="tog-claude" onclick="setBrain('claude')">SET ACTIVE</span></h3>
+    <div class="fld"><label>API Key</label><input id="key_claude" placeholder="sk-ant-..."></div>
+    <div class="hint">$5 free credit · <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com/settings/keys</a></div>
+  </div>
+  <div class="brain-section openai"><h3>OPENAI · COPILOT <span class="brain-active-toggle" id="tog-openai" onclick="setBrain('openai')">SET ACTIVE</span></h3>
+    <div class="fld"><label>API Key</label><input id="key_openai" placeholder="sk-..."></div>
+    <div class="hint">Copilot engine · <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a></div>
+  </div>
+  <div class="modal-btns"><button class="mbtn ghost" onclick="closeAISetup()">Cancel</button><button class="mbtn primary" onclick="saveAISetup()">Save All</button></div>
+</div></div>
+
+<div class="modal" id="mailModal"><div class="modal-box wide"><h2>▸ Email → Mission Parser</h2>
+  <div class="fld"><label>Paste email (subject + body)</label>
+    <textarea id="mailContent" placeholder="From: ...&#10;Subject: ...&#10;&#10;Email body here. Include any dates, deadlines, or task instructions. Jarvis will extract tasks using the active AI brain."></textarea>
+  </div>
+  <div class="modal-btns">
+    <button class="mbtn ghost" onclick="closeMail()">Cancel</button>
+    <button class="mbtn primary" id="extractBtn" onclick="parseEmail()">▸ EXTRACT TASKS</button>
+  </div>
+  <div id="extractStatus"></div>
+  <div class="extracted" id="extractedList"></div>
+  <div class="modal-btns" id="addExtractedBar" style="display:none">
+    <button class="mbtn ghost" onclick="clearExtracted()">Clear</button>
+    <button class="mbtn primary" onclick="addExtractedTasks()">+ Add Selected to Schedule</button>
+  </div>
+  <div class="hint" style="margin-top:14px">Phase 1 · paste-and-parse. Future hook for Microsoft Graph auto-scan ready in code.</div>
+</div></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 const DEFAULT_CFG={apiKey:"AIzaSyDbxaBCE-tPmc6byx-hv9eeqx_DfRYr0q0",databaseURL:"https://decmil---hseq-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"decmil---hseq",appId:"1:615574493396:web:f0c963945c4dc66b720341"};
 const DAY_KEY="2026-05-30-NS",KPI_KEY="may26";
@@ -466,38 +436,36 @@ function mins(t){const a=t.split(':');return(+a[0])*60+(+a[1]);}
 function tLog(h){return logM(mins(h));}
 function durTxt(s,e){let d=tLog(e)-tLog(s);if(d<0)d+=1440;return d>=60?(d/60)+'h':d+'m';}
 
-const KPIS=[
-  {id:'so', lbl:'SAFETY OBS',    target:2},
-  {id:'hse',lbl:'HSE INSP',      target:2},
-  {id:'env',lbl:'ENV INSP',      target:1},
-  {id:'cri',lbl:'CRITICAL RISK', target:2},
-];
+const KPIS=[{id:'so',lbl:'SAFETY',target:2},{id:'hse',lbl:'HSE',target:2},{id:'env',lbl:'ENV',target:1},{id:'cri',lbl:'CRIT',target:2}];
 const SEED=[
- {id:'n01',s:'17:30',e:'18:00',type:'fixed',title:'Pre-start meeting facilitation',sub:'iPad / Breathos · QR sign-on',done:true},
- {id:'n02',s:'18:00',e:'18:15',type:'fixed',title:'Personnel check + crew list to mgmt',sub:'Emailed',done:true},
- {id:'n03',s:'18:15',e:'18:45',type:'fixed',title:'Weekly SWMS sign-on with crew',sub:'All crew signed',done:true},
- {id:'n04',s:'18:45',e:'19:00',type:'fixed',title:'Fatigue Self Assessment collection',sub:'Collected — upload blocked',done:true},
- {id:'n05',s:'19:00',e:'20:30',type:'p2',title:'Daily Night Shift site check-up',sub:'Lighting, exclusion zones, separation, active works',kpi:'so',done:false},
- {id:'n06',s:'20:30',e:'22:00',type:'p1',title:'Weekly Client Report',sub:'Supervisor-led pre-start under Innovations/Initiatives',done:false},
+ {id:'n01',s:'17:30',e:'18:00',type:'fixed',title:'Pre-start meeting facilitation',sub:'iPad / Breathos',done:true},
+ {id:'n02',s:'18:00',e:'18:15',type:'fixed',title:'Personnel check + crew list',sub:'Emailed',done:true},
+ {id:'n03',s:'18:15',e:'18:45',type:'fixed',title:'Weekly SWMS sign-on',sub:'All crew',done:true},
+ {id:'n04',s:'18:45',e:'19:00',type:'fixed',title:'Fatigue SA collection',sub:'Collected',done:true},
+ {id:'n05',s:'19:00',e:'20:30',type:'p2',title:'Daily NS site check-up',sub:'Lighting, exclusion zones',kpi:'so',done:false},
+ {id:'n06',s:'20:30',e:'22:00',type:'p1',title:'Weekly Client Report',sub:'Innovations/Initiatives',done:false},
  {id:'n07',s:'22:00',e:'22:30',type:'break',title:'Meal break',sub:'',done:false},
- {id:'n08',s:'22:30',e:'01:00',type:'p1',title:'May 2026 Monthly Client Report',sub:'SAI360 stats · inspection counts · training matrix · env data',done:false},
+ {id:'n08',s:'22:30',e:'01:00',type:'p1',title:'May Monthly Client Report',sub:'SAI360 · inspection counts · training matrix',done:false},
  {id:'n09',s:'01:00',e:'02:30',type:'p2',title:'ICAM training',sub:'PEEPO + 5 Whys',done:false},
  {id:'n10',s:'02:30',e:'03:00',type:'break',title:'Second break',sub:'',done:false},
- {id:'n11',s:'03:00',e:'04:00',type:'fixed',title:'Tomorrow\u0027s pre-start — finalise',sub:'',done:false},
+ {id:'n11',s:'03:00',e:'04:00',type:'fixed',title:'Tomorrow pre-start finalise',sub:'',done:false},
  {id:'n12',s:'04:00',e:'04:30',type:'p3',title:'Second site walk',sub:'',done:false},
- {id:'n13',s:'04:30',e:'05:00',type:'blocked',title:'Fatigue SA upload (interim)',sub:'Photograph → SharePoint 10.5',done:false},
+ {id:'n13',s:'04:30',e:'05:00',type:'blocked',title:'Fatigue SA upload (interim)',sub:'Photograph → 10.5',done:false},
  {id:'n14',s:'05:00',e:'05:30',type:'fixed',title:'End-of-shift wrap-up + handover',sub:'',done:false},
 ];
 
 let db=null,tasksRef=null,kpiRef=null;
 let tasks=[],kpiState={so:0,hse:0,env:0,cri:0};
 let editingId=null;
+let extractedTasks=[];
 const badgeText={p1:'P1',p2:'P2',p3:'P3',fixed:'FIXED',meet:'MEET',break:'BREAK',admin:'ADMIN',blocked:'BLOCKED'};
 
 function setDot(s){document.getElementById('dot').className='dot '+s;document.getElementById('sysLink').textContent=s==='on'?'ONLINE':'OFFLINE';}
 function getCfg(){try{return JSON.parse(localStorage.getItem('fb_cfg'));}catch(e){return null;}}
-function getAIKey(){return localStorage.getItem('gemini_key')||'';}
-function setAIIndicator(){document.getElementById('sysAI').textContent=getAIKey()?'ONLINE':'OFFLINE';}
+function getKey(b){return localStorage.getItem('key_'+b)||'';}
+function getActiveBrain(){return localStorage.getItem('active_brain')||'gemini';}
+function setBrain(b){if(b!==getActiveBrain())localStorage.setItem('active_brain',b);updateBrainUI();if(getKey(b))jarvisSay("Switched to "+b.toUpperCase(),true,b.toUpperCase());}
+function updateBrainUI(){const b=getActiveBrain();document.querySelectorAll('.bsw').forEach(function(el){el.classList.toggle('active',el.dataset.brain===b);});document.querySelectorAll('.brain-active-toggle').forEach(function(el){el.classList.toggle('on',el.id==='tog-'+b);el.textContent=el.id==='tog-'+b?'✓ ACTIVE':'SET ACTIVE';});const pill=document.getElementById('sysBrain');if(getKey(b)){pill.textContent=b.toUpperCase();pill.className='brain-pill '+b;}else{pill.textContent='OFFLINE';pill.className='brain-pill off';}}
 
 function connect(cfg){
   try{
@@ -507,60 +475,38 @@ function connect(cfg){
     tasksRef=db.ref('decmil_schedule/'+DAY_KEY+'/tasks');
     kpiRef=db.ref('decmil_schedule/kpis/'+KPI_KEY);
     setDot('on');
-    tasksRef.on('value',function(snap){
-      const v=snap.val();
-      if(!v){const seed={};SEED.forEach(function(t){seed[t.id]=t;});tasksRef.set(seed);return;}
-      tasks=Object.keys(v).map(function(k){return v[k];}).sort(function(a,b){return tLog(a.s)-tLog(b.s);});
-      render();updateCharts();
-    },function(){setDot('off');});
-    kpiRef.on('value',function(snap){const v=snap.val();if(v)kpiState=Object.assign({},kpiState,v);renderKPI();updateCharts();});
+    tasksRef.on('value',function(snap){const v=snap.val();if(!v){const seed={};SEED.forEach(function(t){seed[t.id]=t;});tasksRef.set(seed);return;}tasks=Object.keys(v).map(function(k){return v[k];}).sort(function(a,b){return tLog(a.s)-tLog(b.s);});render();},function(){setDot('off');});
+    kpiRef.on('value',function(snap){const v=snap.val();if(v)kpiState=Object.assign({},kpiState,v);renderKPI();});
   }catch(e){setDot('off');console.error(e);}
 }
 
 function renderStats(){
   const today=new Date();today.setHours(0,0,0,0);
-  const dayIn=Math.floor((today-ROSTER_START)/86400000)+1;
-  const dayClamped=Math.max(1,Math.min(ROSTER_LEN,dayIn));
-  document.getElementById('rosDay').textContent=dayClamped;
-  let dots='';for(let i=1;i<=ROSTER_LEN;i++){dots+='<div class="d '+(i<dayClamped?'past':(i===dayClamped?'now':''))+'"></div>';}
+  const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));
+  document.getElementById('rosDay').textContent=dayIn;
+  let dots='';for(let i=1;i<=ROSTER_LEN;i++){dots+='<div class="d '+(i<dayIn?'past':(i===dayIn?'now':''))+'"></div>';}
   document.getElementById('rosDots').innerHTML=dots;
   const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));
-  document.getElementById('rosSub').textContent=toFly+' DAYS TO FLYOUT';
   document.getElementById('prjDays').textContent=toFly;
-  let pStrip='';const ts=Math.ceil((FINAL_DAY-ROSTER_START)/86400000);const el=ts-toFly;
-  for(let i=1;i<=ts;i++)pStrip+='<div class="d '+(i<=el?'past':'')+'"></div>';
-  document.getElementById('prjStrip').innerHTML=pStrip;
-  const day=today.getDate();
-  document.getElementById('monthDay').textContent=day;
-  document.getElementById('kpiMonthDay').textContent=day;
-  let segs='';const mp=Math.round((day/31)*10);
-  for(let i=1;i<=10;i++)segs+='<div class="seg '+(i<=mp?'on':'')+'"></div>';
-  document.getElementById('monthSegs').innerHTML=segs;
-  const now=new Date();
-  document.getElementById('sysDate').textContent=now.toISOString().substring(0,10)+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('monthDay').textContent=today.getDate();
+  document.getElementById('shiftDate').textContent='SAT 30 MAY · NS '+(toFly+'d to flyout');
 }
 
 function renderKPI(){
-  const C=264;
+  const C=176; // 2π·28 ≈ 176 (smaller radius for compact rings)
   document.getElementById('rings').innerHTML=KPIS.map(function(k){
     const c=kpiState[k.id]||0,t=k.target;
     const pct=Math.min(100,(c/t)*100),off=C-(C*pct/100);
     let cls=c>=t?'met':(c>0?'prog':'behind');
-    return '<div class="ring-card"><div class="ring-svg"><svg viewBox="0 0 100 100">'+
-      '<circle class="ring-bg" cx="50" cy="50" r="42"/>'+
-      '<circle class="ring-fill '+cls+'" cx="50" cy="50" r="42" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"/></svg>'+
-      '<div class="ring-center"><div class="ring-val">'+c+'<span class="target">/'+t+'</span></div><div class="ring-pct">'+Math.round(pct)+'%</div></div></div>'+
-      '<div class="ring-lbl">'+k.lbl+'</div><div class="ring-ctrl">'+
-      '<button class="ring-btn" onclick="bump(\''+k.id+'\',-1)">−</button>'+
-      '<button class="ring-btn" onclick="bump(\''+k.id+'\',1)">+</button></div></div>';
+    return '<div class="ring-card"><div class="ring-svg"><svg viewBox="0 0 64 64"><circle class="ring-bg" cx="32" cy="32" r="28"/><circle class="ring-fill '+cls+'" cx="32" cy="32" r="28" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"/></svg><div class="ring-center"><div class="ring-val">'+c+'<span class="target">/'+t+'</span></div></div></div><div class="ring-lbl">'+k.lbl+'</div><div class="ring-ctrl"><button class="ring-btn" onclick="bump(\''+k.id+'\',-1)">−</button><button class="ring-btn" onclick="bump(\''+k.id+'\',1)">+</button></div></div>';
   }).join('');
 }
-function bump(id,d){kpiState[id]=Math.max(0,(kpiState[id]||0)+d);renderKPI();updateCharts();if(kpiRef)kpiRef.set(kpiState);}
+function bump(id,d){kpiState[id]=Math.max(0,(kpiState[id]||0)+d);renderKPI();if(kpiRef)kpiRef.set(kpiState);}
 
 function render(){
   const cm=clockM(),nl=logM(cm);
   const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl;});
-  let nowText='— STANDBY —',nextText='Awaiting shift start (17:30)';
+  let nowText='— STANDBY —',nextText='';
   if(tasks.length){
     if(nl<tLog(tasks[0].s)||nl>=720){nowText='— STANDBY —';nextText='Shift starts <b>'+tasks[0].s+'</b>';}
     else if(cur){nowText=cur.title;const nx=tasks.find(function(t){return tLog(t.s)>nl;});nextText=nx?'NEXT '+nx.s+' · <b>'+nx.title+'</b>':'Wrap-up';}
@@ -569,28 +515,16 @@ function render(){
   document.getElementById('statusNow').innerHTML=nowText;
   document.getElementById('statusNext').innerHTML=nextText;
   let rem=720-nl;if(nl<0||nl>=720)rem=720;
-  document.getElementById('shiftRem').textContent=String(Math.floor(rem/60)).padStart(2,'0')+':'+String(rem%60).padStart(2,'0');
+  document.getElementById('shiftRem').textContent=String(Math.floor(rem/60)).padStart(2,'0')+':'+String(rem%60).padStart(2,'0')+' left';
 
   document.getElementById('slots').innerHTML=tasks.map(function(t){
     const isNow=tLog(t.s)<=nl&&tLog(t.e)>nl&&nl<720;
     const cls=t.done?'done':(isNow?'now':t.type);
-    return '<div class="slot"><div class="t-col">'+t.s+'<span class="dur">'+durTxt(t.s,t.e)+'</span></div>'+
-      '<div class="task '+cls+(t.type==='blocked'?' blocked':'')+'">'+
-      '<div class="task-head">'+
-      (isNow&&!t.done?'<span class="now-tag">ACTIVE</span>':'')+
-      '<span class="badge b-'+t.type+'">'+(badgeText[t.type]||t.type)+'</span>'+
-      (t.kpi?'<span class="kpi-tag">KPI</span>':'')+
-      '<span class="title">'+t.title+'</span></div>'+
-      (t.sub?'<div class="sub">'+t.sub+'</div>':'')+
-      (t.type!=='break'?'<div class="actions">'+
-        '<button class="act done-btn '+(t.done?'is-done':'')+'" onclick="toggleDone(\''+t.id+'\')">'+(t.done?'✓ DONE · UNDO':'MARK DONE')+'</button>'+
-        '<button class="act" onclick="openTask(\''+t.id+'\')">EDIT</button></div>':'')+
-      '</div></div>';
+    return '<div class="slot"><div class="t-col">'+t.s+'<span class="dur">'+durTxt(t.s,t.e)+'</span></div><div class="task '+cls+(t.type==='blocked'?' blocked':'')+'"><div class="task-head">'+(isNow&&!t.done?'<span class="now-tag">ACTIVE</span>':'')+'<span class="badge b-'+t.type+'">'+(badgeText[t.type]||t.type)+'</span>'+(t.kpi?'<span class="kpi-tag">KPI</span>':'')+(t.source==='email'?'<span class="src-tag">📧 EMAIL</span>':'')+'<span class="title">'+t.title+'</span></div>'+(t.sub?'<div class="sub">'+t.sub+'</div>':'')+(t.type!=='break'?'<div class="actions"><button class="act done-btn '+(t.done?'is-done':'')+'" onclick="toggleDone(\''+t.id+'\')">'+(t.done?'✓ DONE · UNDO':'MARK DONE')+'</button><button class="act" onclick="openTask(\''+t.id+'\')">EDIT</button></div>':'')+'</div></div>';
   }).join('');
-  const doneCount=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;
-  const total=tasks.filter(function(t){return t.type!=='break';}).length;
-  document.getElementById('qDone').textContent=doneCount;
-  document.getElementById('qTotal').textContent=total;
+  const dn=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;
+  const tot=tasks.filter(function(t){return t.type!=='break';}).length;
+  document.getElementById('qDone').textContent=dn;document.getElementById('qTotal').textContent=tot;
   let pct=Math.max(0,Math.min(100,Math.round((nl/720)*100)));
   if(nl>=720&&cm>=330&&cm<SHIFT_START)pct=0;
   document.getElementById('progfill').style.width=pct+'%';
@@ -604,252 +538,171 @@ function delTask(){if(editingId&&tasksRef&&confirm('Delete?')){tasksRef.child(ed
 function openSetup(){const c=getCfg()||DEFAULT_CFG;document.getElementById('cfg_api').value=c.apiKey;document.getElementById('cfg_db').value=c.databaseURL;document.getElementById('cfg_pid').value=c.projectId;document.getElementById('cfg_app').value=c.appId;document.getElementById('fbModal').classList.add('open');}
 function closeSetup(){document.getElementById('fbModal').classList.remove('open');}
 function saveSetup(){const cfg={apiKey:document.getElementById('cfg_api').value.trim(),databaseURL:document.getElementById('cfg_db').value.trim(),projectId:document.getElementById('cfg_pid').value.trim(),appId:document.getElementById('cfg_app').value.trim()};localStorage.setItem('fb_cfg',JSON.stringify(cfg));closeSetup();connect(cfg);}
-function openAISetup(){document.getElementById('ai_key').value=getAIKey();document.getElementById('aiModal').classList.add('open');}
+function openAISetup(){document.getElementById('key_gemini').value=getKey('gemini');document.getElementById('key_claude').value=getKey('claude');document.getElementById('key_openai').value=getKey('openai');updateBrainUI();document.getElementById('aiModal').classList.add('open');}
 function closeAISetup(){document.getElementById('aiModal').classList.remove('open');}
-function saveAISetup(){const k=document.getElementById('ai_key').value.trim();if(k)localStorage.setItem('gemini_key',k);else localStorage.removeItem('gemini_key');setAIIndicator();closeAISetup();if(k)jarvisSay("AI brain online. Gemini link established. How can I assist, Kevin?",true);}
+function saveAISetup(){['gemini','claude','openai'].forEach(function(b){const v=document.getElementById('key_'+b).value.trim();if(v)localStorage.setItem('key_'+b,v);else localStorage.removeItem('key_'+b);});updateBrainUI();closeAISetup();const b=getActiveBrain();if(getKey(b))jarvisSay("Brain configuration saved. "+b.toUpperCase()+" online.",true,b.toUpperCase());}
 
-// ========== JARVIS VOICE ==========
+function toggleSide(){document.getElementById('sidePanel').classList.toggle('mobile-open');}
+function toggleIntel(){document.getElementById('intelPanel').classList.toggle('mobile-open');}
+
+// VOICE
 let voice=null;
-function pickVoice(){
-  const vs=speechSynthesis.getVoices();
-  voice=vs.find(v=>/Google UK English Male/i.test(v.name))||vs.find(v=>v.lang.startsWith('en-GB')&&/male/i.test(v.name))||vs.find(v=>v.lang.startsWith('en-GB'))||vs.find(v=>v.lang.startsWith('en-AU'))||vs.find(v=>v.lang.startsWith('en'))||vs[0];
-}
+function pickVoice(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/Google UK English Male/i.test(v.name))||vs.find(v=>v.lang.startsWith('en-GB'))||vs.find(v=>v.lang.startsWith('en-AU'))||vs.find(v=>v.lang.startsWith('en'))||vs[0];}
 if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=pickVoice;pickVoice();}
-
 function showViz(on){document.getElementById('speechViz').classList.toggle('hidden',!on);}
-function jarvisSay(text,addToChat){
-  if(addToChat)addMsg('jarvis',text);
-  if(!('speechSynthesis' in window))return;
-  try{speechSynthesis.cancel();}catch(e){}
-  const u=new SpeechSynthesisUtterance(text);
-  if(voice)u.voice=voice;
-  u.rate=.98;u.pitch=1;u.volume=1;
-  u.onstart=function(){showViz(true);};
-  u.onend=function(){showViz(false);};
-  u.onerror=function(){showViz(false);};
-  speechSynthesis.speak(u);
-}
+function jarvisSay(text,addToChat,brain){if(addToChat)addMsg('jarvis',text,brain||'JARVIS');if(!('speechSynthesis' in window))return;try{speechSynthesis.cancel();}catch(e){}const u=new SpeechSynthesisUtterance(text);if(voice)u.voice=voice;u.rate=.98;u.onstart=function(){showViz(true);};u.onend=function(){showViz(false);};u.onerror=function(){showViz(false);};speechSynthesis.speak(u);}
 
-// ========== MIC ==========
 let rec=null,listening=false;
-function setupMic(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){return null;}
-  const r=new SR();r.lang='en-AU';r.continuous=false;r.interimResults=false;
-  r.onresult=function(e){const t=e.results[0][0].transcript;document.getElementById('jInput').value=t;jSend();};
-  r.onend=function(){listening=false;document.getElementById('micBtn').classList.remove('listening');};
-  r.onerror=function(){listening=false;document.getElementById('micBtn').classList.remove('listening');};
-  return r;
-}
-function toggleMic(){
-  if(!rec)rec=setupMic();
-  if(!rec){jarvisSay("Voice input not supported in this browser. Try Chrome or Edge.",true);return;}
-  if(listening){try{rec.stop();}catch(e){}listening=false;document.getElementById('micBtn').classList.remove('listening');}
-  else{try{rec.start();listening=true;document.getElementById('micBtn').classList.add('listening');}catch(e){}}
-}
+function setupMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;const r=new SR();r.lang='en-AU';r.continuous=false;r.interimResults=false;r.onresult=function(e){const t=e.results[0][0].transcript;document.getElementById('jInput').value=t;jSend();};r.onend=function(){listening=false;document.getElementById('micBtn').classList.remove('listening');};r.onerror=function(){listening=false;document.getElementById('micBtn').classList.remove('listening');};return r;}
+function toggleMic(){if(!rec)rec=setupMic();if(!rec){jarvisSay("Voice input not supported. Try Chrome.",true);return;}if(listening){try{rec.stop();}catch(e){}listening=false;document.getElementById('micBtn').classList.remove('listening');}else{try{rec.start();listening=true;document.getElementById('micBtn').classList.add('listening');}catch(e){}}}
 
-// ========== JARVIS CHAT ==========
-function addMsg(role,text){
-  const m=document.getElementById('jcMsgs');
-  const d=document.createElement('div');d.className='jc-msg '+role;d.textContent=text;
-  m.appendChild(d);m.scrollTop=m.scrollHeight;
-  if(!document.getElementById('jChat').classList.contains('open'))toggleChat();
-}
-function toggleChat(){document.getElementById('jChat').classList.toggle('open');}
+function addMsg(role,text,brain){const m=document.getElementById('jcMsgs');m.classList.remove('empty');const d=document.createElement('div');d.className='jc-msg '+role;d.textContent=text;if(brain)d.setAttribute('data-brain',brain);m.appendChild(d);m.scrollTop=m.scrollHeight;}
+function jSend(){const inp=document.getElementById('jInput');const q=inp.value.trim();if(!q)return;inp.value='';addMsg('user',q);handleQuery(q);}
 
-function jSend(){
-  const inp=document.getElementById('jInput');
-  const q=inp.value.trim();if(!q)return;
-  inp.value='';addMsg('user',q);
-  handleQuery(q);
-}
-
-// Voice command handler — local first, fall through to Gemini
 function handleQuery(q){
   const lq=q.toLowerCase();
-  // Quick local matches
-  if(/^(hi|hello|hey|good (morning|evening|night))/i.test(lq)){
-    const h=new Date().getHours();const greet=h<5||h>=22?'Good evening':h<12?'Good morning':'Good evening';
-    jarvisSay(greet+", Kevin. All systems online. How can I assist?",true);return;
+  let askBrain=null,actualQ=q;
+  const m=lq.match(/^(ask|hey|tell)\s+(claude|gemini|openai|copilot|gpt)\s+(.*)/i);
+  if(m){askBrain=m[2].toLowerCase();if(askBrain==='copilot'||askBrain==='gpt')askBrain='openai';actualQ=q.replace(/^(ask|hey|tell)\s+\S+\s+/i,'');}
+  if(!askBrain){
+    if(/^(hi|hello|hey|good (morning|evening|night))/i.test(lq)){const h=new Date().getHours();jarvisSay((h<5||h>=18?'Good evening':h<12?'Good morning':'Good afternoon')+", Kevin. All systems online.",true,'JARVIS');return;}
+    if(/\b(brief|briefing|status report|sitrep)\b/i.test(lq)){briefing();return;}
+    if(/\b(what'?s? next|next task|next mission)\b/i.test(lq)){speakNext();return;}
+    if(/\b(time|how long|shift remain)/i.test(lq)){speakTime();return;}
+    if(/\b(kpi|tracking|how am i doing)\b/i.test(lq)){speakKPIs();return;}
+    if(/\b(thank|thanks|cheers)\b/i.test(lq)){jarvisSay("You're welcome, Kevin.",true,'JARVIS');return;}
+    if(/\b(news|headlines)\b/i.test(lq)){speakNews();return;}
+    if(/^mark (done|complete) /i.test(lq)){markTaskByVoice(q);return;}
+    if(/\b(switch to|use) (claude|gemini|openai|copilot)\b/i.test(lq)){const b=lq.match(/\b(claude|gemini|openai|copilot)\b/)[1];setBrain(b==='copilot'?'openai':b);return;}
   }
-  if(/\b(brief|briefing|status report|sitrep)\b/i.test(lq)){briefing();return;}
-  if(/\b(what'?s? next|next task|next mission|what now)\b/i.test(lq)){speakNext();return;}
-  if(/\b(time|how long|shift remain)/i.test(lq)){speakTime();return;}
-  if(/\b(kpi|tracking|how am i doing)\b/i.test(lq)){speakKPIs();return;}
-  if(/\b(thank|thanks|cheers)\b/i.test(lq)){jarvisSay("You're welcome, Kevin. Standing by.",true);return;}
-  if(/\b(news|headlines|what'?s happening)\b/i.test(lq)){speakNews();return;}
-  if(/^mark (done|complete) /i.test(lq)){markTaskByVoice(q);return;}
-  // Fallback to Gemini AI
-  if(getAIKey())askGemini(q);
-  else jarvisSay("AI brain offline. Add a Gemini key via the AI button, or try: brief me, what's next, how am I tracking, or news.",true);
+  const brain=askBrain||getActiveBrain();
+  if(!getKey(brain)){jarvisSay(brain.toUpperCase()+" brain offline. Add a key via 🧠 BRAINS.",true,'JARVIS');return;}
+  askAI(actualQ,brain);
 }
 
-function speakNext(){
-  const nl=logM(clockM());
-  const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});
-  if(nx)jarvisSay("Next mission, "+nx.s+" hours: "+nx.title+".",true);
-  else jarvisSay("No further missions queued. Shift winding down.",true);
-}
-function speakTime(){
-  const n=new Date(),nl=logM(clockM());
-  const rem=Math.max(0,720-nl);
-  const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
-  jarvisSay("The time is "+t+". "+(rem>0?Math.floor(rem/60)+" hours "+(rem%60)+" minutes remaining on shift.":"Shift complete."),true);
-}
-function speakKPIs(){
-  const lines=KPIS.map(function(k){const c=kpiState[k.id]||0;const s=c>=k.target?'met':(c>0?'in progress':'behind');return k.lbl.toLowerCase()+", "+c+" of "+k.target+", "+s;});
-  jarvisSay("KPI status: "+lines.join(". ")+". Month-end approaching.",true);
-}
-function markTaskByVoice(q){
-  const term=q.replace(/^mark (done|complete) /i,'').trim().toLowerCase();
-  const match=tasks.find(function(t){return t.title.toLowerCase().includes(term)&&!t.done;});
-  if(match){if(tasksRef)tasksRef.child(match.id).update({done:true});if(match.kpi)bump(match.kpi,1);jarvisSay("Marking "+match.title+" as complete. Well done.",true);}
-  else jarvisSay("Couldn't find an active mission matching '"+term+"'.",true);
-}
+function speakNext(){const nl=logM(clockM());const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});if(nx)jarvisSay("Next mission, "+nx.s+": "+nx.title+".",true,'JARVIS');else jarvisSay("No further missions queued.",true,'JARVIS');}
+function speakTime(){const n=new Date(),nl=logM(clockM()),rem=Math.max(0,720-nl);jarvisSay("Time is "+String(n.getHours()).padStart(2,'0')+":"+String(n.getMinutes()).padStart(2,'0')+". "+(rem>0?Math.floor(rem/60)+" hours "+(rem%60)+" minutes remaining.":"Shift complete."),true,'JARVIS');}
+function speakKPIs(){const lines=KPIS.map(function(k){const c=kpiState[k.id]||0;return k.lbl.toLowerCase()+", "+c+" of "+k.target+", "+(c>=k.target?'met':(c>0?'in progress':'behind'));});jarvisSay("KPI status: "+lines.join(". ")+".",true,'JARVIS');}
+function markTaskByVoice(q){const term=q.replace(/^mark (done|complete) /i,'').trim().toLowerCase();const match=tasks.find(function(t){return t.title.toLowerCase().includes(term)&&!t.done;});if(match){if(tasksRef)tasksRef.child(match.id).update({done:true});if(match.kpi)bump(match.kpi,1);jarvisSay("Marking "+match.title+" complete.",true,'JARVIS');}else jarvisSay("Couldn't find a match for '"+term+"'.",true,'JARVIS');}
 
-function briefing(){
-  const today=new Date();today.setHours(0,0,0,0);
-  const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));
-  const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));
-  const nl=logM(clockM()),rem=Math.max(0,720-nl);
-  const done=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;
-  const tot=tasks.filter(function(t){return t.type!=='break';}).length;
-  const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl;});
-  const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});
-  const kpiBehind=KPIS.filter(function(k){return (kpiState[k.id]||0)<k.target;});
-  const greet=new Date().getHours()>=18||new Date().getHours()<5?'Good evening':'Good morning';
+function briefing(){const today=new Date();today.setHours(0,0,0,0);const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));const nl=logM(clockM()),rem=Math.max(0,720-nl);const done=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;const tot=tasks.filter(function(t){return t.type!=='break';}).length;const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl;});const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});const kpiBehind=KPIS.filter(function(k){return (kpiState[k.id]||0)<k.target;});const h=new Date().getHours();const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');let t=greet+", Kevin. Tactical update. ";t+="Time "+String(new Date().getHours()).padStart(2,'0')+":"+String(new Date().getMinutes()).padStart(2,'0')+". ";if(rem>0)t+="Shift "+Math.round((nl/720)*100)+" percent complete. ";t+="Mission queue, "+done+" of "+tot+" complete. ";if(cur)t+="Currently engaged: "+cur.title+". ";if(nx)t+="Next: "+nx.s+", "+nx.title+". ";t+="Day "+dayIn+" of 7. "+toFly+" days until final shift. ";if(kpiBehind.length===0)t+="All KPIs met. Outstanding. ";else t+=kpiBehind.length+" KPI"+(kpiBehind.length>1?'s':'')+" behind. ";t+="Standing by.";jarvisSay(t,true,'JARVIS');}
 
-  let text=greet+", Kevin. ";
-  text+="Tactical update follows. ";
-  text+="Time is "+String(new Date().getHours()).padStart(2,'0')+":"+String(new Date().getMinutes()).padStart(2,'0')+". ";
-  if(rem>0)text+="Shift "+Math.round((nl/720)*100)+" percent complete, "+Math.floor(rem/60)+" hours "+(rem%60)+" minutes remaining. ";
-  text+="Mission queue, "+done+" of "+tot+" complete. ";
-  if(cur)text+="Currently engaged: "+cur.title+". ";
-  if(nx)text+="Next up at "+nx.s+", "+nx.title+". ";
-  text+="Roster, day "+dayIn+" of 7. ";
-  text+=toFly+" days until your final shift on project. ";
-  if(kpiBehind.length===0)text+="All KPIs met for May. Outstanding. ";
-  else text+=kpiBehind.length+" KPI"+(kpiBehind.length>1?'s':'')+" still behind target with one day of May remaining: "+kpiBehind.map(function(k){return k.lbl.toLowerCase();}).join(", ")+". Recommend closing these tomorrow. ";
-  text+="All clear, Kevin. Standing by.";
-  jarvisSay(text,true);
-}
+// AI brain dispatch
+function buildContext(){const today=new Date();today.setHours(0,0,0,0);const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));const kpiTxt=KPIS.map(function(k){return k.lbl+': '+(kpiState[k.id]||0)+'/'+k.target;}).join(', ');const open=tasks.filter(function(t){return !t.done&&t.type!=='break';}).map(function(t){return t.s+' '+t.title;}).join('; ');return `Operator: Kevin Kegin, HSE Advisor at Decmil, PRJ0172 McPhee Creek S5 Nullagine WA.
+Now: ${new Date().toString().substring(0,21)}. Night Shift Day ${dayIn}/7. Final shift in ${toFly}d (5 Jun).
+KPIs (May): ${kpiTxt}. Today is the 30th. KPIs reset 1 Jun.
+Open missions: ${open||'none'}.
+Blocker: Scanner offline, Fatigue SA upload pending.`;}
 
-// ========== GEMINI BRAIN ==========
-async function askGemini(q){
-  const k=getAIKey();if(!k)return;
-  const ctx=buildContext();
-  const prompt=`You are JARVIS — Kevin Kegin's personal HSE tactical AI. You're British, calm, formal but warm, witty when appropriate. You address him as "Kevin" or "sir". Keep replies under 80 words for speech. You have full context of his work below. Use it.
+const SYS_PROMPT=`You are JARVIS — Kevin Kegin's personal HSE tactical AI. British, calm, formal but warm, witty when appropriate. Address him as "Kevin" or "sir". Keep replies under 80 words for speech.`;
 
-Context:
-${ctx}
+async function askAI(q,brain){addMsg('jarvis','...thinking',brain.toUpperCase());let ans='';try{if(brain==='gemini')ans=await callGemini(q,buildContext());else if(brain==='claude')ans=await callClaude(q,buildContext());else if(brain==='openai')ans=await callOpenAI(q,buildContext());}catch(e){ans="Connection failed.";}const msgs=document.getElementById('jcMsgs');if(msgs.lastChild&&msgs.lastChild.textContent==='...thinking')msgs.removeChild(msgs.lastChild);jarvisSay(ans.trim(),true,brain.toUpperCase());}
 
-User: ${q}`;
+async function callGemini(q,ctx){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:SYS_PROMPT+"\n\n"+ctx+"\n\nUser: "+q}]}]})});const d=await r.json();return d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0].text||"No response.";}
+async function callClaude(q,ctx){const k=getKey('claude');const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:300,system:SYS_PROMPT+"\n\n"+ctx,messages:[{role:'user',content:q}]})});const d=await r.json();if(d.error)return "Claude error: "+d.error.message;return d.content&&d.content[0]&&d.content[0].text||"No response.";}
+async function callOpenAI(q,ctx){const k=getKey('openai');const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:300,messages:[{role:'system',content:SYS_PROMPT+"\n\n"+ctx},{role:'user',content:q}]})});const d=await r.json();if(d.error)return "OpenAI error: "+d.error.message;return d.choices&&d.choices[0]&&d.choices[0].message.content||"No response.";}
+
+// ========== EMAIL PARSER ==========
+function openMail(){document.getElementById('mailContent').value='';document.getElementById('extractStatus').innerHTML='';document.getElementById('extractedList').innerHTML='';document.getElementById('addExtractedBar').style.display='none';extractedTasks=[];document.getElementById('mailModal').classList.add('open');}
+function closeMail(){document.getElementById('mailModal').classList.remove('open');}
+function clearExtracted(){extractedTasks=[];document.getElementById('extractedList').innerHTML='';document.getElementById('addExtractedBar').style.display='none';document.getElementById('extractStatus').innerHTML='';}
+
+const EMAIL_PROMPT=`You are an HSE task-extraction assistant for Kevin Kegin (HSE Advisor, Decmil, PRJ0172 McPhee Creek).
+From the email below, extract every actionable task for him.
+
+Return ONLY a valid JSON array (no markdown fences, no commentary). Format each task as:
+{"title":"brief task name (max 60 chars)","date":"YYYY-MM-DD or null","time":"HH:MM 24h or null","priority":"p1|p2|p3","kpi":"so|hse|env|cri|null","detail":"context max 100 chars"}
+
+Priority: p1=urgent/today/regulatory/client-deliverable/escalation, p2=this-week/important, p3=routine
+KPI: so=safety obs, hse=HSE inspection, env=environmental inspection, cri=critical risk inspection (mobile plant/vehicles/lifting/heights/excavation/energy)
+
+If email has no actionable tasks for Kevin, return [].
+Be specific in titles - capture the actual deliverable, not generic words.
+
+Email:
+`;
+
+async function parseEmail(){
+  const content=document.getElementById('mailContent').value.trim();
+  if(!content){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Paste an email first</div>';return;}
+  const brain=getActiveBrain();
+  if(!getKey(brain)){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ No '+brain.toUpperCase()+' key. Open 🧠 BRAINS to set up.</div>';return;}
+  document.getElementById('extractBtn').disabled=true;
+  document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ '+brain.toUpperCase()+' parsing email…</div>';
+  document.getElementById('extractedList').innerHTML='';
+  document.getElementById('addExtractedBar').style.display='none';
+  let raw='';
   try{
-    addMsg('jarvis','...thinking');
-    const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+k,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})
-    });
-    const d=await r.json();
-    const ans=d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0].text||"Apologies, Kevin — connection unstable.";
-    // remove placeholder
-    const msgs=document.getElementById('jcMsgs');
-    if(msgs.lastChild&&msgs.lastChild.textContent==='...thinking')msgs.removeChild(msgs.lastChild);
-    jarvisSay(ans.trim(),true);
-  }catch(e){
-    jarvisSay("AI link failed. Check your Gemini key.",true);
-  }
+    if(brain==='gemini')raw=await callGeminiRaw(EMAIL_PROMPT+content);
+    else if(brain==='claude')raw=await callClaudeRaw(EMAIL_PROMPT+content);
+    else if(brain==='openai')raw=await callOpenAIRaw(EMAIL_PROMPT+content);
+  }catch(e){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ AI request failed</div>';document.getElementById('extractBtn').disabled=false;return;}
+  // Clean and parse
+  raw=raw.replace(/```json/gi,'').replace(/```/g,'').trim();
+  let arr=null;
+  try{arr=JSON.parse(raw);}catch(e){const m=raw.match(/\[[\s\S]*\]/);if(m){try{arr=JSON.parse(m[0]);}catch(e2){}}}
+  if(!Array.isArray(arr)){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Could not parse AI response. Try again.</div>';document.getElementById('extractBtn').disabled=false;return;}
+  if(arr.length===0){document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ No actionable tasks found in this email.</div>';document.getElementById('extractBtn').disabled=false;return;}
+  extractedTasks=arr;
+  document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ '+arr.length+' task'+(arr.length>1?'s':'')+' extracted. Review and select.</div>';
+  renderExtracted();
+  document.getElementById('addExtractedBar').style.display='flex';
+  document.getElementById('extractBtn').disabled=false;
 }
 
-function buildContext(){
-  const today=new Date();today.setHours(0,0,0,0);
-  const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));
-  const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));
-  const kpiTxt=KPIS.map(function(k){return k.lbl+': '+(kpiState[k.id]||0)+'/'+k.target;}).join(', ');
-  const open=tasks.filter(function(t){return !t.done&&t.type!=='break';}).map(function(t){return t.s+' '+t.title+(t.type==='p1'?' (P1)':'');}).join('; ');
-  const done=tasks.filter(function(t){return t.done;}).length;
-  return `Operator: Kevin Kegin, HSE Advisor at Decmil, PRJ0172 McPhee Creek S5 Nullagine WA.
-Current: ${new Date().toString().substring(0,21)}.
-Shift: Night (17:30-05:30), Day ${dayIn}/7 of swing. Final project shift in ${toFly} days (5 Jun).
-Mission progress: ${done} tasks done. Open: ${open||'none'}.
-KPIs (May 2026): ${kpiTxt}. Today is the 30th. KPIs reset 1 Jun.
-Active blocker: Scanner offline, Fatigue SA upload pending.
-Project end: 17 Jul 2026. Kevin's last day on project: 5 Jun.`;
+function renderExtracted(){
+  document.getElementById('extractedList').innerHTML=extractedTasks.map(function(t,i){
+    const pr=t.priority||'p2';
+    const time=t.time||'--:--';
+    const date=t.date||'today';
+    return '<label class="ext-task '+pr+'"><input type="checkbox" checked data-idx="'+i+'"><div class="et-body"><div class="et-title"><span class="badge b-'+pr+'">'+pr.toUpperCase()+'</span>'+(t.kpi?'<span class="kpi-tag">'+t.kpi.toUpperCase()+'</span>':'')+(t.title||'Untitled')+'</div><div class="et-meta">'+date+' · '+time+'</div>'+(t.detail?'<div class="et-detail">'+t.detail+'</div>':'')+'</div></label>';
+  }).join('');
 }
 
-// ========== CHARTS ==========
-let ch1=null,ch2=null;
-function initCharts(){
-  if(typeof Chart==='undefined')return;
-  Chart.defaults.color='#7dd3fc';Chart.defaults.font.family='Rajdhani';Chart.defaults.font.size=10;
-  const ctx1=document.getElementById('ch1').getContext('2d');
-  ch1=new Chart(ctx1,{type:'line',data:{labels:[],datasets:[{label:'Done',data:[],borderColor:'#00d4ff',backgroundColor:'rgba(0,212,255,.1)',fill:true,tension:.3,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,212,255,.05)'},ticks:{font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(0,212,255,.05)'},ticks:{font:{size:9},stepSize:1}}}}});
-  const ctx2=document.getElementById('ch2').getContext('2d');
-  ch2=new Chart(ctx2,{type:'bar',data:{labels:['Safety','HSE','Env','Crit'],datasets:[{label:'Current',data:[0,0,0,0],backgroundColor:['#ff3355','#fbbf24','#22ff88','#ff3355']},{label:'Target',data:[2,2,1,2],backgroundColor:'rgba(0,212,255,.15)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:9}}},y:{beginAtZero:true,grid:{color:'rgba(0,212,255,.05)'},ticks:{font:{size:9},stepSize:1}}}}});
-}
-function updateCharts(){
-  if(!ch1||!ch2)return;
-  // Mission completion curve — show tasks done at each task end-time
-  const sorted=tasks.filter(function(t){return t.type!=='break';}).sort(function(a,b){return tLog(a.s)-tLog(b.s);});
-  let cum=0;const labels=[],vals=[];
-  sorted.forEach(function(t){if(t.done)cum++;labels.push(t.s);vals.push(cum);});
-  ch1.data.labels=labels;ch1.data.datasets[0].data=vals;ch1.update('none');
-  ch2.data.datasets[0].data=[kpiState.so||0,kpiState.hse||0,kpiState.env||0,kpiState.cri||0];
-  ch2.data.datasets[0].backgroundColor=KPIS.map(function(k){const c=kpiState[k.id]||0;return c>=k.target?'#22ff88':(c>0?'#fbbf24':'#ff3355');});
-  ch2.update('none');
+function addExtractedTasks(){
+  if(!tasksRef){alert('Connect Firebase first');return;}
+  const checks=document.querySelectorAll('#extractedList input[type=checkbox]');
+  let added=0;
+  checks.forEach(function(c){
+    if(!c.checked)return;
+    const t=extractedTasks[+c.dataset.idx];
+    if(!t)return;
+    const id='e'+Date.now()+'_'+(added++);
+    const tm=t.time||'17:30';
+    // end time = +30min default
+    const [hh,mm]=tm.split(':').map(Number);
+    const end=String((hh+(mm+30>=60?1:0))%24).padStart(2,'0')+':'+String((mm+30)%60).padStart(2,'0');
+    const obj={id:id,s:tm,e:end,type:t.priority||'p2',title:t.title||'Untitled',sub:t.detail||'',kpi:t.kpi||'',done:false,source:'email'};
+    tasksRef.child(id).set(obj);
+  });
+  if(added>0){jarvisSay(added+" mission"+(added>1?'s':'')+" added from email, Kevin.",true,'JARVIS');closeMail();}
+  else alert('Tick at least one task');
 }
 
-// ========== INTEL FEED ==========
-const FEEDS={
-  world:'https://feeds.bbci.co.uk/news/world/rss.xml',
-  aus:'https://www.abc.net.au/news/feed/45910/rss.xml',
-  biz:'https://feeds.reuters.com/reuters/businessNews'
-};
+// Raw AI callers (for email parsing - no system prompt wrap)
+async function callGeminiRaw(prompt){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});const d=await r.json();return d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0].text||'';}
+async function callClaudeRaw(prompt){const k=getKey('claude');const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:1500,messages:[{role:'user',content:prompt}]})});const d=await r.json();return d.content&&d.content[0]&&d.content[0].text||'';}
+async function callOpenAIRaw(prompt){const k=getKey('openai');const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:1500,messages:[{role:'user',content:prompt}]})});const d=await r.json();return d.choices&&d.choices[0]&&d.choices[0].message.content||'';}
+
+// ========== INTEL ==========
+const FEEDS={world:'https://feeds.bbci.co.uk/news/world/rss.xml',aus:'https://www.abc.net.au/news/feed/45910/rss.xml',biz:'https://feeds.reuters.com/reuters/businessNews'};
 let intelLatest=[];
-async function loadFeed(key){
-  document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ FETCHING…</div>';
-  try{
-    const url='https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(FEEDS[key]);
-    const r=await fetch(url);const d=await r.json();
-    if(!d.items){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ NO DATA</div>';return;}
-    intelLatest=d.items.slice(0,8);
-    document.getElementById('intelList').innerHTML=intelLatest.map(function(it){
-      const dt=new Date(it.pubDate);const ago=Math.round((Date.now()-dt)/60000);
-      const agoTxt=ago<60?ago+'m':Math.round(ago/60)+'h';
-      return '<a class="intel-item" href="'+it.link+'" target="_blank">'+it.title+'<div class="meta">'+agoTxt+' AGO · '+(d.feed.title||'').substring(0,30)+'</div></a>';
-    }).join('');
-  }catch(e){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ UPLINK FAILED</div>';}
-}
-function switchFeed(k){
-  document.querySelectorAll('.intel-tab').forEach(function(t){t.classList.toggle('active',t.dataset.feed===k);});
-  loadFeed(k);
-}
-function speakNews(){
-  if(intelLatest.length===0){jarvisSay("Intel feed not loaded yet, Kevin.",true);return;}
-  const top=intelLatest.slice(0,3).map(function(it,i){return (i+1)+'. '+it.title;}).join('. ');
-  jarvisSay("Top headlines: "+top,true);
-}
+async function loadFeed(key){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ FETCHING…</div>';try{const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(FEEDS[key]));const d=await r.json();if(!d.items){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ NO DATA</div>';return;}intelLatest=d.items.slice(0,10);document.getElementById('intelList').innerHTML=intelLatest.map(function(it){const dt=new Date(it.pubDate);const ago=Math.round((Date.now()-dt)/60000);return '<a class="intel-item" href="'+it.link+'" target="_blank">'+it.title+'<div class="meta">'+(ago<60?ago+'m':Math.round(ago/60)+'h')+' AGO</div></a>';}).join('');}catch(e){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ UPLINK FAILED</div>';}}
+function switchFeed(k){document.querySelectorAll('.intel-tab').forEach(function(t){t.classList.toggle('active',t.dataset.feed===k);});loadFeed(k);}
+function speakNews(){if(intelLatest.length===0){jarvisSay("Intel feed not loaded.",true,'JARVIS');return;}const top=intelLatest.slice(0,3).map(function(it,i){return (i+1)+'. '+it.title;}).join('. ');jarvisSay("Top headlines: "+top,true,'JARVIS');}
+
+// ========== MS GRAPH FUTURE HOOK ==========
+// Reserved namespace for future Microsoft Graph integration:
+// async function msGraphFetchEmails(){ /* OAuth + /me/messages */ }
+// async function msGraphAutoScan(){ /* poll inbox, parseEmail each, dedupe */ }
 
 // ========== BOOT ==========
 function tick(){const n=new Date();document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');render();renderStats();}
-renderKPI();renderStats();setAIIndicator();initCharts();tick();setInterval(tick,15000);
+renderKPI();renderStats();updateBrainUI();tick();setInterval(tick,15000);
 const saved=getCfg();if(saved){connect(saved);}else{setDot('off');openSetup();}
 loadFeed('world');
 
-// Greeting + initial briefing
-setTimeout(function(){
-  document.getElementById('greetingText').innerHTML='SYSTEMS NOMINAL<span class="sub">Welcome back, Kevin.</span>';
-  setTimeout(function(){
-    document.getElementById('greeting').classList.add('fade');
-    setTimeout(function(){
-      const h=new Date().getHours();
-      const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');
-      const nl=logM(clockM());const rem=Math.max(0,720-nl);
-      const done=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;
-      jarvisSay(greet+", Kevin. Tactical display online. "+done+" missions logged complete. "+Math.floor(rem/60)+" hours "+(rem%60)+" minutes remaining on shift. Say 'brief me' for full sitrep, or tap the microphone.",false);
-    },800);
-  },1400);
-},600);
+setTimeout(function(){document.getElementById('greeting').classList.add('fade');setTimeout(function(){const h=new Date().getHours();const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');const nl=logM(clockM()),rem=Math.max(0,720-nl),done=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;jarvisSay(greet+", Kevin. Dashboard online. "+done+" missions complete. "+Math.floor(rem/60)+" hours "+(rem%60)+" minutes on shift. Email parser ready — try the mail button.",false);},1000);},1500);
 </script>
 </body>
 </html>

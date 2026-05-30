@@ -576,7 +576,7 @@ function handleQuery(q){
     if(/\b(switch to|use) (claude|gemini|openai|copilot)\b/i.test(lq)){const b=lq.match(/\b(claude|gemini|openai|copilot)\b/)[1];setBrain(b==='copilot'?'openai':b);return;}
   }
   const brain=askBrain||getActiveBrain();
-  if(!getKey(brain)){jarvisSay(brain.toUpperCase()+" brain offline. Add a key via 🧠 BRAINS.",true,'JARVIS');return;}
+  if(brain==='jarvis'){jarvisSay("Local mode, Kevin. Try: brief me, what's next, KPI status, news, mark done. For broader queries switch to G, C, or O.",true,'JARVIS');return;}if(!getKey(brain)){jarvisSay(brain.toUpperCase()+" brain offline. Add a key via 🧠 BRAINS.",true,'JARVIS');return;}
   askAI(actualQ,brain);
 }
 

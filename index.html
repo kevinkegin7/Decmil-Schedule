@@ -464,7 +464,7 @@ function setDot(s){document.getElementById('dot').className='dot '+s;document.ge
 function getCfg(){try{return JSON.parse(localStorage.getItem('fb_cfg'));}catch(e){return null;}}
 function getKey(b){return localStorage.getItem('key_'+b)||'';}
 function getActiveBrain(){return localStorage.getItem('active_brain')||'gemini';}
-function setBrain(b){if(b!==getActiveBrain())localStorage.setItem('active_brain',b);updateBrainUI();if(getKey(b))jarvisSay("Switched to "+b.toUpperCase(),true,b.toUpperCase());}
+function setBrain(b){if(b!==getActiveBrain())localStorage.setItem('active_brain',b);updateBrainUI();if(b==='jarvis')jarvisSay("Local Jarvis mode active, Kevin. Voice commands online.",true,'JARVIS');else if(getKey(b))jarvisSay("Switched to "+b.toUpperCase(),true,b.toUpperCase());}
 function updateBrainUI(){const b=getActiveBrain();document.querySelectorAll('.bsw').forEach(function(el){el.classList.toggle('active',el.dataset.brain===b);});document.querySelectorAll('.brain-active-toggle').forEach(function(el){el.classList.toggle('on',el.id==='tog-'+b);el.textContent=el.id==='tog-'+b?'✓ ACTIVE':'SET ACTIVE';});const pill=document.getElementById('sysBrain');if(getKey(b)){pill.textContent=b.toUpperCase();pill.className='brain-pill '+b;}else{pill.textContent='OFFLINE';pill.className='brain-pill off';}}
 
 function connect(cfg){

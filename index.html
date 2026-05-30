@@ -3,704 +3,338 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRJ0172 — Daily Schedule</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Decmil Schedule — Live (NS)</title>
 <style>
-  :root {
-    --bg: #f4f3ef;
-    --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: #e0ddd5;
-    --border2: #ccc9be;
-    --text: #1a1916;
-    --text2: #6b6860;
-    --text3: #a09d96;
-    --green: #1D9E75;
-    --green-bg: #e8f7f1;
-    --green-text: #0d6b4e;
-    --blue: #378ADD;
-    --blue-bg: #e8f2fc;
-    --blue-text: #1a5a9a;
-    --amber: #c47d0a;
-    --amber-bg: #fdf3dc;
-    --amber-text: #7a4e06;
-    --red: #d13b3b;
-    --red-bg: #fdeaea;
-    --font: 'IBM Plex Sans', sans-serif;
-    --mono: 'IBM Plex Mono', monospace;
-  }
+:root{
+  --bg:#0f1419; --card:#1a2129; --card2:#232c36; --line:#2e3a46;
+  --txt:#e8edf2; --txt2:#9aa7b4; --txt3:#6b7886;
+  --p1:#e5484d; --p2:#f5a623; --p3:#30a46c; --fixed:#3b82f6; --meet:#8b5cf6;
+  --break:#64748b; --admin:#475569; --blocked:#f59e0b;
+  --done:#1f3a2e; --donetxt:#4ade80;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);padding:16px;max-width:680px;margin:0 auto}
+.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;flex-wrap:wrap}
+.hdr h1{font-size:19px;font-weight:600;display:flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:99px;background:var(--txt3)}
+.dot.on{background:#22c55e;box-shadow:0 0 6px #22c55e}
+.dot.off{background:#ef4444}
+.hdr .sub{font-size:13px;color:var(--txt2)}
+.hbtn{font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--txt2);padding:6px 11px;border-radius:8px;cursor:pointer}
+.hbtn:active{transform:scale(.96)}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+.live{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px}
+.clock{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
+.next{font-size:12px;color:var(--txt2);text-align:right;line-height:1.4}
+.next b{color:var(--txt);font-weight:600}
 
-  body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 2rem 1rem;
-  }
+.prog-wrap{margin-bottom:14px}
+.prog-bar{height:7px;background:var(--card2);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:99px;transition:width .4s}
+.prog-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);margin-top:5px}
 
-  .page { max-width: 740px; margin: 0 auto; }
+.alert{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);border-radius:10px;padding:10px 13px;margin-bottom:14px;font-size:12px;color:#fbbf24;line-height:1.45}
+.alert b{color:#fcd34d}
 
-  /* ── Header ── */
-  .page-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 1.5rem;
-    gap: 1rem;
-  }
-  .page-title {
-    font-size: 11px;
-    font-family: var(--mono);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--text3);
-    margin-bottom: 4px;
-  }
-  .page-heading {
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.02em;
-  }
-  .sync-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
-    font-family: var(--mono);
-    color: var(--text3);
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    background: var(--surface);
-    white-space: nowrap;
-    margin-top: 4px;
-  }
-  .sync-dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--border2);
-    flex-shrink: 0;
-  }
-  .sync-dot.live { background: var(--green); animation: blink 2s ease-in-out infinite; }
-  .sync-dot.error { background: var(--red); }
-  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.kpi h3{font-size:12px;color:var(--txt2);font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi-item{background:var(--card2);border-radius:9px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between}
+.kpi-lbl{font-size:12px;line-height:1.3}
+.kpi-lbl .met{color:var(--txt3);font-size:11px}
+.kpi-ctrl{display:flex;align-items:center;gap:8px}
+.kpi-btn{width:24px;height:24px;border:none;border-radius:6px;background:var(--line);color:var(--txt);font-size:15px;cursor:pointer;line-height:1}
+.kpi-count{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;min-width:30px;text-align:center}
+.kpi-count.done{color:var(--donetxt)}
 
-  /* ── Live strip ── */
-  .live-strip {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1rem;
-    align-items: center;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 18px;
-    margin-bottom: 1.5rem;
-  }
-  .live-clock {
-    font-family: var(--mono);
-    font-size: 24px;
-    font-weight: 500;
-    color: var(--text);
-    letter-spacing: -0.02em;
-  }
-  .live-next {
-    font-size: 12px;
-    color: var(--text2);
-  }
-  .live-next strong { color: var(--text); font-weight: 500; }
-  .live-date {
-    font-size: 11px;
-    font-family: var(--mono);
-    color: var(--text3);
-    text-align: right;
-  }
+.slots{display:flex;flex-direction:column;gap:9px}
+.slot{display:grid;grid-template-columns:62px 1fr;gap:12px;align-items:start}
+.t{font-size:12px;color:var(--txt2);font-variant-numeric:tabular-nums;padding-top:13px;text-align:right}
+.t .dur{font-size:10px;color:var(--txt3);display:block;margin-top:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.card.done{background:var(--done);border-color:#2c5440}
+.card.done .title{color:var(--donetxt);text-decoration:line-through;opacity:.85}
+.card.now{border-color:var(--meet);box-shadow:0 0 0 1px var(--meet)}
+.card.blocked{border-color:rgba(245,158,11,.5)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.title{font-size:14px;font-weight:500;line-height:1.35;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sub{font-size:12px;color:var(--txt2);margin-top:5px;line-height:1.4}
+.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+.b-p1{background:rgba(229,72,77,.15);color:var(--p1)}
+.b-p2{background:rgba(245,166,35,.15);color:var(--p2)}
+.b-p3{background:rgba(48,163,108,.15);color:var(--p3)}
+.b-fixed{background:rgba(59,130,246,.15);color:var(--fixed)}
+.b-meet{background:rgba(139,92,246,.15);color:var(--meet)}
+.b-break{background:rgba(100,116,139,.15);color:var(--break)}
+.b-admin{background:rgba(71,85,105,.2);color:#94a3b8}
+.b-blocked{background:rgba(245,158,11,.18);color:#fbbf24}
+.tag{font-size:10px;color:var(--txt3);background:var(--card2);padding:2px 6px;border-radius:5px}
+.now-pill{font-size:9px;font-weight:700;color:var(--meet);background:rgba(139,92,246,.18);padding:1px 6px;border-radius:4px}
+.actions{display:flex;gap:6px;margin-top:9px}
+.act{font-size:11px;font-weight:600;border:1px solid var(--line);background:transparent;color:var(--txt2);padding:5px 12px;border-radius:7px;cursor:pointer}
+.act.done-btn{color:var(--p3);border-color:rgba(48,163,108,.4)}
+.act.done-btn.is-done{color:var(--donetxt)}
+.addbtn{width:100%;margin-top:14px;padding:12px;border:1px dashed var(--line);background:transparent;color:var(--txt2);border-radius:11px;font-size:13px;font-weight:600;cursor:pointer}
 
-  /* ── Toolbar ── */
-  .toolbar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 1.25rem;
-    align-items: center;
-  }
-  .btn {
-    font-family: var(--font);
-    font-size: 12px;
-    font-weight: 500;
-    padding: 7px 16px;
-    border-radius: 6px;
-    border: 1px solid var(--border2);
-    background: var(--surface);
-    color: var(--text2);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .btn:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
-  .btn.primary { background: var(--text); color: #fff; border-color: var(--text); }
-  .btn.primary:hover { background: #333; }
-  .progress-wrap { flex: 1; }
-  .progress-label { font-size: 11px; font-family: var(--mono); color: var(--text3); margin-bottom: 4px; }
-  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.4s ease; }
-
-  /* ── Add form ── */
-  .add-form {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 1.25rem;
-    display: none;
-  }
-  .add-form.open { display: block; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-  .form-grid.full { grid-template-columns: 1fr; }
-  .form-label { font-size: 10px; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); display: block; margin-bottom: 4px; }
-  .form-input {
-    font-family: var(--font);
-    font-size: 13px;
-    padding: 7px 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--text);
-    width: 100%;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .form-input:focus { border-color: var(--border2); background: var(--surface); }
-  .type-row { display: flex; gap: 6px; }
-  .type-btn {
-    font-family: var(--font);
-    font-size: 12px;
-    padding: 5px 14px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text2);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .type-btn.sel { background: var(--text); color: #fff; border-color: var(--text); }
-  .color-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; margin-top: 2px; }
-  .swatch {
-    width: 22px; height: 22px; border-radius: 50%;
-    cursor: pointer; border: 2px solid transparent;
-    transition: transform 0.1s;
-  }
-  .swatch:hover { transform: scale(1.15); }
-  .swatch.sel { border-color: var(--text); }
-  .form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
-
-  /* ── Schedule ── */
-  .schedule { display: flex; flex-direction: column; }
-  .slot { display: grid; grid-template-columns: 78px 10px 1fr; gap: 0 12px; align-items: stretch; min-height: 50px; }
-  .slot-time {
-    font-size: 11px;
-    font-family: var(--mono);
-    color: var(--text3);
-    padding: 13px 0 0;
-    text-align: right;
-    line-height: 1.4;
-  }
-  .slot-time .end { color: var(--border2); font-size: 10px; display: block; }
-  .slot-line { display: flex; flex-direction: column; align-items: center; }
-  .slot-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; margin-top: 15px; }
-  .slot-vline { flex: 1; width: 1px; background: var(--border); margin-top: 3px; }
-  .slot:last-child .slot-vline { display: none; }
-
-  .slot-card {
-    margin: 5px 0;
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    position: relative;
-    transition: opacity 0.2s;
-  }
-  .slot-card.is-break { background: var(--surface2); border-style: dashed; }
-  .slot-card.is-done { opacity: 0.4; }
-  .slot-card.is-active { border-width: 1.5px; }
-
-  .card-top { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 2px; }
-  .card-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-    flex: 1;
-    outline: none;
-    background: transparent;
-    border: none;
-    cursor: text;
-    font-family: var(--font);
-    line-height: 1.4;
-    min-width: 0;
-    word-break: break-word;
-  }
-  .card-title:focus { color: var(--text); }
-  .card-detail {
-    font-size: 11px;
-    color: var(--text2);
-    line-height: 1.6;
-    outline: none;
-    background: transparent;
-    border: none;
-    width: 100%;
-    cursor: text;
-    resize: none;
-    font-family: var(--font);
-  }
-  .card-note {
-    font-size: 11px;
-    color: var(--green-text);
-    margin-top: 4px;
-    outline: none;
-    background: transparent;
-    border: none;
-    width: 100%;
-    font-family: var(--font);
-  }
-  .card-note::before { content: "✓ "; }
-
-  .dur { font-size: 10px; font-family: var(--mono); color: var(--text3); position: absolute; top: 10px; right: 12px; }
-
-  .badge {
-    font-size: 10px;
-    font-family: var(--mono);
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-weight: 500;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-  .badge-now { background: var(--blue-bg); color: var(--blue-text); }
-  .badge-done { background: var(--green-bg); color: var(--green-text); }
-  .badge-break { background: var(--amber-bg); color: var(--amber-text); }
-
-  .card-actions {
-    position: absolute; top: 8px; right: 8px;
-    display: none; gap: 4px; align-items: center;
-  }
-  .slot-card:hover .card-actions { display: flex; }
-  .act {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text2);
-    cursor: pointer;
-    font-family: var(--font);
-    line-height: 1.6;
-    transition: all 0.1s;
-  }
-  .act:hover { background: var(--surface); color: var(--text); }
-  .act.done-btn { color: var(--green-text); border-color: var(--green); }
-  .act.del-btn:hover { color: var(--red); border-color: var(--red); }
-
-  /* ── Config overlay ── */
-  .overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(26,25,22,0.55);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .overlay.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border-radius: 12px;
-    padding: 24px;
-    max-width: 520px;
-    width: 100%;
-    border: 1px solid var(--border2);
-  }
-  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-  .modal p { font-size: 13px; color: var(--text2); margin-bottom: 16px; line-height: 1.6; }
-  .modal code {
-    display: block;
-    font-family: var(--mono);
-    font-size: 11px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 10px 12px;
-    margin-bottom: 12px;
-    color: var(--text2);
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
-
-  /* ── Firebase config section ── */
-  .config-section {
-    background: var(--amber-bg);
-    border: 1px solid #f5d88a;
-    border-radius: 8px;
-    padding: 12px 14px;
-    margin-bottom: 1.25rem;
-    font-size: 12px;
-    color: var(--amber-text);
-    display: none;
-  }
-  .config-section.show { display: block; }
-  .config-section strong { display: block; margin-bottom: 4px; font-size: 13px; }
-
-  @media (max-width: 500px) {
-    .live-strip { grid-template-columns: auto 1fr; }
-    .live-date { display: none; }
-    .form-grid { grid-template-columns: 1fr; }
-  }
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.open{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
+.modal-box h2{font-size:16px;margin-bottom:14px}
+.fld{margin-bottom:11px}
+.fld label{display:block;font-size:11px;color:var(--txt2);margin-bottom:4px;font-weight:600}
+.fld input,.fld select,.fld textarea{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:9px 11px;font-size:13px;font-family:inherit}
+.fld textarea{resize:vertical;min-height:48px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.modal-btns{display:flex;gap:8px;margin-top:16px}
+.mbtn{flex:1;padding:11px;border-radius:9px;border:none;font-size:13px;font-weight:600;cursor:pointer}
+.mbtn.primary{background:var(--meet);color:#fff}
+.mbtn.ghost{background:var(--card2);color:var(--txt2);border:1px solid var(--line)}
+.mbtn.danger{background:rgba(229,72,77,.15);color:var(--p1);flex:0 0 auto;padding:11px 16px}
+.hint{font-size:11px;color:var(--txt3);margin-top:8px;line-height:1.4}
+.foot{text-align:center;font-size:11px;color:var(--txt3);margin-top:18px;line-height:1.5}
 </style>
 </head>
 <body>
-
-<div class="page">
-
-  <!-- Header -->
-  <div class="page-header">
-    <div>
-      <div class="page-title">PRJ0172 · McPhee Creek · Marble Bar Rd</div>
-      <div class="page-heading">Daily Schedule</div>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-      <div class="sync-badge">
-        <div class="sync-dot" id="syncDot"></div>
-        <span id="syncLabel">not connected</span>
-      </div>
-      <button class="btn" onclick="document.getElementById('cfgOverlay').classList.add('open')" style="font-size:11px;padding:4px 12px;">⚙ Firebase setup</button>
-    </div>
+<div class="hdr">
+  <div>
+    <h1><span class="dot" id="dot"></span> Decmil Schedule</h1>
+    <div class="sub" id="datesub">Loading…</div>
   </div>
-
-  <!-- Firebase not configured warning -->
-  <div class="config-section" id="cfgWarn">
-    <strong>⚠ Firebase not configured — changes are local only</strong>
-    Click "Firebase setup" above to connect live sync so your whole team sees updates in real time.
-  </div>
-
-  <!-- Live strip -->
-  <div class="live-strip">
-    <div class="live-clock" id="liveClock">--:--</div>
-    <div class="live-next" id="liveNext">—</div>
-    <div class="live-date" id="liveDate"></div>
-  </div>
-
-  <!-- Progress -->
-  <div class="toolbar">
-    <button class="btn primary" onclick="toggleForm()">+ Add task</button>
-    <div class="progress-wrap">
-      <div class="progress-label" id="progressLabel">0 / 0 done</div>
-      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-    </div>
-  </div>
-
-  <!-- Add form -->
-  <div class="add-form" id="addForm">
-    <div class="form-grid">
-      <div><label class="form-label">Start</label><input class="form-input" type="time" id="f-start" value="08:00"></div>
-      <div><label class="form-label">End</label><input class="form-input" type="time" id="f-end" value="09:00"></div>
-    </div>
-    <div class="form-grid full" style="margin-bottom:10px;">
-      <div><label class="form-label">Title</label><input class="form-input" id="f-title" placeholder="Task title"></div>
-    </div>
-    <div class="form-grid full" style="margin-bottom:10px;">
-      <div><label class="form-label">Detail (optional)</label><input class="form-input" id="f-detail" placeholder="Additional detail"></div>
-    </div>
-    <div class="form-grid" style="margin-bottom:0;">
-      <div>
-        <label class="form-label">Type</label>
-        <div class="type-row">
-          <button class="type-btn sel" id="tb-work" onclick="selType('work')">Work</button>
-          <button class="type-btn" id="tb-break" onclick="selType('break')">Break</button>
-        </div>
-      </div>
-      <div>
-        <label class="form-label">Colour</label>
-        <div class="color-row" id="colorPicker"></div>
-      </div>
-    </div>
-    <div class="form-actions">
-      <button class="btn" onclick="toggleForm()">Cancel</button>
-      <button class="btn primary" onclick="addTask()">Add task</button>
-    </div>
-  </div>
-
-  <!-- Schedule -->
-  <div class="schedule" id="schedule"></div>
-
+  <button class="hbtn" onclick="openSetup()">⚙ Firebase</button>
 </div>
 
-<!-- Firebase setup modal -->
-<div class="overlay" id="cfgOverlay">
-  <div class="modal">
-    <h3>Connect Firebase live sync</h3>
-    <p>Follow these steps once, then paste your config below and save. Anyone who opens this file with the same config will see live updates.</p>
-    <p style="margin-bottom:8px;"><strong>Steps:</strong><br>
-    1. Go to <a href="https://console.firebase.google.com" target="_blank" style="color:var(--blue);">console.firebase.google.com</a><br>
-    2. Create a project → Add a web app → copy the firebaseConfig object<br>
-    3. In the console go to <em>Realtime Database → Create database → Start in test mode</em><br>
-    4. Paste your config values below and click Save</p>
-    <div class="form-grid full" style="margin-bottom:8px;">
-      <div><label class="form-label">apiKey</label><input class="form-input" id="cfg-apiKey" placeholder="AIzaSy..."></div>
+<div class="live">
+  <div class="clock" id="clock">--:--</div>
+  <div class="next" id="next"></div>
+</div>
+
+<div class="prog-wrap">
+  <div class="prog-bar"><div class="prog-fill" id="progfill" style="width:0%"></div></div>
+  <div class="prog-meta"><span id="progtxt">Tasks 0/0 done</span><span id="shiftpct">Shift 0%</span></div>
+</div>
+
+<div class="alert"><b>Blocker:</b> Scanner not working — Fatigue Self Assessment scan/upload pending. Interim: photograph forms with phone, upload to SharePoint <b>10.5 folder</b>. Flag to IT first thing tomorrow.</div>
+
+<div class="kpi">
+  <h3>Monthly KPI Tracker — synced</h3>
+  <div class="kpi-grid" id="kpigrid"></div>
+</div>
+
+<div class="slots" id="slots"></div>
+<button class="addbtn" onclick="openTask()">+ Add task</button>
+
+<div class="foot">Night Shift · Live across all devices via Firebase · Done only changes on button press<br>kevinkegin7.github.io/Decmil-Schedule</div>
+
+<div class="modal" id="taskModal">
+  <div class="modal-box">
+    <h2 id="taskTitle">Add task</h2>
+    <div class="row2">
+      <div class="fld"><label>Start</label><input id="f_start" placeholder="22:00"></div>
+      <div class="fld"><label>End</label><input id="f_end" placeholder="23:00"></div>
     </div>
-    <div class="form-grid full" style="margin-bottom:8px;">
-      <div><label class="form-label">databaseURL</label><input class="form-input" id="cfg-dbUrl" placeholder="https://your-project-default-rtdb.firebaseio.com"></div>
+    <div class="fld"><label>Title</label><input id="f_title" placeholder="Task name"></div>
+    <div class="fld"><label>Detail (optional)</label><textarea id="f_sub"></textarea></div>
+    <div class="row2">
+      <div class="fld"><label>Priority / type</label>
+        <select id="f_type">
+          <option value="p1">Priority 1</option><option value="p2">Priority 2</option>
+          <option value="p3">Priority 3</option><option value="fixed">Fixed</option>
+          <option value="meet">Meeting</option><option value="break">Break</option>
+          <option value="admin">Admin</option><option value="blocked">Blocked</option>
+        </select></div>
+      <div class="fld"><label>Links KPI</label>
+        <select id="f_kpi">
+          <option value="">None</option><option value="so">Safety Obs</option>
+          <option value="hse">HSE Insp</option><option value="env">Env Insp</option>
+          <option value="cri">Critical Risk</option>
+        </select></div>
     </div>
-    <div class="form-grid full" style="margin-bottom:8px;">
-      <div><label class="form-label">projectId</label><input class="form-input" id="cfg-projectId" placeholder="your-project-id"></div>
-    </div>
-    <div class="form-grid full" style="margin-bottom:8px;">
-      <div><label class="form-label">appId</label><input class="form-input" id="cfg-appId" placeholder="1:123456789:web:abc..."></div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="document.getElementById('cfgOverlay').classList.remove('open')">Cancel</button>
-      <button class="btn primary" onclick="saveConfig()">Save &amp; connect</button>
+    <div class="modal-btns">
+      <button class="mbtn danger" id="delBtn" onclick="delTask()" style="display:none">Delete</button>
+      <button class="mbtn ghost" onclick="closeTask()">Cancel</button>
+      <button class="mbtn primary" onclick="saveTask()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<div class="modal" id="fbModal">
+  <div class="modal-box">
+    <h2>Firebase setup</h2>
+    <div class="fld"><label>apiKey</label><input id="cfg_api"></div>
+    <div class="fld"><label>databaseURL</label><input id="cfg_db"></div>
+    <div class="fld"><label>projectId</label><input id="cfg_pid"></div>
+    <div class="fld"><label>appId</label><input id="cfg_app"></div>
+    <div class="modal-btns">
+      <button class="mbtn ghost" onclick="closeSetup()">Cancel</button>
+      <button class="mbtn primary" onclick="saveSetup()">Save &amp; connect</button>
+    </div>
+    <div class="hint">Values are pre-filled — just hit Save &amp; connect once.</div>
+  </div>
+</div>
 
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
-// ── Default schedule data ──────────────────────────────────────────
-const DEFAULTS = [
-  {id:"s1",start:"08:00",end:"08:30",type:"work",color:"#1D9E75",title:"QR scanner for JMP — developed and laminated",detail:"QR code developed, laminated and displayed at site entry.",done:false,note:""},
-  {id:"s2",start:"08:30",end:"09:05",type:"work",color:"#1D9E75",title:"Emails — JMP reply to Scott + toolbox review",detail:"Replied to Scott re JMP QR code. Reviewed Line of Fire toolbox talk content.",done:false,note:""},
-  {id:"s3",start:"09:05",end:"09:45",type:"work",color:"#1D9E75",title:"Emergency response team poster + First Aider poster",detail:"Updated and displayed Emergency Response Team poster and First Aider poster on site.",done:false,note:""},
-  {id:"s4",start:"09:45",end:"10:30",type:"work",color:"#378ADD",title:"SAI360 — Safety observations (×2)",detail:"Complete and submit 2 safety observations in SAI360.",done:false,note:""},
-  {id:"s5",start:"10:30",end:"11:00",type:"break",color:"#c47d0a",title:"Morning break",detail:"",done:false,note:""},
-  {id:"s6",start:"11:00",end:"11:45",type:"work",color:"#378ADD",title:"SAI360 — HSE inspections (×2) + Environmental (×1)",detail:"Complete 2 HSE inspections and 1 environmental inspection in SAI360.",done:false,note:""},
-  {id:"s7",start:"11:45",end:"12:30",type:"work",color:"#378ADD",title:"SAI360 — Critical risk inspections (×2)",detail:"Complete 2 critical risk inspections. Clears all monthly KPI targets.",done:false,note:""},
-  {id:"s8",start:"12:30",end:"13:30",type:"work",color:"#c47d0a",title:"ACT-0007628 — Close out with Frazer",detail:"Confirm reflective tape applied to all SJ Traffic LVs on night shift. Close action in SAI360.",done:false,note:""},
-  {id:"s9",start:"13:30",end:"14:00",type:"work",color:"#D85A30",title:"Field visit — work front walk",detail:"Get out to the active work fronts. Catch up with supervisors.",done:false,note:""},
-  {id:"s10",start:"14:00",end:"14:30",type:"break",color:"#c47d0a",title:"Afternoon break",detail:"",done:false,note:""},
-  {id:"s11",start:"14:30",end:"15:30",type:"work",color:"#D85A30",title:"Field visit continued — supervisor catch-ups",detail:"Continue work front walk. Observe plant and TTM controls.",done:false,note:""},
-  {id:"s12",start:"15:30",end:"16:00",type:"work",color:"#7F77DD",title:"Subcontractor SWMS review follow-up",detail:"Follow up on action items from SWMS review. Confirm with relevant parties.",done:false,note:""},
-  {id:"s13",start:"16:00",end:"16:30",type:"work",color:"#888780",title:"Admin — SAI360 wrap-up",detail:"Ensure all SAI360 entries submitted. Check open notifications or assigned actions.",done:false,note:""},
-  {id:"s14",start:"16:30",end:"17:00",type:"work",color:"#888780",title:"End of day — review and plan tomorrow",detail:"Log completed tasks, update KPI tracker, note anything carried forward.",done:false,note:""}
+const DEFAULT_CFG={
+  apiKey:"AIzaSyDbxaBCE-tPmc6byx-hv9eeqx_DfRYr0q0",
+  databaseURL:"https://decmil---hseq-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"decmil---hseq",
+  appId:"1:615574493396:web:f0c963945c4dc66b720341"
+};
+const DAY_KEY="2026-05-30-NS";
+const KPI_KEY="may26";
+
+// Night shift: 17:30 -> 05:30 (12h). Logical time = mins from shift start.
+const SHIFT_START=17*60+30;   // 1050
+const SHIFT_LEN=12*60;        // 720
+function clockM(){const n=new Date();return n.getHours()*60+n.getMinutes();}
+function logM(cm){return cm>=SHIFT_START ? cm-SHIFT_START : cm + (1440-SHIFT_START);}
+function isOffShift(){const cm=clockM();return cm>=(SHIFT_START+SHIFT_LEN)%1440 && cm<SHIFT_START;}
+function mins(t){const a=t.split(':');return (+a[0])*60+(+a[1]);}
+function tLog(hhmm){return logM(mins(hhmm));}
+function durTxt(s,e){let d=tLog(e)-tLog(s);if(d<0)d+=1440;return d>=60?(d/60)+'h':d+'m';}
+
+const KPIS=[
+  {id:'so', lbl:'Safety Observations', target:2},
+  {id:'hse',lbl:'HSE Inspections',     target:2},
+  {id:'env',lbl:'Environmental Insp.', target:1},
+  {id:'cri',lbl:'Critical Risk Insp.', target:2},
 ];
 
-const COLORS = ["#1D9E75","#378ADD","#D85A30","#7F77DD","#c47d0a","#888780","#d13b3b","#0d6b4e","#185fa5"];
-let selColor = COLORS[0];
-let selTypeVal = "work";
-let slots = [];
-let db = null;
-let dbRef = null;
-let saveTimer = null;
-let ignoreNext = false;
+const SEED=[
+ {id:'n01',s:'17:30',e:'18:00',type:'fixed',title:'Pre-start meeting facilitation',sub:'iPad / Breathos · QR sign-on',done:true},
+ {id:'n02',s:'18:00',e:'18:15',type:'fixed',title:'Personnel onsite check + crew list to mgmt',sub:'Emailed',done:true},
+ {id:'n03',s:'18:15',e:'18:45',type:'fixed',title:'Weekly SWMS sign-on with crew',sub:'All crew signed',done:true},
+ {id:'n04',s:'18:45',e:'19:00',type:'fixed',title:'Fatigue Self Assessment collection',sub:'Collected — upload blocked, see workaround',done:true},
+ {id:'n05',s:'19:00',e:'20:30',type:'p2',title:'Daily Night Shift site check-up',sub:'Lighting, exclusion zones, separation, active works — log Safety Obs along the way',kpi:'so',done:false},
+ {id:'n06',s:'20:30',e:'22:00',type:'p1',title:'Weekly Client Report — submission',sub:'Client deliverable. Include supervisor-led pre-start note (front-line ownership) under Innovations/Initiatives',done:false},
+ {id:'n07',s:'22:00',e:'22:30',type:'break',title:'Meal break',sub:'',done:false},
+ {id:'n08',s:'22:30',e:'01:00',type:'p1',title:'May 2026 Monthly Client Report — submission',sub:'Month close. Pull SAI360 stats, inspection counts, training matrix snapshot, env data',done:false},
+ {id:'n09',s:'01:00',e:'02:30',type:'p2',title:'ICAM training',sub:'PEEPO + 5 Whys framework refresher',done:false},
+ {id:'n10',s:'02:30',e:'03:00',type:'break',title:'Second break',sub:'',done:false},
+ {id:'n11',s:'03:00',e:'04:00',type:'fixed',title:'Tomorrow\u0027s pre-start — finalise',sub:'Started earlier — finish content + format check',done:false},
+ {id:'n12',s:'04:00',e:'04:30',type:'p3',title:'Second site walk',sub:'End-of-shift conditions check',done:false},
+ {id:'n13',s:'04:30',e:'05:00',type:'blocked',title:'Fatigue SA upload — interim workaround',sub:'Scanner down. Photograph forms, upload to SharePoint 10.5 folder. Flag to IT.',done:false},
+ {id:'n14',s:'05:00',e:'05:30',type:'fixed',title:'End-of-shift wrap-up + handover',sub:'',done:false},
+];
 
-// ── Config ────────────────────────────────────────────────────────
-function loadConfig() {
-  try { return JSON.parse(localStorage.getItem("fb_cfg") || "null"); } catch(e) { return null; }
-}
-function saveConfig() {
-  const cfg = {
-    apiKey: document.getElementById("cfg-apiKey").value.trim(),
-    databaseURL: document.getElementById("cfg-dbUrl").value.trim(),
-    projectId: document.getElementById("cfg-projectId").value.trim(),
-    appId: document.getElementById("cfg-appId").value.trim()
-  };
-  if (!cfg.apiKey || !cfg.databaseURL || !cfg.projectId || !cfg.appId) {
-    alert("Please fill in all four fields."); return;
-  }
-  localStorage.setItem("fb_cfg", JSON.stringify(cfg));
-  document.getElementById("cfgOverlay").classList.remove("open");
-  initFirebase(cfg);
-}
+let db=null,tasksRef=null,kpiRef=null;
+let tasks=[],kpiState={so:0,hse:0,env:0,cri:0};
+let editingId=null;
+const badgeText={p1:'priority 1',p2:'priority 2',p3:'priority 3',fixed:'fixed',meet:'meeting',break:'break',admin:'admin',blocked:'blocked'};
 
-// ── Firebase ──────────────────────────────────────────────────────
-function initFirebase(cfg) {
-  try {
-    if (firebase.apps.length) firebase.app().delete();
-    firebase.initializeApp({ ...cfg, authDomain: cfg.projectId+".firebaseapp.com", storageBucket: cfg.projectId+".appspot.com", messagingSenderId: "000000000000" });
-    db = firebase.database();
-    dbRef = db.ref("schedule_prj0172");
-    setSyncState("connecting...", "connecting");
-    dbRef.once("value").then(snap => {
-      const val = snap.val();
-      if (val && val.slots) {
-        slots = val.slots;
-      } else {
-        slots = DEFAULTS.map(s => ({...s}));
-        pushToDb();
-      }
+function setDot(s){document.getElementById('dot').className='dot '+s;}
+function getCfg(){try{return JSON.parse(localStorage.getItem('fb_cfg'));}catch(e){return null;}}
+
+function connect(cfg){
+  try{
+    if(firebase.apps.length){firebase.app().delete().catch(function(){});}
+    firebase.initializeApp(Object.assign({},cfg,{authDomain:cfg.projectId+".firebaseapp.com"}));
+    db=firebase.database();
+    tasksRef=db.ref('decmil_schedule/'+DAY_KEY+'/tasks');
+    kpiRef=db.ref('decmil_schedule/kpis/'+KPI_KEY);
+    setDot('on');
+    tasksRef.on('value',function(snap){
+      const v=snap.val();
+      if(!v){const seed={};SEED.forEach(function(t){seed[t.id]=t;});tasksRef.set(seed);return;}
+      tasks=Object.keys(v).map(function(k){return v[k];}).sort(function(a,b){return tLog(a.s)-tLog(b.s);});
       render();
-      setSyncState("live", "live");
-      document.getElementById("cfgWarn").classList.remove("show");
-      dbRef.on("value", snap => {
-        if (ignoreNext) { ignoreNext = false; return; }
-        const v = snap.val();
-        if (v && v.slots) { slots = v.slots; render(); setSyncState("updated", "live"); setTimeout(()=>setSyncState("live","live"),1200); }
-      });
-    }).catch(e => {
-      setSyncState("connection failed", "error");
-      document.getElementById("cfgWarn").classList.add("show");
-    });
-  } catch(e) {
-    setSyncState("error", "error");
-    document.getElementById("cfgWarn").classList.add("show");
+    },function(){setDot('off');});
+    kpiRef.on('value',function(snap){const v=snap.val();if(v)kpiState=Object.assign({},kpiState,v);renderKPI();});
+  }catch(e){setDot('off');console.error(e);}
+}
+
+function renderKPI(){
+  document.getElementById('kpigrid').innerHTML=KPIS.map(function(k){
+    const c=kpiState[k.id]||0,met=c>=k.target;
+    return '<div class="kpi-item"><div class="kpi-lbl">'+k.lbl+'<br><span class="met">min '+k.target+'/mo'+(met?' · ✓ met':'')+'</span></div>'+
+      '<div class="kpi-ctrl"><button class="kpi-btn" onclick="bump(\''+k.id+'\',-1)">−</button>'+
+      '<span class="kpi-count '+(met?'done':'')+'">'+c+'</span>'+
+      '<button class="kpi-btn" onclick="bump(\''+k.id+'\',1)">+</button></div></div>';
+  }).join('');
+}
+function bump(id,d){kpiState[id]=Math.max(0,(kpiState[id]||0)+d);renderKPI();if(kpiRef)kpiRef.set(kpiState);}
+
+function render(){
+  const cm=clockM(),nl=logM(cm);
+  const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl;});
+  let nextHtml='Off shift — see you at 17:30';
+  if(tasks.length){
+    if(nl<tLog(tasks[0].s)||nl>=720)nextHtml='Starts <b>'+tasks[0].s+'</b> · '+tasks[0].title;
+    else if(cur)nextHtml='Now: <b>'+cur.title+'</b>';
+    else{const nx=tasks.find(function(t){return tLog(t.e)>nl;});if(nx)nextHtml='Next <b>'+nx.s+'</b> · '+nx.title;else nextHtml='Shift ending — wrap up';}
   }
+  document.getElementById('next').innerHTML=nextHtml;
+
+  document.getElementById('slots').innerHTML=tasks.map(function(t){
+    const isNow=tLog(t.s)<=nl&&tLog(t.e)>nl&&nl<720;
+    return '<div class="slot"><div class="t">'+t.s+'<span class="dur">'+durTxt(t.s,t.e)+'</span></div>'+
+      '<div class="card '+(t.done?'done':'')+' '+(isNow?'now':'')+' '+(t.type==='blocked'?'blocked':'')+'">'+
+      '<div class="card-top"><div class="title">'+
+      (isNow&&!t.done?'<span class="now-pill">NOW</span>':'')+
+      '<span class="badge b-'+t.type+'">'+(badgeText[t.type]||t.type)+'</span>'+
+      (t.kpi?'<span class="tag">KPI</span>':'')+t.title+'</div></div>'+
+      (t.sub?'<div class="sub">'+t.sub+'</div>':'')+
+      (t.type!=='break'?'<div class="actions">'+
+        '<button class="act done-btn '+(t.done?'is-done':'')+'" onclick="toggleDone(\''+t.id+'\')">'+(t.done?'✓ Done — undo':'Mark done')+'</button>'+
+        '<button class="act" onclick="openTask(\''+t.id+'\')">Edit</button></div>':'')+
+      '</div></div>';
+  }).join('');
+
+  const doneCount=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;
+  const total=tasks.filter(function(t){return t.type!=='break';}).length;
+  document.getElementById('progtxt').textContent='Tasks '+doneCount+'/'+total+' done';
+  let pct=Math.max(0,Math.min(100,Math.round((nl/720)*100)));
+  if(nl>=720&&nl<1440-SHIFT_START+0)pct=0;
+  document.getElementById('progfill').style.width=pct+'%';
+  document.getElementById('shiftpct').textContent='Shift '+pct+'%';
+}
+function toggleDone(id){
+  const t=tasks.find(function(x){return x.id===id;});if(!t)return;
+  const nd=!t.done;if(t.kpi)bump(t.kpi,nd?1:-1);
+  if(tasksRef)tasksRef.child(id).update({done:nd});
 }
 
-function pushToDb() {
-  if (!dbRef) return;
-  ignoreNext = true;
-  dbRef.set({ slots, updatedAt: Date.now() }).catch(e => setSyncState("save error","error"));
+function openTask(id){
+  editingId=id||null;
+  document.getElementById('taskTitle').textContent=id?'Edit task':'Add task';
+  document.getElementById('delBtn').style.display=id?'block':'none';
+  const t=id?tasks.find(function(x){return x.id===id;}):{s:'',e:'',title:'',sub:'',type:'p2',kpi:''};
+  document.getElementById('f_start').value=t.s;document.getElementById('f_end').value=t.e;
+  document.getElementById('f_title').value=t.title;document.getElementById('f_sub').value=t.sub||'';
+  document.getElementById('f_type').value=t.type;document.getElementById('f_kpi').value=t.kpi||'';
+  document.getElementById('taskModal').classList.add('open');
 }
-function queueSave() { clearTimeout(saveTimer); saveTimer = setTimeout(pushToDb, 700); }
-
-function setSyncState(label, state) {
-  document.getElementById("syncLabel").textContent = label;
-  const dot = document.getElementById("syncDot");
-  dot.className = "sync-dot" + (state === "live" ? " live" : state === "error" ? " error" : "");
+function closeTask(){document.getElementById('taskModal').classList.remove('open');}
+function saveTask(){
+  if(!tasksRef){alert('Connect Firebase first (⚙)');return;}
+  const id=editingId||('t'+Date.now());
+  let prevDone=false;if(editingId){const ex=tasks.find(function(x){return x.id===id;});prevDone=ex?ex.done:false;}
+  const obj={id:id,s:document.getElementById('f_start').value.trim(),e:document.getElementById('f_end').value.trim(),
+    title:document.getElementById('f_title').value.trim(),sub:document.getElementById('f_sub').value.trim(),
+    type:document.getElementById('f_type').value,kpi:document.getElementById('f_kpi').value,done:prevDone};
+  tasksRef.child(id).set(obj);closeTask();
 }
+function delTask(){if(editingId&&tasksRef&&confirm('Delete this task?')){tasksRef.child(editingId).remove();closeTask();}}
 
-// ── Time helpers ───────────────────────────────────────────────────
-function toMins(t) { const [h,m] = t.split(":").map(Number); return h*60+m; }
-function fmtDur(s,e) { const d=toMins(e)-toMins(s); return d>=60?(d/60)+"h":d+"m"; }
-function uid() { return "t"+Date.now()+Math.random().toString(36).slice(2,5); }
-function status(slot) {
-  if (slot.done) return "done";
-  const now = new Date(); const cur = now.getHours()*60+now.getMinutes();
-  const s=toMins(slot.start), e=toMins(slot.end);
-  if(cur>=s && cur<e) return slot.type==="break"?"break":"active";
-  return "future";
+function openSetup(){
+  const c=getCfg()||DEFAULT_CFG;
+  document.getElementById('cfg_api').value=c.apiKey;document.getElementById('cfg_db').value=c.databaseURL;
+  document.getElementById('cfg_pid').value=c.projectId;document.getElementById('cfg_app').value=c.appId;
+  document.getElementById('fbModal').classList.add('open');
 }
-
-// ── Render ─────────────────────────────────────────────────────────
-function render() {
-  const now = new Date();
-  const cur = now.getHours()*60+now.getMinutes();
-  document.getElementById("liveClock").textContent = String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
-  document.getElementById("liveDate").textContent = now.toLocaleDateString("en-AU",{weekday:"long",day:"2-digit",month:"long"});
-
-  const sorted = [...slots].sort((a,b)=>toMins(a.start)-toMins(b.start));
-
-  const next = sorted.find(s=>!s.done&&toMins(s.start)>cur);
-  if (next) { const mins=toMins(next.start)-cur; document.getElementById("liveNext").innerHTML=`Next: <strong>${esc(next.title)}</strong> in ${mins}m`; }
-  else if(cur>=toMins("17:00")) { document.getElementById("liveNext").innerHTML=`<strong>Day complete — well done!</strong>`; }
-  else { document.getElementById("liveNext").textContent="—"; }
-
-  const total = sorted.filter(s=>s.type==="work").length;
-  const done = sorted.filter(s=>s.type==="work"&&s.done).length;
-  document.getElementById("progressLabel").textContent=`${done} / ${total} tasks done`;
-  document.getElementById("progressFill").style.width=(total?Math.round(done/total*100):0)+"%";
-
-  const sched = document.getElementById("schedule");
-  sched.innerHTML = "";
-
-  sorted.forEach(slot => {
-    const st = status(slot);
-    const isActive = st==="active", isDone = st==="done", isBreak = slot.type==="break";
-    const dotColor = isDone?"#1D9E75":isActive?slot.color:isBreak?"#c47d0a":slot.color+"99";
-    const cardStyle = isActive?`background:${slot.color}12;border-color:${slot.color};`:"";
-    const badge = slot.done?`<span class="badge badge-done">done</span>`
-      :isActive?`<span class="badge badge-now">now</span>`
-      :isDone?`<span class="badge badge-done">done</span>`
-      :isBreak?`<span class="badge badge-break">break</span>`:"";
-    const doneLabel = slot.done?"Undo":"Done";
-
-    const div = document.createElement("div");
-    div.className="slot";
-    div.innerHTML=`
-      <div class="slot-time">${slot.start}<span class="end">${slot.end}</span></div>
-      <div class="slot-line">
-        <div class="slot-dot" style="background:${dotColor}"></div>
-        <div class="slot-vline"></div>
-      </div>
-      <div class="slot-card${isDone?" is-done":""}${isBreak?" is-break":""}${isActive?" is-active":""}" style="${cardStyle}">
-        <div class="card-actions">
-          <button class="act done-btn" onclick="toggleDone('${slot.id}')">${doneLabel}</button>
-          <button class="act del-btn" onclick="deleteSlot('${slot.id}')">✕</button>
-        </div>
-        <div class="card-top">
-          <span class="card-title" contenteditable="true" data-id="${slot.id}" data-field="title" onblur="updateField(this)">${esc(slot.title)}</span>
-          ${badge}
-          <span class="dur" style="position:static;margin-left:auto;flex-shrink:0;">${fmtDur(slot.start,slot.end)}</span>
-        </div>
-        ${slot.detail!==undefined?`<div class="card-detail" contenteditable="true" data-id="${slot.id}" data-field="detail" onblur="updateField(this)">${esc(slot.detail)}</div>`:""}
-        ${slot.note?`<div class="card-note" contenteditable="true" data-id="${slot.id}" data-field="note" onblur="updateField(this)">${esc(slot.note)}</div>`:""}
-      </div>`;
-    sched.appendChild(div);
-  });
+function closeSetup(){document.getElementById('fbModal').classList.remove('open');}
+function saveSetup(){
+  const cfg={apiKey:document.getElementById('cfg_api').value.trim(),databaseURL:document.getElementById('cfg_db').value.trim(),
+    projectId:document.getElementById('cfg_pid').value.trim(),appId:document.getElementById('cfg_app').value.trim()};
+  localStorage.setItem('fb_cfg',JSON.stringify(cfg));closeSetup();connect(cfg);
 }
 
-function esc(s){return(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-
-// ── Actions ────────────────────────────────────────────────────────
-function updateField(el) {
-  const s = slots.find(x=>x.id===el.dataset.id);
-  if(s){s[el.dataset.field]=el.innerText.trim();queueSave();}
-}
-function toggleDone(id) {
-  const s=slots.find(x=>x.id===id);
-  if(s){s.done=!s.done;render();pushToDb();}
-}
-function deleteSlot(id) {
-  if(!confirm("Remove this task?"))return;
-  slots=slots.filter(x=>x.id!==id);render();pushToDb();
-}
-function toggleForm() { document.getElementById("addForm").classList.toggle("open"); }
-function selType(t) {
-  selTypeVal=t;
-  document.getElementById("tb-work").classList.toggle("sel",t==="work");
-  document.getElementById("tb-break").classList.toggle("sel",t==="break");
-}
-function addTask() {
-  const start=document.getElementById("f-start").value;
-  const end=document.getElementById("f-end").value;
-  const title=document.getElementById("f-title").value.trim();
-  const detail=document.getElementById("f-detail").value.trim();
-  if(!title||!start||!end){alert("Please fill in start time, end time and title.");return;}
-  slots.push({id:uid(),start,end,type:selTypeVal,color:selColor,title,detail,done:false,note:""});
-  document.getElementById("f-title").value="";
-  document.getElementById("f-detail").value="";
-  toggleForm();render();pushToDb();
-}
-
-// ── Init ────────────────────────────────────────────────────────────
-function buildColorPicker() {
-  const row=document.getElementById("colorPicker");
-  COLORS.forEach(c=>{
-    const sw=document.createElement("div");
-    sw.className="swatch"+(c===selColor?" sel":"");
-    sw.style.background=c;
-    sw.onclick=()=>{selColor=c;document.querySelectorAll(".swatch").forEach(s=>s.classList.toggle("sel",s===sw));};
-    row.appendChild(sw);
-  });
-}
-
-// Pre-fill modal if config exists
-function prefillConfig() {
-  const cfg=loadConfig();
-  if(!cfg)return;
-  document.getElementById("cfg-apiKey").value=cfg.apiKey||"";
-  document.getElementById("cfg-dbUrl").value=cfg.databaseURL||"";
-  document.getElementById("cfg-projectId").value=cfg.projectId||"";
-  document.getElementById("cfg-appId").value=cfg.appId||"";
-}
-
-buildColorPicker();
-prefillConfig();
-
-const savedCfg = loadConfig();
-if(savedCfg && savedCfg.apiKey && savedCfg.databaseURL){
-  initFirebase(savedCfg);
-} else {
-  slots = DEFAULTS.map(s=>({...s}));
-  document.getElementById("cfgWarn").classList.add("show");
-  setSyncState("not connected","");
-  render();
-}
-
-setInterval(render,30000);
+function tick(){const n=new Date();document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');render();}
+document.getElementById('datesub').textContent='Sat 30 May → Sun 31 May · Night Shift 17:30–05:30 · PRJ0172';
+renderKPI();tick();setInterval(tick,20000);
+const saved=getCfg();
+if(saved){connect(saved);}else{setDot('off');openSetup();}
 </script>
 </body>
 </html>

@@ -3,146 +3,331 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Decmil Schedule — Live (NS)</title>
+<title>DECMIL · TACTICAL HSE DISPLAY</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f1419; --card:#1a2129; --card2:#232c36; --line:#2e3a46;
-  --txt:#e8edf2; --txt2:#9aa7b4; --txt3:#6b7886;
-  --p1:#e5484d; --p2:#f5a623; --p3:#30a46c; --fixed:#3b82f6; --meet:#8b5cf6;
-  --break:#64748b; --admin:#475569; --blocked:#f59e0b;
-  --done:#1f3a2e; --donetxt:#4ade80;
+  --bg:#03070d;
+  --bg2:#070f1a;
+  --panel:rgba(8,18,32,.7);
+  --panel2:rgba(12,24,40,.85);
+  --line:rgba(0,212,255,.15);
+  --line2:rgba(0,212,255,.35);
+  --cyan:#00d4ff;
+  --cyan-dim:#0891b2;
+  --txt:#e0f2fe;
+  --txt2:#7dd3fc;
+  --txt3:#475569;
+  --amber:#fbbf24;
+  --red:#ff3355;
+  --green:#22ff88;
+  --purple:#c084fc;
+  --orange:#ff8533;
+  --glow-cyan:0 0 8px rgba(0,212,255,.6),0 0 20px rgba(0,212,255,.2);
+  --glow-green:0 0 8px rgba(34,255,136,.6),0 0 20px rgba(34,255,136,.2);
+  --glow-amber:0 0 8px rgba(251,191,36,.6),0 0 20px rgba(251,191,36,.2);
+  --glow-red:0 0 8px rgba(255,51,85,.6),0 0 20px rgba(255,51,85,.2);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);padding:16px;max-width:680px;margin:0 auto}
-.hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;flex-wrap:wrap}
-.hdr h1{font-size:19px;font-weight:600;display:flex;align-items:center;gap:8px}
-.dot{width:9px;height:9px;border-radius:99px;background:var(--txt3)}
-.dot.on{background:#22c55e;box-shadow:0 0 6px #22c55e}
-.dot.off{background:#ef4444}
-.hdr .sub{font-size:13px;color:var(--txt2)}
-.hbtn{font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--txt2);padding:6px 11px;border-radius:8px;cursor:pointer}
-.hbtn:active{transform:scale(.96)}
+html,body{background:var(--bg)}
+body{
+  font-family:'Rajdhani',sans-serif;color:var(--txt);padding:14px;max-width:720px;margin:0 auto;min-height:100vh;
+  background:
+    radial-gradient(ellipse at top,rgba(0,212,255,.06),transparent 60%),
+    radial-gradient(ellipse at bottom,rgba(168,85,247,.04),transparent 60%),
+    linear-gradient(180deg,#03070d 0%,#050a14 100%);
+  position:relative;overflow-x:hidden;
+}
+/* Animated grid background */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.4;
+  background-image:
+    linear-gradient(rgba(0,212,255,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,212,255,.06) 1px,transparent 1px);
+  background-size:40px 40px;
+  animation:grid-drift 60s linear infinite;
+}
+@keyframes grid-drift{0%{background-position:0 0,0 0}100%{background-position:40px 40px,40px 40px}}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse at center,transparent 30%,rgba(3,7,13,.7) 100%);
+}
+body > *{position:relative;z-index:1}
 
-.live{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:10px}
-.clock{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}
-.next{font-size:12px;color:var(--txt2);text-align:right;line-height:1.4}
-.next b{color:var(--txt);font-weight:600}
+/* HUD frame with corner brackets */
+.frame{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px}
+.frame::before,.frame::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none}
+.frame::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);box-shadow:var(--glow-cyan)}
+.frame::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);box-shadow:var(--glow-cyan)}
+.frame .brkA,.frame .brkB{position:absolute;width:14px;height:14px;pointer-events:none}
+.frame .brkA{top:-1px;right:-1px;border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);box-shadow:var(--glow-cyan)}
+.frame .brkB{bottom:-1px;left:-1px;border-bottom:2px solid var(--cyan);border-left:2px solid var(--cyan);box-shadow:var(--glow-cyan)}
 
-.prog-wrap{margin-bottom:14px}
-.prog-bar{height:7px;background:var(--card2);border-radius:99px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:99px;transition:width .4s}
-.prog-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--txt3);margin-top:5px}
+/* Header */
+.hdr-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding:8px 4px;border-bottom:1px solid var(--line);position:relative}
+.hdr-bar::after{content:"";position:absolute;bottom:-1px;left:0;width:80px;height:1px;background:var(--cyan);box-shadow:var(--glow-cyan)}
+.hdr-title{font-family:'Orbitron',sans-serif;font-weight:700;font-size:14px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow-cyan);display:flex;align-items:center;gap:10px}
+.status-dot{position:relative;width:10px;height:10px;border-radius:50%;background:var(--txt3)}
+.status-dot.on{background:var(--green);box-shadow:0 0 8px var(--green)}
+.status-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
+.status-dot.on::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--green);animation:pulse-ring 2s ease-out infinite}
+.status-dot.off::before{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px solid var(--red);animation:pulse-ring 1.2s ease-out infinite}
+@keyframes pulse-ring{0%{transform:scale(.6);opacity:1}100%{transform:scale(2);opacity:0}}
+.hdr-btn{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--cyan);background:transparent;border:1px solid var(--line2);padding:6px 12px;border-radius:3px;cursor:pointer;text-transform:uppercase}
+.hdr-btn:hover{background:rgba(0,212,255,.08);box-shadow:var(--glow-cyan)}
 
-.alert{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);border-radius:10px;padding:10px 13px;margin-bottom:14px;font-size:12px;color:#fbbf24;line-height:1.45}
-.alert b{color:#fcd34d}
+.sys-strip{display:flex;gap:14px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);margin-bottom:14px;padding:0 4px;flex-wrap:wrap;letter-spacing:.5px}
+.sys-strip span b{color:var(--cyan);font-weight:400}
 
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px}
-.kpi h3{font-size:12px;color:var(--txt2);font-weight:600;letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px}
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.kpi-item{background:var(--card2);border-radius:9px;padding:8px 10px;display:flex;align-items:center;justify-content:space-between}
-.kpi-lbl{font-size:12px;line-height:1.3}
-.kpi-lbl .met{color:var(--txt3);font-size:11px}
-.kpi-ctrl{display:flex;align-items:center;gap:8px}
-.kpi-btn{width:24px;height:24px;border:none;border-radius:6px;background:var(--line);color:var(--txt);font-size:15px;cursor:pointer;line-height:1}
-.kpi-count{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;min-width:30px;text-align:center}
-.kpi-count.done{color:var(--donetxt)}
+/* Time + status panel */
+.time-row{display:grid;grid-template-columns:auto 1fr;gap:10px;margin-bottom:14px}
+.time-panel{padding:14px 18px}
+.time-panel .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);margin-bottom:4px}
+.clock{font-family:'Orbitron',sans-serif;font-size:34px;font-weight:700;color:var(--cyan);text-shadow:var(--glow-cyan);font-variant-numeric:tabular-nums;line-height:1}
+.shift-meta{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);margin-top:6px;letter-spacing:.5px}
+.shift-meta b{color:var(--amber);font-weight:400}
 
-.slots{display:flex;flex-direction:column;gap:9px}
-.slot{display:grid;grid-template-columns:62px 1fr;gap:12px;align-items:start}
-.t{font-size:12px;color:var(--txt2);font-variant-numeric:tabular-nums;padding-top:13px;text-align:right}
-.t .dur{font-size:10px;color:var(--txt3);display:block;margin-top:2px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
-.card.done{background:var(--done);border-color:#2c5440}
-.card.done .title{color:var(--donetxt);text-decoration:line-through;opacity:.85}
-.card.now{border-color:var(--meet);box-shadow:0 0 0 1px var(--meet)}
-.card.blocked{border-color:rgba(245,158,11,.5)}
-.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
-.title{font-size:14px;font-weight:500;line-height:1.35;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.sub{font-size:12px;color:var(--txt2);margin-top:5px;line-height:1.4}
-.badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
-.b-p1{background:rgba(229,72,77,.15);color:var(--p1)}
-.b-p2{background:rgba(245,166,35,.15);color:var(--p2)}
-.b-p3{background:rgba(48,163,108,.15);color:var(--p3)}
-.b-fixed{background:rgba(59,130,246,.15);color:var(--fixed)}
-.b-meet{background:rgba(139,92,246,.15);color:var(--meet)}
-.b-break{background:rgba(100,116,139,.15);color:var(--break)}
-.b-admin{background:rgba(71,85,105,.2);color:#94a3b8}
-.b-blocked{background:rgba(245,158,11,.18);color:#fbbf24}
-.tag{font-size:10px;color:var(--txt3);background:var(--card2);padding:2px 6px;border-radius:5px}
-.now-pill{font-size:9px;font-weight:700;color:var(--meet);background:rgba(139,92,246,.18);padding:1px 6px;border-radius:4px}
-.actions{display:flex;gap:6px;margin-top:9px}
-.act{font-size:11px;font-weight:600;border:1px solid var(--line);background:transparent;color:var(--txt2);padding:5px 12px;border-radius:7px;cursor:pointer}
-.act.done-btn{color:var(--p3);border-color:rgba(48,163,108,.4)}
-.act.done-btn.is-done{color:var(--donetxt)}
-.addbtn{width:100%;margin-top:14px;padding:12px;border:1px dashed var(--line);background:transparent;color:var(--txt2);border-radius:11px;font-size:13px;font-weight:600;cursor:pointer}
+.status-panel{padding:12px 16px;display:flex;flex-direction:column;justify-content:center}
+.status-panel .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);margin-bottom:4px}
+.status-now{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--cyan);line-height:1.3;margin-bottom:3px}
+.status-next{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);letter-spacing:.5px}
+.status-next b{color:var(--txt)}
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+/* Shift progress strip */
+.prog-strip{margin-bottom:14px;padding:8px 12px;display:flex;align-items:center;gap:12px}
+.prog-strip .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);white-space:nowrap}
+.prog-track{flex:1;height:6px;background:rgba(0,212,255,.08);border-radius:1px;overflow:hidden;position:relative}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan));box-shadow:var(--glow-cyan);transition:width .5s;position:relative}
+.prog-fill::after{content:"";position:absolute;right:0;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 8px #fff}
+.prog-pct{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--cyan);font-weight:600;min-width:42px;text-align:right}
+
+/* Stat row */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.stat{padding:11px 12px;text-align:center}
+.stat .lbl{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--txt2);margin-bottom:6px}
+.stat .big{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:700;color:var(--cyan);text-shadow:var(--glow-cyan);line-height:1;margin-bottom:6px}
+.stat .big small{font-size:11px;color:var(--txt2);font-weight:500}
+.stat .sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:.5px;line-height:1.3;margin-top:6px}
+.dot-strip{display:flex;gap:3px;justify-content:center}
+.dot-strip .d{width:18px;height:4px;background:rgba(0,212,255,.15);border-radius:1px}
+.dot-strip .d.past{background:var(--cyan);box-shadow:0 0 4px var(--cyan)}
+.dot-strip .d.now{background:#fff;box-shadow:0 0 6px #fff;animation:pulse-now 1.5s ease-in-out infinite}
+@keyframes pulse-now{0%,100%{opacity:1}50%{opacity:.4}}
+.stat-mini{display:flex;gap:3px;justify-content:center;margin-top:4px}
+.stat-mini .seg{flex:1;height:3px;background:rgba(0,212,255,.15);border-radius:1px;max-width:8px}
+.stat-mini .seg.on{background:var(--amber);box-shadow:0 0 4px var(--amber)}
+
+/* Alert / blocker */
+.alert{margin-bottom:14px;padding:10px 14px;background:rgba(255,133,51,.06);border:1px solid rgba(255,133,51,.35);border-left:3px solid var(--orange);border-radius:3px;font-family:'Rajdhani',sans-serif;font-size:13px;color:#fdba74;line-height:1.45;display:flex;gap:10px;align-items:center}
+.alert .icon{font-family:'Orbitron',sans-serif;font-size:14px;color:var(--orange);text-shadow:var(--glow-amber);flex-shrink:0}
+.alert b{color:#fed7aa;font-weight:600}
+
+/* KPI Matrix - Ring meters */
+.kpi-wrap{margin-bottom:16px;padding:14px}
+.kpi-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.kpi-head h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow-cyan)}
+.kpi-head .month{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);letter-spacing:.5px}
+.kpi-head .month b{color:var(--amber)}
+.rings{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.ring-card{position:relative;text-align:center;padding:6px 4px}
+.ring-svg{width:80px;height:80px;margin:0 auto;display:block;position:relative}
+.ring-svg svg{transform:rotate(-90deg);overflow:visible}
+.ring-bg{fill:none;stroke:rgba(0,212,255,.12);stroke-width:6}
+.ring-fill{fill:none;stroke:var(--cyan);stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s ease,stroke .3s}
+.ring-fill.behind{stroke:var(--red);filter:drop-shadow(0 0 4px var(--red))}
+.ring-fill.prog{stroke:var(--amber);filter:drop-shadow(0 0 4px var(--amber))}
+.ring-fill.met{stroke:var(--green);filter:drop-shadow(0 0 6px var(--green))}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-val{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:var(--txt);line-height:1}
+.ring-val .target{font-size:10px;color:var(--txt3);font-weight:400}
+.ring-pct{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt2);margin-top:2px}
+.ring-lbl{font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;color:var(--txt2);margin-top:8px;line-height:1.3;min-height:22px}
+.ring-ctrl{display:flex;gap:4px;justify-content:center;margin-top:6px}
+.ring-btn{width:22px;height:22px;border:1px solid var(--line2);background:transparent;color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:13px;cursor:pointer;border-radius:2px;line-height:1}
+.ring-btn:hover{background:rgba(0,212,255,.1);box-shadow:var(--glow-cyan)}
+
+/* Mission queue / tasks */
+.queue-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;padding:0 4px}
+.queue-head h3{font-family:'Orbitron',sans-serif;font-size:11px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow-cyan)}
+.queue-head .cnt{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2)}
+.queue-head .cnt b{color:var(--cyan)}
+.slots{display:flex;flex-direction:column;gap:6px}
+.slot{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:stretch}
+.t-col{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2);text-align:right;padding-top:11px;letter-spacing:.5px}
+.t-col .dur{display:block;font-size:9px;color:var(--txt3);margin-top:2px}
+.task{position:relative;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--cyan-dim);padding:10px 12px;border-radius:2px;overflow:hidden;transition:.2s}
+.task.done{border-left-color:var(--green);background:rgba(34,255,136,.04)}
+.task.done .title{color:var(--green);text-decoration:line-through;opacity:.7}
+.task.now{border-left-color:var(--cyan);background:rgba(0,212,255,.05);box-shadow:var(--glow-cyan)}
+.task.now::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:scan-line 2.5s linear infinite}
+@keyframes scan-line{0%{transform:translateY(0)}100%{transform:translateY(60px)}}
+.task.blocked{border-left-color:var(--orange);background:rgba(255,133,51,.04)}
+.task.p1{border-left-color:var(--red)}
+.task.p2{border-left-color:var(--amber)}
+.task.p3{border-left-color:var(--green)}
+.task.fixed{border-left-color:var(--cyan-dim)}
+.task.meet{border-left-color:var(--purple)}
+.task.break{border-left-color:var(--txt3)}
+.task.admin{border-left-color:var(--cyan-dim)}
+.task-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.title{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:var(--txt);line-height:1.3}
+.task.done .title{color:var(--green)}
+.badge{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;padding:2px 6px;border-radius:2px;text-transform:uppercase;white-space:nowrap}
+.b-p1{background:rgba(255,51,85,.15);color:var(--red);border:1px solid rgba(255,51,85,.4)}
+.b-p2{background:rgba(251,191,36,.15);color:var(--amber);border:1px solid rgba(251,191,36,.4)}
+.b-p3{background:rgba(34,255,136,.15);color:var(--green);border:1px solid rgba(34,255,136,.4)}
+.b-fixed{background:rgba(8,145,178,.18);color:var(--cyan);border:1px solid var(--line2)}
+.b-meet{background:rgba(192,132,252,.15);color:var(--purple);border:1px solid rgba(192,132,252,.4)}
+.b-break{background:rgba(71,85,105,.2);color:var(--txt2);border:1px solid var(--line)}
+.b-admin{background:rgba(8,145,178,.18);color:var(--cyan);border:1px solid var(--line2)}
+.b-blocked{background:rgba(255,133,51,.15);color:var(--orange);border:1px solid rgba(255,133,51,.4)}
+.now-tag{font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;color:var(--cyan);background:var(--cyan);color:#000;padding:2px 7px;border-radius:2px;letter-spacing:1.5px;animation:pulse-tag 1.2s ease-in-out infinite}
+@keyframes pulse-tag{0%,100%{opacity:1}50%{opacity:.5}}
+.kpi-tag{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--cyan);padding:1px 5px;background:rgba(0,212,255,.08);border:1px solid var(--line2);border-radius:2px}
+.sub{font-family:'Rajdhani',sans-serif;font-size:12px;color:var(--txt2);margin-top:4px;line-height:1.4}
+.actions{display:flex;gap:6px;margin-top:8px}
+.act{font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:1px;border:1px solid var(--line2);background:transparent;color:var(--txt2);padding:5px 10px;border-radius:2px;cursor:pointer;text-transform:uppercase}
+.act.done-btn{color:var(--green);border-color:rgba(34,255,136,.4)}
+.act.done-btn.is-done{background:rgba(34,255,136,.1);color:var(--green)}
+.act:hover{background:rgba(0,212,255,.05);box-shadow:var(--glow-cyan)}
+
+.addbtn{width:100%;margin-top:12px;padding:11px;border:1px dashed var(--line2);background:transparent;color:var(--cyan);border-radius:3px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+.addbtn:hover{background:rgba(0,212,255,.05);box-shadow:var(--glow-cyan)}
+
+.foot{text-align:center;margin-top:18px;padding-top:12px;border-top:1px solid var(--line);font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);letter-spacing:1px;line-height:1.6}
+.foot b{color:var(--cyan)}
+
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:18px;z-index:50;backdrop-filter:blur(8px)}
 .modal.open{display:flex}
-.modal-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
-.modal-box h2{font-size:16px;margin-bottom:14px}
+.modal-box{background:var(--bg2);border:1px solid var(--line2);border-radius:4px;padding:22px;width:100%;max-width:420px;max-height:90vh;overflow:auto;position:relative}
+.modal-box::before,.modal-box::after{content:"";position:absolute;width:18px;height:18px}
+.modal-box::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);box-shadow:var(--glow-cyan)}
+.modal-box::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);box-shadow:var(--glow-cyan)}
+.modal-box h2{font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow-cyan);margin-bottom:16px;text-transform:uppercase}
 .fld{margin-bottom:11px}
-.fld label{display:block;font-size:11px;color:var(--txt2);margin-bottom:4px;font-weight:600}
-.fld input,.fld select,.fld textarea{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:9px 11px;font-size:13px;font-family:inherit}
+.fld label{display:block;font-family:'Orbitron',sans-serif;font-size:9px;color:var(--txt2);margin-bottom:4px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+.fld input,.fld select,.fld textarea{width:100%;background:rgba(0,0,0,.4);border:1px solid var(--line2);border-radius:2px;color:var(--txt);padding:9px 11px;font-size:13px;font-family:'Rajdhani',sans-serif}
+.fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--cyan);box-shadow:var(--glow-cyan)}
 .fld textarea{resize:vertical;min-height:48px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .modal-btns{display:flex;gap:8px;margin-top:16px}
-.mbtn{flex:1;padding:11px;border-radius:9px;border:none;font-size:13px;font-weight:600;cursor:pointer}
-.mbtn.primary{background:var(--meet);color:#fff}
-.mbtn.ghost{background:var(--card2);color:var(--txt2);border:1px solid var(--line)}
-.mbtn.danger{background:rgba(229,72,77,.15);color:var(--p1);flex:0 0 auto;padding:11px 16px}
-.hint{font-size:11px;color:var(--txt3);margin-top:8px;line-height:1.4}
-.foot{text-align:center;font-size:11px;color:var(--txt3);margin-top:18px;line-height:1.5}
+.mbtn{flex:1;padding:11px;border-radius:2px;border:1px solid var(--line2);font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;cursor:pointer;letter-spacing:1.5px;text-transform:uppercase}
+.mbtn.primary{background:var(--cyan);color:#000;border-color:var(--cyan);box-shadow:var(--glow-cyan)}
+.mbtn.ghost{background:transparent;color:var(--txt2)}
+.mbtn.danger{background:transparent;color:var(--red);border-color:rgba(255,51,85,.4);flex:0 0 auto;padding:11px 16px}
+.hint{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt3);margin-top:10px;line-height:1.5;letter-spacing:.5px}
+
+@media (max-width:520px){
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .stat-grid .stat:nth-child(3){grid-column:span 2}
+  .rings{grid-template-columns:1fr 1fr}
+  .time-row{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<div class="hdr">
-  <div>
-    <h1><span class="dot" id="dot"></span> Decmil Schedule</h1>
-    <div class="sub" id="datesub">Loading…</div>
+
+<div class="hdr-bar">
+  <div class="hdr-title">
+    <span class="status-dot" id="dot"></span>
+    DECMIL · TACTICAL HSE
   </div>
-  <button class="hbtn" onclick="openSetup()">⚙ Firebase</button>
+  <button class="hdr-btn" onclick="openSetup()">⚙ SYS</button>
 </div>
 
-<div class="live">
-  <div class="clock" id="clock">--:--</div>
-  <div class="next" id="next"></div>
+<div class="sys-strip">
+  <span>OP: <b>KEVIN KEGIN</b></span>
+  <span>MODE: <b id="sysMode">NS</b></span>
+  <span>PRJ: <b>PRJ0172 MCPHEE</b></span>
+  <span>DATE: <b id="sysDate">--</b></span>
+  <span>LINK: <b id="sysLink">--</b></span>
 </div>
 
-<div class="prog-wrap">
-  <div class="prog-bar"><div class="prog-fill" id="progfill" style="width:0%"></div></div>
-  <div class="prog-meta"><span id="progtxt">Tasks 0/0 done</span><span id="shiftpct">Shift 0%</span></div>
+<div class="time-row">
+  <div class="frame time-panel"><span class="brkA"></span><span class="brkB"></span>
+    <div class="lbl">CHRONO</div>
+    <div class="clock" id="clock">--:--</div>
+    <div class="shift-meta">SHIFT <b id="shiftRem">--:--</b> REMAINING</div>
+  </div>
+  <div class="frame status-panel"><span class="brkA"></span><span class="brkB"></span>
+    <div class="lbl">CURRENT OPERATION</div>
+    <div class="status-now" id="statusNow">Initialising…</div>
+    <div class="status-next" id="statusNext"></div>
+  </div>
 </div>
 
-<div class="alert"><b>Blocker:</b> Scanner not working — Fatigue Self Assessment scan/upload pending. Interim: photograph forms with phone, upload to SharePoint <b>10.5 folder</b>. Flag to IT first thing tomorrow.</div>
+<div class="frame prog-strip"><span class="brkA"></span><span class="brkB"></span>
+  <span class="lbl">SHIFT</span>
+  <div class="prog-track"><div class="prog-fill" id="progfill" style="width:0%"></div></div>
+  <span class="prog-pct" id="shiftpct">0%</span>
+</div>
 
-<div class="kpi">
-  <h3>Monthly KPI Tracker — synced</h3>
-  <div class="kpi-grid" id="kpigrid"></div>
+<div class="stat-grid">
+  <div class="frame stat"><span class="brkA"></span><span class="brkB"></span>
+    <div class="lbl">ROSTER · NS</div>
+    <div class="big">D<span id="rosDay">-</span><small>/7</small></div>
+    <div class="dot-strip" id="rosDots"></div>
+    <div class="sub" id="rosSub">- days to flyout</div>
+  </div>
+  <div class="frame stat"><span class="brkA"></span><span class="brkB"></span>
+    <div class="lbl">FINAL SHIFT</div>
+    <div class="big"><span id="prjDays">-</span><small> DAYS</small></div>
+    <div class="dot-strip" id="prjStrip"></div>
+    <div class="sub">5 JUN · LEAD HSE WINDOW</div>
+  </div>
+  <div class="frame stat"><span class="brkA"></span><span class="brkB"></span>
+    <div class="lbl">MAY 2026</div>
+    <div class="big">D<span id="monthDay">-</span><small>/31</small></div>
+    <div class="stat-mini" id="monthSegs"></div>
+    <div class="sub">MONTH-END APPROACH</div>
+  </div>
+</div>
+
+<div class="alert">
+  <span class="icon">⚠</span>
+  <div><b>SCANNER OFFLINE</b> — Fatigue SA upload pending. Interim: photograph forms, upload to SharePoint <b>10.5 folder</b>. Flag IT.</div>
+</div>
+
+<div class="frame kpi-wrap"><span class="brkA"></span><span class="brkB"></span>
+  <div class="kpi-head">
+    <h3>▸ KPI MATRIX · MAY 2026</h3>
+    <span class="month">DAY <b id="kpiMonthDay">-</b>/31</span>
+  </div>
+  <div class="rings" id="rings"></div>
+</div>
+
+<div class="queue-head">
+  <h3>▸ MISSION QUEUE</h3>
+  <span class="cnt"><b id="qDone">0</b>/<span id="qTotal">0</span> COMPLETE</span>
 </div>
 
 <div class="slots" id="slots"></div>
-<button class="addbtn" onclick="openTask()">+ Add task</button>
+<button class="addbtn" onclick="openTask()">+ ADD MISSION</button>
 
-<div class="foot">Night Shift · Live across all devices via Firebase · Done only changes on button press<br>kevinkegin7.github.io/Decmil-Schedule</div>
+<div class="foot">
+  ◉ LIVE SYNC VIA FIREBASE · DONE-STATE LOCKED TO USER INPUT<br>
+  <b>kevinkegin7.github.io/Decmil-Schedule</b>
+</div>
 
 <div class="modal" id="taskModal">
   <div class="modal-box">
-    <h2 id="taskTitle">Add task</h2>
+    <h2>▸ Mission Detail</h2>
     <div class="row2">
       <div class="fld"><label>Start</label><input id="f_start" placeholder="22:00"></div>
       <div class="fld"><label>End</label><input id="f_end" placeholder="23:00"></div>
     </div>
-    <div class="fld"><label>Title</label><input id="f_title" placeholder="Task name"></div>
-    <div class="fld"><label>Detail (optional)</label><textarea id="f_sub"></textarea></div>
+    <div class="fld"><label>Title</label><input id="f_title"></div>
+    <div class="fld"><label>Detail</label><textarea id="f_sub"></textarea></div>
     <div class="row2">
-      <div class="fld"><label>Priority / type</label>
+      <div class="fld"><label>Priority</label>
         <select id="f_type">
           <option value="p1">Priority 1</option><option value="p2">Priority 2</option>
           <option value="p3">Priority 3</option><option value="fixed">Fixed</option>
           <option value="meet">Meeting</option><option value="break">Break</option>
           <option value="admin">Admin</option><option value="blocked">Blocked</option>
         </select></div>
-      <div class="fld"><label>Links KPI</label>
+      <div class="fld"><label>KPI Link</label>
         <select id="f_kpi">
           <option value="">None</option><option value="so">Safety Obs</option>
           <option value="hse">HSE Insp</option><option value="env">Env Insp</option>
@@ -159,16 +344,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 
 <div class="modal" id="fbModal">
   <div class="modal-box">
-    <h2>Firebase setup</h2>
+    <h2>▸ Firebase Uplink</h2>
     <div class="fld"><label>apiKey</label><input id="cfg_api"></div>
     <div class="fld"><label>databaseURL</label><input id="cfg_db"></div>
     <div class="fld"><label>projectId</label><input id="cfg_pid"></div>
     <div class="fld"><label>appId</label><input id="cfg_app"></div>
     <div class="modal-btns">
       <button class="mbtn ghost" onclick="closeSetup()">Cancel</button>
-      <button class="mbtn primary" onclick="saveSetup()">Save &amp; connect</button>
+      <button class="mbtn primary" onclick="saveSetup()">CONNECT</button>
     </div>
-    <div class="hint">Values are pre-filled — just hit Save &amp; connect once.</div>
+    <div class="hint">// pre-filled · one-tap connect</div>
   </div>
 </div>
 
@@ -183,47 +368,47 @@ const DEFAULT_CFG={
 };
 const DAY_KEY="2026-05-30-NS";
 const KPI_KEY="may26";
-
-// Night shift: 17:30 -> 05:30 (12h). Logical time = mins from shift start.
-const SHIFT_START=17*60+30;   // 1050
-const SHIFT_LEN=12*60;        // 720
+const ROSTER_START=new Date('2026-05-29T00:00:00');
+const ROSTER_LEN=7;
+const FINAL_DAY=new Date('2026-06-05T00:00:00');
+const SHIFT_START=17*60+30;
+const SHIFT_LEN=12*60;
 function clockM(){const n=new Date();return n.getHours()*60+n.getMinutes();}
 function logM(cm){return cm>=SHIFT_START ? cm-SHIFT_START : cm + (1440-SHIFT_START);}
-function isOffShift(){const cm=clockM();return cm>=(SHIFT_START+SHIFT_LEN)%1440 && cm<SHIFT_START;}
 function mins(t){const a=t.split(':');return (+a[0])*60+(+a[1]);}
 function tLog(hhmm){return logM(mins(hhmm));}
 function durTxt(s,e){let d=tLog(e)-tLog(s);if(d<0)d+=1440;return d>=60?(d/60)+'h':d+'m';}
 
 const KPIS=[
-  {id:'so', lbl:'Safety Observations', target:2},
-  {id:'hse',lbl:'HSE Inspections',     target:2},
-  {id:'env',lbl:'Environmental Insp.', target:1},
-  {id:'cri',lbl:'Critical Risk Insp.', target:2},
+  {id:'so', lbl:'SAFETY OBS',    target:2},
+  {id:'hse',lbl:'HSE INSP',      target:2},
+  {id:'env',lbl:'ENV INSP',      target:1},
+  {id:'cri',lbl:'CRITICAL RISK', target:2},
 ];
 
 const SEED=[
  {id:'n01',s:'17:30',e:'18:00',type:'fixed',title:'Pre-start meeting facilitation',sub:'iPad / Breathos · QR sign-on',done:true},
- {id:'n02',s:'18:00',e:'18:15',type:'fixed',title:'Personnel onsite check + crew list to mgmt',sub:'Emailed',done:true},
+ {id:'n02',s:'18:00',e:'18:15',type:'fixed',title:'Personnel check + crew list to mgmt',sub:'Emailed',done:true},
  {id:'n03',s:'18:15',e:'18:45',type:'fixed',title:'Weekly SWMS sign-on with crew',sub:'All crew signed',done:true},
- {id:'n04',s:'18:45',e:'19:00',type:'fixed',title:'Fatigue Self Assessment collection',sub:'Collected — upload blocked, see workaround',done:true},
- {id:'n05',s:'19:00',e:'20:30',type:'p2',title:'Daily Night Shift site check-up',sub:'Lighting, exclusion zones, separation, active works — log Safety Obs along the way',kpi:'so',done:false},
- {id:'n06',s:'20:30',e:'22:00',type:'p1',title:'Weekly Client Report — submission',sub:'Client deliverable. Include supervisor-led pre-start note (front-line ownership) under Innovations/Initiatives',done:false},
+ {id:'n04',s:'18:45',e:'19:00',type:'fixed',title:'Fatigue Self Assessment collection',sub:'Collected — upload blocked',done:true},
+ {id:'n05',s:'19:00',e:'20:30',type:'p2',title:'Daily Night Shift site check-up',sub:'Lighting, exclusion zones, separation, active works — log Safety Obs',kpi:'so',done:false},
+ {id:'n06',s:'20:30',e:'22:00',type:'p1',title:'Weekly Client Report',sub:'Supervisor-led pre-start under Innovations/Initiatives',done:false},
  {id:'n07',s:'22:00',e:'22:30',type:'break',title:'Meal break',sub:'',done:false},
- {id:'n08',s:'22:30',e:'01:00',type:'p1',title:'May 2026 Monthly Client Report — submission',sub:'Month close. Pull SAI360 stats, inspection counts, training matrix snapshot, env data',done:false},
- {id:'n09',s:'01:00',e:'02:30',type:'p2',title:'ICAM training',sub:'PEEPO + 5 Whys framework refresher',done:false},
+ {id:'n08',s:'22:30',e:'01:00',type:'p1',title:'May 2026 Monthly Client Report',sub:'SAI360 stats · inspection counts · training matrix · env data',done:false},
+ {id:'n09',s:'01:00',e:'02:30',type:'p2',title:'ICAM training',sub:'PEEPO + 5 Whys refresher',done:false},
  {id:'n10',s:'02:30',e:'03:00',type:'break',title:'Second break',sub:'',done:false},
- {id:'n11',s:'03:00',e:'04:00',type:'fixed',title:'Tomorrow\u0027s pre-start — finalise',sub:'Started earlier — finish content + format check',done:false},
+ {id:'n11',s:'03:00',e:'04:00',type:'fixed',title:'Tomorrow\u0027s pre-start — finalise',sub:'Finish + format check',done:false},
  {id:'n12',s:'04:00',e:'04:30',type:'p3',title:'Second site walk',sub:'End-of-shift conditions check',done:false},
- {id:'n13',s:'04:30',e:'05:00',type:'blocked',title:'Fatigue SA upload — interim workaround',sub:'Scanner down. Photograph forms, upload to SharePoint 10.5 folder. Flag to IT.',done:false},
+ {id:'n13',s:'04:30',e:'05:00',type:'blocked',title:'Fatigue SA upload (interim)',sub:'Photograph forms → SharePoint 10.5. Flag IT.',done:false},
  {id:'n14',s:'05:00',e:'05:30',type:'fixed',title:'End-of-shift wrap-up + handover',sub:'',done:false},
 ];
 
 let db=null,tasksRef=null,kpiRef=null;
 let tasks=[],kpiState={so:0,hse:0,env:0,cri:0};
 let editingId=null;
-const badgeText={p1:'priority 1',p2:'priority 2',p3:'priority 3',fixed:'fixed',meet:'meeting',break:'break',admin:'admin',blocked:'blocked'};
+const badgeText={p1:'P1',p2:'P2',p3:'P3',fixed:'FIXED',meet:'MEET',break:'BREAK',admin:'ADMIN',blocked:'BLOCKED'};
 
-function setDot(s){document.getElementById('dot').className='dot '+s;}
+function setDot(s){document.getElementById('dot').className='status-dot '+s;document.getElementById('sysLink').textContent=s==='on'?'ONLINE':'OFFLINE';}
 function getCfg(){try{return JSON.parse(localStorage.getItem('fb_cfg'));}catch(e){return null;}}
 
 function connect(cfg){
@@ -244,50 +429,103 @@ function connect(cfg){
   }catch(e){setDot('off');console.error(e);}
 }
 
+function renderStats(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const dayIn=Math.floor((today-ROSTER_START)/86400000)+1;
+  const dayClamped=Math.max(1,Math.min(ROSTER_LEN,dayIn));
+  document.getElementById('rosDay').textContent=dayClamped;
+  let dots='';
+  for(let i=1;i<=ROSTER_LEN;i++){
+    const cls=i<dayClamped?'past':(i===dayClamped?'now':'');
+    dots+='<div class="d '+cls+'"></div>';
+  }
+  document.getElementById('rosDots').innerHTML=dots;
+  const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));
+  document.getElementById('rosSub').textContent=toFly+' DAYS TO FLYOUT';
+  document.getElementById('prjDays').textContent=toFly;
+  let prjStrip='';
+  const totalSwing=Math.ceil((FINAL_DAY-ROSTER_START)/86400000);
+  const elapsed=totalSwing-toFly;
+  for(let i=1;i<=totalSwing;i++){
+    prjStrip+='<div class="d '+(i<=elapsed?'past':'')+'"></div>';
+  }
+  document.getElementById('prjStrip').innerHTML=prjStrip;
+  const day=today.getDate();
+  document.getElementById('monthDay').textContent=day;
+  document.getElementById('kpiMonthDay').textContent=day;
+  let segs='';
+  const monthPct=Math.round((day/31)*10);
+  for(let i=1;i<=10;i++)segs+='<div class="seg '+(i<=monthPct?'on':'')+'"></div>';
+  document.getElementById('monthSegs').innerHTML=segs;
+  const now=new Date();
+  document.getElementById('sysDate').textContent=now.toISOString().substring(0,10)+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+}
+
 function renderKPI(){
-  document.getElementById('kpigrid').innerHTML=KPIS.map(function(k){
-    const c=kpiState[k.id]||0,met=c>=k.target;
-    return '<div class="kpi-item"><div class="kpi-lbl">'+k.lbl+'<br><span class="met">min '+k.target+'/mo'+(met?' · ✓ met':'')+'</span></div>'+
-      '<div class="kpi-ctrl"><button class="kpi-btn" onclick="bump(\''+k.id+'\',-1)">−</button>'+
-      '<span class="kpi-count '+(met?'done':'')+'">'+c+'</span>'+
-      '<button class="kpi-btn" onclick="bump(\''+k.id+'\',1)">+</button></div></div>';
+  const C=264;
+  const html=KPIS.map(function(k){
+    const c=kpiState[k.id]||0,t=k.target;
+    const pct=Math.min(100,(c/t)*100);
+    const offset=C-(C*pct/100);
+    let cls='behind';
+    if(c>=t)cls='met';
+    else if(c>0)cls='prog';
+    return '<div class="ring-card"><div class="ring-svg"><svg viewBox="0 0 100 100">'+
+      '<circle class="ring-bg" cx="50" cy="50" r="42"/>'+
+      '<circle class="ring-fill '+cls+'" cx="50" cy="50" r="42" stroke-dasharray="'+C+'" stroke-dashoffset="'+offset+'"/>'+
+      '</svg><div class="ring-center"><div class="ring-val">'+c+'<span class="target">/'+t+'</span></div>'+
+      '<div class="ring-pct">'+Math.round(pct)+'%</div></div></div>'+
+      '<div class="ring-lbl">'+k.lbl+'</div>'+
+      '<div class="ring-ctrl"><button class="ring-btn" onclick="bump(\''+k.id+'\',-1)">−</button>'+
+      '<button class="ring-btn" onclick="bump(\''+k.id+'\',1)">+</button></div></div>';
   }).join('');
+  document.getElementById('rings').innerHTML=html;
 }
 function bump(id,d){kpiState[id]=Math.max(0,(kpiState[id]||0)+d);renderKPI();if(kpiRef)kpiRef.set(kpiState);}
 
 function render(){
   const cm=clockM(),nl=logM(cm);
   const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl;});
-  let nextHtml='Off shift — see you at 17:30';
+  let nowText='— STANDBY —',nextText='Awaiting shift start (17:30)';
   if(tasks.length){
-    if(nl<tLog(tasks[0].s)||nl>=720)nextHtml='Starts <b>'+tasks[0].s+'</b> · '+tasks[0].title;
-    else if(cur)nextHtml='Now: <b>'+cur.title+'</b>';
-    else{const nx=tasks.find(function(t){return tLog(t.e)>nl;});if(nx)nextHtml='Next <b>'+nx.s+'</b> · '+nx.title;else nextHtml='Shift ending — wrap up';}
+    if(nl<tLog(tasks[0].s)||nl>=720){nowText='— STANDBY —';nextText='Shift starts <b>'+tasks[0].s+'</b>';}
+    else if(cur){nowText=cur.title;const nx=tasks.find(function(t){return tLog(t.s)>nl;});nextText=nx?'NEXT '+nx.s+' · <b>'+nx.title+'</b>':'Shift wrap-up';}
+    else{const nx=tasks.find(function(t){return tLog(t.e)>nl;});if(nx){nowText='— TRANSITION —';nextText='NEXT '+nx.s+' · <b>'+nx.title+'</b>';}else{nowText='— SHIFT END —';nextText='Wrap-up';}}
   }
-  document.getElementById('next').innerHTML=nextHtml;
+  document.getElementById('statusNow').innerHTML=nowText;
+  document.getElementById('statusNext').innerHTML=nextText;
+
+  // Shift remaining
+  let rem=720-nl;
+  if(nl<0||nl>=720)rem=720;
+  const remH=Math.floor(rem/60),remM=rem%60;
+  document.getElementById('shiftRem').textContent=String(remH).padStart(2,'0')+':'+String(remM).padStart(2,'0');
 
   document.getElementById('slots').innerHTML=tasks.map(function(t){
     const isNow=tLog(t.s)<=nl&&tLog(t.e)>nl&&nl<720;
-    return '<div class="slot"><div class="t">'+t.s+'<span class="dur">'+durTxt(t.s,t.e)+'</span></div>'+
-      '<div class="card '+(t.done?'done':'')+' '+(isNow?'now':'')+' '+(t.type==='blocked'?'blocked':'')+'">'+
-      '<div class="card-top"><div class="title">'+
-      (isNow&&!t.done?'<span class="now-pill">NOW</span>':'')+
+    const cls=t.done?'done':(isNow?'now':t.type);
+    return '<div class="slot"><div class="t-col">'+t.s+'<span class="dur">'+durTxt(t.s,t.e)+'</span></div>'+
+      '<div class="task '+cls+(t.type==='blocked'?' blocked':'')+'">'+
+      '<div class="task-head">'+
+      (isNow&&!t.done?'<span class="now-tag">ACTIVE</span>':'')+
       '<span class="badge b-'+t.type+'">'+(badgeText[t.type]||t.type)+'</span>'+
-      (t.kpi?'<span class="tag">KPI</span>':'')+t.title+'</div></div>'+
+      (t.kpi?'<span class="kpi-tag">KPI</span>':'')+
+      '<span class="title">'+t.title+'</span></div>'+
       (t.sub?'<div class="sub">'+t.sub+'</div>':'')+
       (t.type!=='break'?'<div class="actions">'+
-        '<button class="act done-btn '+(t.done?'is-done':'')+'" onclick="toggleDone(\''+t.id+'\')">'+(t.done?'✓ Done — undo':'Mark done')+'</button>'+
-        '<button class="act" onclick="openTask(\''+t.id+'\')">Edit</button></div>':'')+
+        '<button class="act done-btn '+(t.done?'is-done':'')+'" onclick="toggleDone(\''+t.id+'\')">'+(t.done?'✓ DONE · UNDO':'MARK DONE')+'</button>'+
+        '<button class="act" onclick="openTask(\''+t.id+'\')">EDIT</button></div>':'')+
       '</div></div>';
   }).join('');
 
   const doneCount=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;
   const total=tasks.filter(function(t){return t.type!=='break';}).length;
-  document.getElementById('progtxt').textContent='Tasks '+doneCount+'/'+total+' done';
+  document.getElementById('qDone').textContent=doneCount;
+  document.getElementById('qTotal').textContent=total;
   let pct=Math.max(0,Math.min(100,Math.round((nl/720)*100)));
-  if(nl>=720&&nl<1440-SHIFT_START+0)pct=0;
+  if(nl>=720&&cm>=330&&cm<SHIFT_START)pct=0;
   document.getElementById('progfill').style.width=pct+'%';
-  document.getElementById('shiftpct').textContent='Shift '+pct+'%';
+  document.getElementById('shiftpct').textContent=pct+'%';
 }
 function toggleDone(id){
   const t=tasks.find(function(x){return x.id===id;});if(!t)return;
@@ -297,7 +535,6 @@ function toggleDone(id){
 
 function openTask(id){
   editingId=id||null;
-  document.getElementById('taskTitle').textContent=id?'Edit task':'Add task';
   document.getElementById('delBtn').style.display=id?'block':'none';
   const t=id?tasks.find(function(x){return x.id===id;}):{s:'',e:'',title:'',sub:'',type:'p2',kpi:''};
   document.getElementById('f_start').value=t.s;document.getElementById('f_end').value=t.e;
@@ -315,7 +552,7 @@ function saveTask(){
     type:document.getElementById('f_type').value,kpi:document.getElementById('f_kpi').value,done:prevDone};
   tasksRef.child(id).set(obj);closeTask();
 }
-function delTask(){if(editingId&&tasksRef&&confirm('Delete this task?')){tasksRef.child(editingId).remove();closeTask();}}
+function delTask(){if(editingId&&tasksRef&&confirm('Delete?')){tasksRef.child(editingId).remove();closeTask();}}
 
 function openSetup(){
   const c=getCfg()||DEFAULT_CFG;
@@ -330,9 +567,12 @@ function saveSetup(){
   localStorage.setItem('fb_cfg',JSON.stringify(cfg));closeSetup();connect(cfg);
 }
 
-function tick(){const n=new Date();document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');render();}
-document.getElementById('datesub').textContent='Sat 30 May → Sun 31 May · Night Shift 17:30–05:30 · PRJ0172';
-renderKPI();tick();setInterval(tick,20000);
+function tick(){
+  const n=new Date();
+  document.getElementById('clock').textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+  render();renderStats();
+}
+renderKPI();renderStats();tick();setInterval(tick,15000);
 const saved=getCfg();
 if(saved){connect(saved);}else{setDot('off');openSetup();}
 </script>

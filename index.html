@@ -68,12 +68,50 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .status-next{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);letter-spacing:.5px}
 .status-next b{color:var(--txt)}
 
+/* === ROSTER TIMELINE (NEW) === */
+.roster-panel{background:rgba(0,212,255,.03);border:1px solid var(--line);padding:10px;border-radius:3px;margin-bottom:10px}
+.rp-head{display:flex;justify-content:space-between;font-family:'Orbitron',sans-serif;font-size:9px;color:var(--txt2);margin-bottom:10px;letter-spacing:1px}
+.rp-head span{color:var(--amber)}
+.rp-timeline{display:flex;gap:3px;align-items:center}
+.rt-node{flex:1;height:5px;background:rgba(0,212,255,.1);border-radius:2px;transition:.3s}
+.rt-node.filled{background:var(--cyan-dim);box-shadow:0 0 4px rgba(0,212,255,.4)}
+.rt-node.active{background:#fff;box-shadow:0 0 8px #fff,0 0 14px rgba(0,212,255,.6);animation:pulseNode 1.5s ease-in-out infinite}
+@keyframes pulseNode{50%{opacity:.45}}
+.rp-labels{display:flex;justify-content:space-between;align-items:baseline;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--cyan);margin-top:8px}
+.rp-labels .sub{font-size:8px;color:var(--txt3);font-weight:400;letter-spacing:1px}
+
+/* Mini-stats 2-column variant (now that ROSTER is its own panel) */
 .mini-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.mini-stats.cols2{grid-template-columns:1fr 1fr}
 .ms{background:rgba(0,212,255,.04);border:1px solid var(--line);border-radius:3px;padding:8px 4px;text-align:center}
 .ms .l{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:1px;color:var(--txt3);margin-bottom:3px}
 .ms .v{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--cyan);line-height:1}
 .ms .v small{font-size:8px;color:var(--txt3)}
 .ms .s{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--txt3);margin-top:3px}
+
+/* === HOLOGRAPHIC GLOBE (NEW) === */
+.holo-globe-container{display:flex;justify-content:center;align-items:center;padding:14px 0 4px;perspective:800px;overflow:hidden;margin-top:10px}
+.holo-globe{width:120px;height:120px;position:relative;transform-style:preserve-3d;animation:spinGlobe 22s linear infinite}
+.holo-globe .ring{position:absolute;inset:0;border:1px solid rgba(0,212,255,.35);border-radius:50%;box-shadow:inset 0 0 15px rgba(0,212,255,.12)}
+.holo-globe .ring:nth-child(1){transform:rotateY(0deg)}
+.holo-globe .ring:nth-child(2){transform:rotateY(45deg)}
+.holo-globe .ring:nth-child(3){transform:rotateY(90deg)}
+.holo-globe .ring:nth-child(4){transform:rotateY(135deg)}
+.holo-globe .equator{position:absolute;top:50%;left:-5%;width:110%;height:1px;background:rgba(0,212,255,.85);box-shadow:0 0 6px rgba(0,212,255,.7);transform:rotateX(90deg)}
+.holo-globe .pole{position:absolute;left:50%;top:50%;width:4px;height:4px;background:var(--amber);border-radius:50%;box-shadow:0 0 8px var(--amber);transform:translate(-50%,-50%) translateZ(60px);animation:polePulse 2s ease-in-out infinite}
+@keyframes spinGlobe{0%{transform:rotateY(0deg) rotateX(15deg)}100%{transform:rotateY(360deg) rotateX(15deg)}}
+@keyframes polePulse{50%{box-shadow:0 0 16px var(--amber)}}
+.globe-lbl{text-align:center;font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--txt3);letter-spacing:1px;margin-top:4px}
+.globe-lbl b{color:var(--cyan)}
+
+/* === INTEL TICKER (NEW) === */
+.intel-ticker{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--cyan);background:rgba(0,212,255,.05);border:1px solid var(--line2);border-radius:3px;padding:6px 0;overflow:hidden;white-space:nowrap;margin-bottom:12px;letter-spacing:.5px;position:relative}
+.intel-ticker::before,.intel-ticker::after{content:"";position:absolute;top:0;bottom:0;width:30px;z-index:2;pointer-events:none}
+.intel-ticker::before{left:0;background:linear-gradient(90deg,var(--bg2),transparent)}
+.intel-ticker::after{right:0;background:linear-gradient(270deg,var(--bg2),transparent)}
+.intel-ticker span{display:inline-block;padding-left:100%;animation:tickerMove 28s linear infinite}
+@keyframes tickerMove{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
 .dot-strip{display:flex;gap:2px;justify-content:center;margin-top:4px}
 .dot-strip .d{flex:1;height:3px;background:rgba(0,212,255,.15);border-radius:1px;max-width:3px}
 .dot-strip .d.past{background:var(--cyan)}
@@ -142,9 +180,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .blocker .close-x{position:absolute;top:5px;right:6px;background:transparent;border:none;color:var(--txt3);font-size:14px;cursor:pointer;padding:0;width:16px;height:16px;line-height:1;border-radius:2px}
 .blocker .close-x:hover{color:var(--red);background:rgba(255,51,85,.1)}
 .add-blocker-btn{width:100%;margin-top:4px;padding:6px;border:1px dashed var(--line);background:transparent;color:var(--txt2);border-radius:3px;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:1.5px;cursor:pointer;text-transform:uppercase}
-.add-blocker-btn:hover{color:var(--cyan);border-color:var(--line2)}
 
-/* Day Navigator */
 .day-nav{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:8px 14px;margin-bottom:14px;position:relative}
 .day-nav::before,.day-nav::after{content:"";position:absolute;width:8px;height:8px}
 .day-nav::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan)}
@@ -349,11 +385,32 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 
   <div class="frame">
     <div class="lbl">▸ TACTICAL STATUS</div>
-    <div class="mini-stats">
-      <div class="ms"><div class="l">ROSTER</div><div class="v">D<span id="rosDay">-</span><small>/7</small></div><div class="dot-strip" id="rosDots"></div></div>
+
+    <!-- 14-day roster timeline -->
+    <div class="roster-panel">
+      <div class="rp-head">SWING LOGIC <span>14 WORK / 7 R&R</span></div>
+      <div class="rp-timeline" id="rosterTimeline"></div>
+      <div class="rp-labels"><span id="rosterCountTxt">D-- OF 14</span><span class="sub" id="rosterStateTxt">SWING ACTIVE</span></div>
+    </div>
+
+    <!-- Flyout + month mini-stats (ROSTER lives in the panel above now) -->
+    <div class="mini-stats cols2">
       <div class="ms"><div class="l">FLYOUT</div><div class="v"><span id="prjDays">-</span><small>d</small></div><div class="s">12 JUN</div></div>
       <div class="ms"><div class="l">MONTH</div><div class="v">D<span id="monthDay">-</span><small id="monthTotal">/31</small></div><div class="s" id="monthName">--</div></div>
     </div>
+
+    <!-- Holographic globe -->
+    <div class="holo-globe-container">
+      <div class="holo-globe">
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="ring"></div>
+        <div class="equator"></div>
+        <div class="pole"></div>
+      </div>
+    </div>
+    <div class="globe-lbl">SECTOR · <b>S5 PILBARA</b> · 22.9°S 120.1°E</div>
   </div>
 
   <div class="frame">
@@ -388,6 +445,9 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 </aside>
 
 <main class="main">
+  <!-- Scrolling intel ticker -->
+  <div class="intel-ticker"><span id="tickerText">▸ DECMIL SITE SECURE ▸ INITIALISING TACTICAL FEED ▸</span></div>
+
   <div class="day-nav">
     <button class="dn-arrow" onclick="navDay(-1)">‹</button>
     <div class="dn-label"><span class="dn-prefix" id="dnPrefix"></span><span class="dn-date" id="dnDate">--</span></div>
@@ -485,7 +545,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 </div></div>
 
 <div class="modal" id="wrapModal"><div class="modal-box"><h2>▸ Wrap Day</h2>
-  <div class="hint" style="margin-bottom:12px;font-size:12px;color:var(--txt2)">Wrap up <b id="wrapDayLabel" style="color:var(--cyan)">--</b>. Incomplete variable missions will be carried to tomorrow. Fixed spine tasks and breaks won't transfer (they're daily).</div>
+  <div class="hint" style="margin-bottom:12px;font-size:12px;color:var(--txt2)">Wrap up <b id="wrapDayLabel" style="color:var(--cyan)">--</b>. Incomplete variable missions will be carried to tomorrow. Fixed spine tasks and breaks won't transfer.</div>
   <div id="wrapPreview" class="wrap-preview"></div>
   <div class="modal-btns"><button class="mbtn ghost" onclick="closeWrap()">Cancel</button><button class="mbtn primary" onclick="confirmWrap()">▸ WRAP & CARRY OVER</button></div>
 </div></div>
@@ -494,6 +554,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <script>
 const DEFAULT_CFG={apiKey:"AIzaSyDbxaBCE-tPmc6byx-hv9eeqx_DfRYr0q0",databaseURL:"https://decmil---hseq-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"decmil---hseq",appId:"1:615574493396:web:f0c963945c4dc66b720341"};
+// 2:1 rotation: 14 days on (29 May → 11 Jun), flyout 12 Jun
 const ROSTER_START=new Date('2026-05-29T00:00:00'),ROSTER_LEN=14,FINAL_DAY=new Date('2026-06-12T00:00:00');
 const SHIFT_START=17*60+30,SHIFT_LEN=12*60;
 
@@ -550,7 +611,6 @@ function attachDayListener(){
   tasksRef.on('value',function(snap){
     const v=snap.val();
     if(!v){const seed={};SEED_NS.forEach(function(t){seed[t.id]=t;});tasksRef.set(seed);return;}
-    // Top up missing fixed spine tasks
     SEED_NS.forEach(function(ft){if(!v[ft.id])tasksRef.child(ft.id).set(ft);});
     tasks=Object.keys(v).map(function(k){return v[k];}).sort(function(a,b){return tLog(a.s)-tLog(b.s);});
     render();
@@ -572,7 +632,6 @@ function connect(cfg){
   }catch(e){setDot('off');console.error(e);}
 }
 
-// ===== DAY NAVIGATION =====
 function isViewingToday(){const t=getShiftDate();return dayKeyFor(t)===dayKeyFor(viewDate);}
 function navDay(d){const nd=new Date(viewDate);nd.setDate(nd.getDate()+d);viewDate=nd;if(db)attachDayListener();renderDayNav();renderStats();renderCalendar();}
 function gotoToday(){viewDate=getShiftDate();if(db)attachDayListener();renderDayNav();renderStats();renderCalendar();}
@@ -595,7 +654,6 @@ function renderDayNav(){
   document.getElementById('dnTodayBtn').classList.toggle('hidden',diff===0);
 }
 
-// ===== SHIFT STATE =====
 function renderShiftState(){
   const el=document.getElementById('shiftState');
   if(!isViewingToday()){el.textContent='▸ PREVIEW MODE';el.className='shift-state';return;}
@@ -605,24 +663,17 @@ function renderShiftState(){
 }
 function startShift(){
   if(!metaRef){alert('Connect Firebase first');return;}
-  if(!isViewingToday()){if(!confirm('You\'re not on today. Start shift for the viewed day?'))return;}
+  if(!isViewingToday()){if(!confirm('Not on today. Start shift for the viewed day?'))return;}
   metaRef.update({startedAt:Date.now(),wrappedAt:null});
   const h=new Date().getHours();const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');
-  jarvisSay(greet+", Kevin. Shift commenced. All systems on standby. Have a productive one.",true,'JARVIS');
+  jarvisSay(greet+", Kevin. Shift commenced. Have a productive one.",true,'JARVIS');
 }
-
 function openWrap(){
   if(!tasksRef){alert('Connect Firebase first');return;}
-  // Build list of carryable incomplete tasks
   const carryable=tasks.filter(function(t){return !t.done&&t.type!=='break'&&FIXED_IDS.indexOf(t.id)===-1;});
   document.getElementById('wrapDayLabel').textContent=document.getElementById('dnDate').textContent;
-  if(carryable.length===0){
-    document.getElementById('wrapPreview').innerHTML='<div style="text-align:center;color:var(--green);padding:20px;font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1.5px">✓ NOTHING TO CARRY OVER<br><span style="color:var(--txt3);font-size:9px;margin-top:6px;display:block">All variable missions complete or none added</span></div>';
-  }else{
-    document.getElementById('wrapPreview').innerHTML=carryable.map(function(t,i){
-      return '<label class="wrap-item"><input type="checkbox" checked data-id="'+t.id+'"><div class="wrap-item-body"><span class="badge b-'+t.type+'" style="margin-right:5px">'+(badgeText[t.type]||t.type)+'</span>'+t.title+'<div class="wrap-item-time">'+t.s+'–'+t.e+(t.sub?' · '+t.sub:'')+'</div></div></label>';
-    }).join('');
-  }
+  if(carryable.length===0){document.getElementById('wrapPreview').innerHTML='<div style="text-align:center;color:var(--green);padding:20px;font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1.5px">✓ NOTHING TO CARRY OVER</div>';}
+  else{document.getElementById('wrapPreview').innerHTML=carryable.map(function(t){return '<label class="wrap-item"><input type="checkbox" checked data-id="'+t.id+'"><div class="wrap-item-body"><span class="badge b-'+t.type+'" style="margin-right:5px">'+(badgeText[t.type]||t.type)+'</span>'+t.title+'<div class="wrap-item-time">'+t.s+'–'+t.e+(t.sub?' · '+t.sub:'')+'</div></div></label>';}).join('');}
   document.getElementById('wrapModal').classList.add('open');
 }
 function closeWrap(){document.getElementById('wrapModal').classList.remove('open');}
@@ -641,10 +692,9 @@ function confirmWrap(){
   });
   metaRef.update({wrappedAt:Date.now()});
   closeWrap();
-  jarvisSay("Day wrapped, Kevin. "+(moved===0?'Nothing carried over. ':moved+' mission'+(moved>1?'s':'')+' carried to tomorrow. ')+"Have a good rest.",true,'JARVIS');
+  jarvisSay("Day wrapped, Kevin. "+(moved===0?'Nothing carried over. ':moved+' mission'+(moved>1?'s':'')+' carried. ')+"Rest well.",true,'JARVIS');
 }
 
-// ===== BLOCKERS =====
 function renderBlockers(){
   const el=document.getElementById('blockersList');
   const keys=Object.keys(blockers);
@@ -653,23 +703,27 @@ function renderBlockers(){
 }
 function openBlocker(){document.getElementById('bk_title').value='';document.getElementById('bk_detail').value='';document.getElementById('bk_type').value='warning';document.getElementById('blockerModal').classList.add('open');}
 function closeBlocker(){document.getElementById('blockerModal').classList.remove('open');}
-function saveBlocker(){
-  if(!blockersRef){alert('Connect Firebase first');return;}
-  const title=document.getElementById('bk_title').value.trim();
-  if(!title){alert('Title required');return;}
-  const id='bk'+Date.now();
-  blockersRef.child(id).set({id:id,title:title.toUpperCase(),detail:document.getElementById('bk_detail').value.trim(),type:document.getElementById('bk_type').value,createdAt:Date.now()});
-  closeBlocker();
-}
+function saveBlocker(){if(!blockersRef){alert('Connect Firebase first');return;}const title=document.getElementById('bk_title').value.trim();if(!title){alert('Title required');return;}const id='bk'+Date.now();blockersRef.child(id).set({id:id,title:title.toUpperCase(),detail:document.getElementById('bk_detail').value.trim(),type:document.getElementById('bk_type').value,createdAt:Date.now()});closeBlocker();}
 function removeBlocker(id){if(confirm('Dismiss this blocker?'))blockersRef.child(id).remove();}
 
 function renderStats(){
   const sd=viewDate;
   const today=new Date();today.setHours(0,0,0,0);
+
+  // 14-day roster timeline (NEW)
   const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));
-  document.getElementById('rosDay').textContent=dayIn;
-  let dots='';for(let i=1;i<=ROSTER_LEN;i++){dots+='<div class="d '+(i<dayIn?'past':(i===dayIn?'now':''))+'"></div>';}
-  document.getElementById('rosDots').innerHTML=dots;
+  document.getElementById('rosterCountTxt').textContent='D'+dayIn+' OF '+ROSTER_LEN;
+  let tlHTML='';
+  for(let i=1;i<=ROSTER_LEN;i++){
+    let cls='rt-node';
+    if(i<dayIn)cls+=' filled';
+    else if(i===dayIn)cls+=' active';
+    tlHTML+='<div class="'+cls+'"></div>';
+  }
+  document.getElementById('rosterTimeline').innerHTML=tlHTML;
+  document.getElementById('rosterStateTxt').textContent=dayIn>=ROSTER_LEN?'FINAL DAY':(dayIn>0?'SWING ACTIVE':'PRE-SWING');
+
+  // Flyout + month
   const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));
   document.getElementById('prjDays').textContent=toFly;
   const monthName=today.toLocaleDateString('en-AU',{month:'short'}).toUpperCase();
@@ -679,10 +733,17 @@ function renderStats(){
   document.getElementById('monthTotal').textContent='/'+daysInMonth;
   document.getElementById('monthName').textContent=monthName+' '+yr;
   document.getElementById('kpiMonthLbl').textContent=monthKeyFor(viewDate).toUpperCase();
+
+  // Shift date header
   const dayShort=sd.toLocaleDateString('en-AU',{weekday:'short'}).toUpperCase();
   const ddNum=sd.getDate();
   const mmShort=sd.toLocaleDateString('en-AU',{month:'short'}).toUpperCase();
   document.getElementById('shiftDate').textContent=dayShort+' '+ddNum+' '+mmShort+' · NS · '+toFly+'d to flyout';
+
+  // Live ticker text
+  const pct=Math.round((dayIn/ROSTER_LEN)*100);
+  const tickerMsg='▸ DECMIL SITE SECURE  ▸ SWING DAY '+dayIn+' OF '+ROSTER_LEN+' · '+pct+'% COMPLETE  ▸ '+toFly+' DAYS TO FLYOUT (12 JUN)  ▸ R&R COMMENCES AFTER D14  ▸ ALL SYSTEMS NOMINAL  ▸ SECTOR S5 PILBARA  ';
+  const tEl=document.getElementById('tickerText');if(tEl)tEl.textContent=tickerMsg;
 }
 
 function renderKPI(){
@@ -698,30 +759,32 @@ function bump(id,d){kpiState[id]=Math.max(0,(kpiState[id]||0)+d);renderKPI();if(
 
 function fmtHMS(s){if(s<0)s=0;const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),x=s%60;return pad(h)+':'+pad(m)+':'+pad(x);}
 function renderCountdown(){
-  // Only live when viewing today
   if(!isViewingToday()){document.getElementById('ctTask').textContent='PREVIEW MODE';document.getElementById('ctBig').textContent='--:--:--';document.getElementById('ctBig').className='ct-big';document.getElementById('ctMeta').textContent='Live countdown only on today';document.getElementById('ctBarFill').style.width='0%';return;}
   const cm=clockM(),nl=logM(cm);
   const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl&&t.type!=='break';});
   const taskEl=document.getElementById('ctTask'),bigEl=document.getElementById('ctBig'),metaEl=document.getElementById('ctMeta'),barEl=document.getElementById('ctBarFill');
-  if(cur){
-    const now=new Date();const endMin=mins(cur.e);
-    let endTs=new Date(now);endTs.setHours(Math.floor(endMin/60),endMin%60,0,0);
-    if(endTs<=now)endTs.setDate(endTs.getDate()+1);
-    const diffS=Math.max(0,Math.floor((endTs-now)/1000));
-    let totalS=(tLog(cur.e)-tLog(cur.s))*60;if(totalS<=0)totalS=60;
-    const elapsedPct=Math.max(0,Math.min(100,100-(diffS/totalS*100)));
-    taskEl.textContent=cur.title;bigEl.textContent=fmtHMS(diffS);bigEl.className='ct-big'+(diffS<300?' urgent':(diffS<900?'':' safe'));metaEl.textContent='REMAINING ON '+cur.s+'–'+cur.e+' MISSION';barEl.style.width=elapsedPct+'%';
-  }else{
-    const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});
-    if(nx){const now=new Date();const startMin=mins(nx.s);let startTs=new Date(now);startTs.setHours(Math.floor(startMin/60),startMin%60,0,0);if(startTs<=now)startTs.setDate(startTs.getDate()+1);const diffS=Math.max(0,Math.floor((startTs-now)/1000));taskEl.textContent=nx.title;bigEl.textContent=fmtHMS(diffS);bigEl.className='ct-big';metaEl.textContent='STARTS '+nx.s;barEl.style.width='0%';}
-    else{taskEl.textContent='— STANDBY —';bigEl.textContent='--:--:--';bigEl.className='ct-big';metaEl.textContent='No active or upcoming mission';barEl.style.width='0%';}
-  }
+  if(cur){const now=new Date();const endMin=mins(cur.e);let endTs=new Date(now);endTs.setHours(Math.floor(endMin/60),endMin%60,0,0);if(endTs<=now)endTs.setDate(endTs.getDate()+1);const diffS=Math.max(0,Math.floor((endTs-now)/1000));let totalS=(tLog(cur.e)-tLog(cur.s))*60;if(totalS<=0)totalS=60;const elapsedPct=Math.max(0,Math.min(100,100-(diffS/totalS*100)));taskEl.textContent=cur.title;bigEl.textContent=fmtHMS(diffS);bigEl.className='ct-big'+(diffS<300?' urgent':(diffS<900?'':' safe'));metaEl.textContent='REMAINING ON '+cur.s+'–'+cur.e+' MISSION';barEl.style.width=elapsedPct+'%';}
+  else{const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});if(nx){const now=new Date();const startMin=mins(nx.s);let startTs=new Date(now);startTs.setHours(Math.floor(startMin/60),startMin%60,0,0);if(startTs<=now)startTs.setDate(startTs.getDate()+1);const diffS=Math.max(0,Math.floor((startTs-now)/1000));taskEl.textContent=nx.title;bigEl.textContent=fmtHMS(diffS);bigEl.className='ct-big';metaEl.textContent='STARTS '+nx.s;barEl.style.width='0%';}else{taskEl.textContent='— STANDBY —';bigEl.textContent='--:--:--';bigEl.className='ct-big';metaEl.textContent='No active or upcoming mission';barEl.style.width='0%';}}
 }
 
 const CAL_TYPES=['blank','work','rnr','leave','off'];
 let calState={};
 let calViewMonth=new Date();calViewMonth.setDate(1);
-function loadCal(){try{calState=JSON.parse(localStorage.getItem('cal_state')||'{}');}catch(e){calState={};}const defaults={'2026-05-29':'work','2026-05-30':'work','2026-05-31':'work','2026-06-01':'work','2026-06-02':'work','2026-06-03':'work','2026-06-04':'work','2026-06-05':'work'};Object.keys(defaults).forEach(function(k){if(!calState[k])calState[k]=defaults[k];});saveCal();}
+function loadCal(){
+  try{calState=JSON.parse(localStorage.getItem('cal_state')||'{}');}catch(e){calState={};}
+  // 2:1 rotation seed — work days 29 May → 11 Jun (14 days), then R&R 12 Jun → 18 Jun (7 days), then next swing
+  const defaults={};
+  // Current swing (14 days)
+  for(let d=29;d<=31;d++)defaults['2026-05-'+pad(d)]='work';
+  for(let d=1;d<=11;d++)defaults['2026-06-'+pad(d)]='work';
+  // R&R (7 days)
+  for(let d=12;d<=18;d++)defaults['2026-06-'+pad(d)]='rnr';
+  // Next swing (14 days)
+  for(let d=19;d<=30;d++)defaults['2026-06-'+pad(d)]='work';
+  for(let d=1;d<=2;d++)defaults['2026-07-'+pad(d)]='work';
+  Object.keys(defaults).forEach(function(k){if(!calState[k])calState[k]=defaults[k];});
+  saveCal();
+}
 function saveCal(){localStorage.setItem('cal_state',JSON.stringify(calState));}
 function cycleCalDay(key){const cur=calState[key]||'blank';const idx=CAL_TYPES.indexOf(cur);const next=CAL_TYPES[(idx+1)%CAL_TYPES.length];if(next==='blank')delete calState[key];else calState[key]=next;saveCal();renderCalendar();}
 function calNav(d){calViewMonth.setMonth(calViewMonth.getMonth()+d);renderCalendar();}
@@ -730,8 +793,7 @@ function renderCalendar(){
   const firstDay=new Date(yr,mo,1);const lastDay=new Date(yr,mo+1,0);const startDow=(firstDay.getDay()+6)%7;
   const today=new Date();today.setHours(0,0,0,0);
   const viewing=new Date(viewDate);viewing.setHours(0,0,0,0);
-  const monthLbl=calViewMonth.toLocaleDateString('en-AU',{month:'long',year:'numeric'}).toUpperCase();
-  document.getElementById('calMonthName').textContent=monthLbl;
+  document.getElementById('calMonthName').textContent=calViewMonth.toLocaleDateString('en-AU',{month:'long',year:'numeric'}).toUpperCase();
   let html='<div class="cal-grid">';['M','T','W','T','F','S','S'].forEach(function(d){html+='<div class="cal-hdr">'+d+'</div>';});
   for(let i=0;i<startDow;i++)html+='<div class="cal-cell empty"></div>';
   for(let d=1;d<=lastDay.getDate();d++){
@@ -744,9 +806,7 @@ function renderCalendar(){
   document.getElementById('calGridBox').innerHTML=html;
   let swing=0,rnr=0,leave=0;const todayMs=today.getTime();
   Object.keys(calState).forEach(function(k){const d=new Date(k+'T00:00:00').getTime();if(d<todayMs)return;if(calState[k]==='work')swing++;else if(calState[k]==='rnr')rnr++;else if(calState[k]==='leave')leave++;});
-  document.getElementById('csSwing').textContent=swing;
-  document.getElementById('csRnR').textContent=rnr;
-  document.getElementById('csLeave').textContent=leave;
+  document.getElementById('csSwing').textContent=swing;document.getElementById('csRnR').textContent=rnr;document.getElementById('csLeave').textContent=leave;
 }
 
 function render(){
@@ -807,7 +867,7 @@ function handleQuery(q){
   const m=lq.match(/^(ask|hey|tell)\s+(claude|gemini|openai|copilot|gpt)\s+(.*)/i);
   if(m){askBrain=m[2].toLowerCase();if(askBrain==='copilot'||askBrain==='gpt')askBrain='openai';actualQ=q.replace(/^(ask|hey|tell)\s+\S+\s+/i,'');}
   if(!askBrain){
-    if(/^(hi|hello|hey|good (morning|evening|night))/i.test(lq)){const h=new Date().getHours();jarvisSay((h<5||h>=18?'Good evening':h<12?'Good morning':'Good afternoon')+", Kevin. All systems online.",true,'JARVIS');return;}
+    if(/^(hi|hello|hey|good (morning|evening|night))/i.test(lq)){const h=new Date().getHours();jarvisSay((h<5||h>=18?'Good evening':h<12?'Good morning':'Good afternoon')+", Kevin.",true,'JARVIS');return;}
     if(/\b(start (my )?(shift|day))\b/i.test(lq)){startShift();return;}
     if(/\b(wrap (my )?(day|shift)|end (my )?(day|shift))\b/i.test(lq)){openWrap();return;}
     if(/\b(brief|briefing|status report|sitrep)\b/i.test(lq)){briefing();return;}
@@ -827,14 +887,14 @@ function handleQuery(q){
 }
 
 function speakNext(){const nl=logM(clockM());const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});if(nx)jarvisSay("Next mission, "+nx.s+": "+nx.title+".",true,'JARVIS');else jarvisSay("No further missions queued.",true,'JARVIS');}
-function speakTime(){const cm=clockM(),nl=logM(cm);const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl&&t.type!=='break';});if(cur){const now=new Date(),endMin=mins(cur.e);let endTs=new Date(now);endTs.setHours(Math.floor(endMin/60),endMin%60,0,0);if(endTs<=now)endTs.setDate(endTs.getDate()+1);const diffS=Math.max(0,Math.floor((endTs-now)/1000));const h=Math.floor(diffS/3600),m=Math.floor((diffS%3600)/60);jarvisSay(h+" hours "+m+" minutes remaining on "+cur.title+".",true,'JARVIS');}else{const rem=Math.max(0,720-nl);jarvisSay("No active mission. "+Math.floor(rem/60)+" hours "+(rem%60)+" minutes remaining on shift.",true,'JARVIS');}}
+function speakTime(){const cm=clockM(),nl=logM(cm);const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl&&t.type!=='break';});if(cur){const now=new Date(),endMin=mins(cur.e);let endTs=new Date(now);endTs.setHours(Math.floor(endMin/60),endMin%60,0,0);if(endTs<=now)endTs.setDate(endTs.getDate()+1);const diffS=Math.max(0,Math.floor((endTs-now)/1000));const h=Math.floor(diffS/3600),m=Math.floor((diffS%3600)/60);jarvisSay(h+" hours "+m+" minutes remaining on "+cur.title+".",true,'JARVIS');}else{const rem=Math.max(0,720-nl);jarvisSay(Math.floor(rem/60)+" hours "+(rem%60)+" minutes remaining on shift.",true,'JARVIS');}}
 function speakKPIs(){const lines=KPIS.map(function(k){const c=kpiState[k.id]||0;return k.lbl.toLowerCase()+", "+c+" of "+k.target+", "+(c>=k.target?'met':(c>0?'in progress':'behind'));});jarvisSay("KPI status: "+lines.join(". ")+".",true,'JARVIS');}
-function markTaskByVoice(q){const term=q.replace(/^mark (done|complete) /i,'').trim().toLowerCase();const match=tasks.find(function(t){return t.title.toLowerCase().includes(term)&&!t.done;});if(match){if(tasksRef)tasksRef.child(match.id).update({done:true});if(match.kpi)bump(match.kpi,1);jarvisSay("Marking "+match.title+" complete.",true,'JARVIS');}else jarvisSay("Couldn't find a match for '"+term+"'.",true,'JARVIS');}
+function markTaskByVoice(q){const term=q.replace(/^mark (done|complete) /i,'').trim().toLowerCase();const match=tasks.find(function(t){return t.title.toLowerCase().includes(term)&&!t.done;});if(match){if(tasksRef)tasksRef.child(match.id).update({done:true});if(match.kpi)bump(match.kpi,1);jarvisSay("Marking "+match.title+" complete.",true,'JARVIS');}else jarvisSay("Couldn't find '"+term+"'.",true,'JARVIS');}
 
-function briefing(){const today=new Date();today.setHours(0,0,0,0);const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));const nl=logM(clockM()),rem=Math.max(0,720-nl);const done=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;const tot=tasks.filter(function(t){return t.type!=='break';}).length;const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl;});const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});const kpiBehind=KPIS.filter(function(k){return (kpiState[k.id]||0)<k.target;});const h=new Date().getHours();const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');let t=greet+", Kevin. Tactical update. Time "+pad(new Date().getHours())+":"+pad(new Date().getMinutes())+". ";if(rem>0)t+="Shift "+Math.round((nl/720)*100)+" percent complete. ";t+="Mission queue, "+done+" of "+tot+" complete. ";if(cur)t+="Currently engaged: "+cur.title+". ";if(nx)t+="Next: "+nx.s+", "+nx.title+". ";t+="Day "+dayIn+" of 7. "+toFly+" days until final shift. ";if(kpiBehind.length===0)t+="All KPIs met. ";else t+=kpiBehind.length+" KPI"+(kpiBehind.length>1?'s':'')+" behind. ";t+="Standing by.";jarvisSay(t,true,'JARVIS');}
+function briefing(){const today=new Date();today.setHours(0,0,0,0);const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));const nl=logM(clockM()),rem=Math.max(0,720-nl);const done=tasks.filter(function(t){return t.done&&t.type!=='break';}).length;const tot=tasks.filter(function(t){return t.type!=='break';}).length;const cur=tasks.find(function(t){return tLog(t.s)<=nl&&tLog(t.e)>nl;});const nx=tasks.find(function(t){return tLog(t.s)>nl&&t.type!=='break';});const kpiBehind=KPIS.filter(function(k){return (kpiState[k.id]||0)<k.target;});const h=new Date().getHours();const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');let t=greet+", Kevin. Tactical update. Time "+pad(new Date().getHours())+":"+pad(new Date().getMinutes())+". ";if(rem>0)t+="Shift "+Math.round((nl/720)*100)+" percent complete. ";t+="Mission queue, "+done+" of "+tot+" complete. ";if(cur)t+="Currently engaged: "+cur.title+". ";if(nx)t+="Next: "+nx.s+", "+nx.title+". ";t+="Day "+dayIn+" of "+ROSTER_LEN+". "+toFly+" days until flyout. ";if(kpiBehind.length===0)t+="All KPIs met. ";else t+=kpiBehind.length+" KPI"+(kpiBehind.length>1?'s':'')+" behind. ";t+="Standing by.";jarvisSay(t,true,'JARVIS');}
 
-function buildContext(){const today=new Date();today.setHours(0,0,0,0);const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));const kpiTxt=KPIS.map(function(k){return k.lbl+': '+(kpiState[k.id]||0)+'/'+k.target;}).join(', ');const open=tasks.filter(function(t){return !t.done&&t.type!=='break';}).map(function(t){return t.s+' '+t.title;}).join('; ');return `Operator: Kevin Kegin, HSE Advisor at Decmil, PRJ0172 McPhee Creek.
-Now: ${new Date().toString().substring(0,21)}. NS Day ${dayIn}/7. Final shift in ${toFly}d.
+function buildContext(){const today=new Date();today.setHours(0,0,0,0);const dayIn=Math.max(1,Math.min(ROSTER_LEN,Math.floor((today-ROSTER_START)/86400000)+1));const toFly=Math.max(0,Math.ceil((FINAL_DAY-today)/86400000));const kpiTxt=KPIS.map(function(k){return k.lbl+': '+(kpiState[k.id]||0)+'/'+k.target;}).join(', ');const open=tasks.filter(function(t){return !t.done&&t.type!=='break';}).map(function(t){return t.s+' '+t.title;}).join('; ');return `Operator: Kevin Kegin, HSE Advisor at Decmil, PRJ0172 McPhee Creek. 2:1 rotation (14 on / 7 off).
+Now: ${new Date().toString().substring(0,21)}. NS Day ${dayIn}/${ROSTER_LEN}. Flyout in ${toFly}d (12 Jun).
 KPIs (${KPI_KEY}): ${kpiTxt}.
 Open missions: ${open||'none'}.`;}
 
@@ -854,7 +914,7 @@ From the email, extract every actionable task. Return ONLY a valid JSON array:
 Priority: p1=urgent/regulatory, p2=this-week/important, p3=routine. KPI: so=safety obs, hse=HSE insp, env=environmental, cri=critical risk.
 Email:
 `;
-async function parseEmail(){const content=document.getElementById('mailContent').value.trim();if(!content){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Paste email first</div>';return;}const brain=getActiveBrain();if(brain==='jarvis'||!getKey(brain)){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Switch to G/C/O brain for email parsing.</div>';return;}document.getElementById('extractBtn').disabled=true;document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ '+brain.toUpperCase()+' parsing…</div>';let raw='';try{if(brain==='gemini')raw=await callGeminiRaw(EMAIL_PROMPT+content);else if(brain==='claude')raw=await callClaudeRaw(EMAIL_PROMPT+content);else if(brain==='openai')raw=await callOpenAIRaw(EMAIL_PROMPT+content);}catch(e){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ AI request failed</div>';document.getElementById('extractBtn').disabled=false;return;}raw=raw.replace(/```json/gi,'').replace(/```/g,'').trim();let arr=null;try{arr=JSON.parse(raw);}catch(e){const m=raw.match(/\[[\s\S]*\]/);if(m){try{arr=JSON.parse(m[0]);}catch(e2){}}}if(!Array.isArray(arr)){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Parse failed.</div>';document.getElementById('extractBtn').disabled=false;return;}if(arr.length===0){document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ No tasks found.</div>';document.getElementById('extractBtn').disabled=false;return;}extractedTasks=arr;document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ '+arr.length+' task'+(arr.length>1?'s':'')+' extracted.</div>';renderExtracted();document.getElementById('addExtractedBar').style.display='flex';document.getElementById('extractBtn').disabled=false;}
+async function parseEmail(){const content=document.getElementById('mailContent').value.trim();if(!content){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Paste email first</div>';return;}const brain=getActiveBrain();if(brain==='jarvis'||!getKey(brain)){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Switch to G/C/O brain.</div>';return;}document.getElementById('extractBtn').disabled=true;document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ '+brain.toUpperCase()+' parsing…</div>';let raw='';try{if(brain==='gemini')raw=await callGeminiRaw(EMAIL_PROMPT+content);else if(brain==='claude')raw=await callClaudeRaw(EMAIL_PROMPT+content);else if(brain==='openai')raw=await callOpenAIRaw(EMAIL_PROMPT+content);}catch(e){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ AI request failed</div>';document.getElementById('extractBtn').disabled=false;return;}raw=raw.replace(/```json/gi,'').replace(/```/g,'').trim();let arr=null;try{arr=JSON.parse(raw);}catch(e){const m=raw.match(/\[[\s\S]*\]/);if(m){try{arr=JSON.parse(m[0]);}catch(e2){}}}if(!Array.isArray(arr)){document.getElementById('extractStatus').innerHTML='<div class="ext-status err">▸ Parse failed.</div>';document.getElementById('extractBtn').disabled=false;return;}if(arr.length===0){document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ No tasks found.</div>';document.getElementById('extractBtn').disabled=false;return;}extractedTasks=arr;document.getElementById('extractStatus').innerHTML='<div class="ext-status">▸ '+arr.length+' task'+(arr.length>1?'s':'')+' extracted.</div>';renderExtracted();document.getElementById('addExtractedBar').style.display='flex';document.getElementById('extractBtn').disabled=false;}
 function renderExtracted(){document.getElementById('extractedList').innerHTML=extractedTasks.map(function(t,i){const pr=t.priority||'p2';const time=t.time||'--:--';const date=t.date||'today';return '<label class="ext-task '+pr+'"><input type="checkbox" checked data-idx="'+i+'"><div class="et-body"><div class="et-title"><span class="badge b-'+pr+'">'+pr.toUpperCase()+'</span>'+(t.kpi?'<span class="kpi-tag">'+t.kpi.toUpperCase()+'</span>':'')+(t.title||'Untitled')+'</div><div class="et-meta">'+date+' · '+time+'</div>'+(t.detail?'<div class="et-detail">'+t.detail+'</div>':'')+'</div></label>';}).join('');}
 function addExtractedTasks(){if(!tasksRef){alert('Connect Firebase first');return;}const checks=document.querySelectorAll('#extractedList input[type=checkbox]');let added=0;checks.forEach(function(c){if(!c.checked)return;const t=extractedTasks[+c.dataset.idx];if(!t)return;const id='e'+Date.now()+'_'+(added++);const tm=t.time||'17:30';const[hh,mm]=tm.split(':').map(Number);const end=pad((hh+(mm+30>=60?1:0))%24)+':'+pad((mm+30)%60);const obj={id:id,s:tm,e:end,type:t.priority||'p2',title:t.title||'Untitled',sub:t.detail||'',kpi:t.kpi||'',done:false,source:'email'};tasksRef.child(id).set(obj);});if(added>0){jarvisSay(added+" mission"+(added>1?'s':'')+" added from email.",true,'JARVIS');closeMail();}else alert('Tick at least one task');}
 async function callGeminiRaw(prompt){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt}]}]})});const d=await r.json();return d.candidates&&d.candidates[0]&&d.candidates[0].content&&d.candidates[0].content.parts[0].text||'';}
@@ -877,7 +937,7 @@ setInterval(tickSecond,1000);
 const saved=getCfg();if(saved){connect(saved);}else{setDot('off');openSetup();}
 loadFeed('world');
 
-setTimeout(function(){document.getElementById('greeting').classList.add('fade');setTimeout(function(){const h=new Date().getHours();const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');const sd=getShiftDate();jarvisSay(greet+", Kevin. Dashboard ready. New: day navigator, custom blockers, start and wrap controls.",false);},1000);},1500);
+setTimeout(function(){document.getElementById('greeting').classList.add('fade');setTimeout(function(){const h=new Date().getHours();const greet=h<5||h>=18?'Good evening':(h<12?'Good morning':'Good afternoon');jarvisSay(greet+", Kevin. Tactical HUD online. 14-day swing tracker, holographic sector globe, and intel ticker engaged.",false);},1000);},1500);
 </script>
 </body>
 </html>

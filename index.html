@@ -499,7 +499,7 @@ function connect(cfg){
     setDot('on');
     tasksRef.on('value',function(snap){
       const v=snap.val();
-      if(!v){const seed={};SEED_NS.forEach(function(t){seed[t.id]=t;});tasksRef.set(seed);return;}
+      if(!v){const seed={};SEED_NS.forEach(function(t){seed[t.id]=t;});tasksRef.set(seed);return;}       SEED_NS.forEach(function(ft){if(!v[ft.id])tasksRef.child(ft.id).set(ft);});
       tasks=Object.keys(v).map(function(k){return v[k];}).sort(function(a,b){return tLog(a.s)-tLog(b.s);});
       render();
     },function(){setDot('off');});

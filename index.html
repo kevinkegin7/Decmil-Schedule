@@ -19,6 +19,349 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .main{grid-area:main;overflow-y:auto;overflow-x:hidden;padding-right:4px}
 .intel{grid-area:intel;overflow:hidden;display:flex;flex-direction:column;gap:10px}
 .dock-area{grid-area:dock}
+/* ── RosterTimeline.module.css ─────────────────────────────────── */
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(8, 18, 32, 0.45);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Corner brackets — top-left and bottom-right */
+.container::before,
+.container::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: rgba(0, 212, 255, 0.7);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.container::before {
+  top: 4px;
+  left: 4px;
+  border-width: 2px 0 0 2px;
+}
+
+.container::after {
+  bottom: 4px;
+  right: 4px;
+  border-width: 0 2px 2px 0;
+}
+
+.label {
+  font-family: 'Orbitron', system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: rgba(125, 211, 252, 0.75);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.timeline {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  align-items: center;
+}
+
+.node {
+  flex: 1;
+  min-width: 6px;
+  height: 12px;
+  border-radius: 2px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* ── Filled (past days) ────────────────────────────────────────── */
+.filled {
+  background: linear-gradient(
+    180deg,
+    rgba(0, 212, 255, 1),
+    rgba(8, 145, 178, 0.9)
+  );
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.5);
+}
+
+/* ── Active (current day) ──────────────────────────────────────── */
+.active {
+  background: linear-gradient(180deg, #ffffff, #e0f2fe);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.9),
+    0 0 16px rgba(0, 212, 255, 0.7);
+  z-index: 1;
+}
+
+.pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  animation: pulseRing 1.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseRing {
+  0%   { transform: scale(0.9); opacity: 1; }
+  100% { transform: scale(2);   opacity: 0; }
+}
+
+/* ── Ghosted (future days) ─────────────────────────────────────── */
+.ghosted {
+  background: rgba(0, 212, 255, 0.06);
+  border: 1px dashed rgba(0, 212, 255, 0.2);
+}
+
+.dayCount {
+  font-family: 'Orbitron', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(0, 212, 255, 1);
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+}
+
+.divider {
+  color: rgba(125, 211, 252, 0.5);
+  font-weight: 400;
+  margin: 0 2px;
+}
+
+import { motion } from 'framer-motion';
+import styles from './RosterTimeline.module.css';
+
+/**
+ * RosterTimeline — horizontal animated timeline of N nodes.
+ *
+ * State logic:
+ *   - day < currentDay   → 'filled'  (solid cyan)
+ *   - day === currentDay → 'active'  (white core + pulsing ring)
+ *   - day > currentDay   → 'ghosted' (low-opacity dashed)
+ *
+ * Each node pops in sequentially via Framer Motion spring.
+ *
+ * Props:
+ *   currentDay (number)  1-indexed current day. Default 5.
+ *   totalDays  (number)  Total nodes in the timeline. Default 14.
+ *   label      (string)  Left-side label. Default 'ROSTER'.
+ */
+const RosterTimeline = ({
+  currentDay = 5,
+  totalDays = 14,
+  label = 'ROSTER',
+}) => {
+  const states = Array.from({ length: totalDays }, (_, i) => {
+    const day = i + 1;
+    if (day < currentDay) return 'filled';
+    if (day === currentDay) return 'active';
+    return 'ghosted';
+  });
+
+  return (
+    <div className={styles.container}>
+      <span className={styles.label}>{label}</span>
+
+      <div className={styles.timeline}>
+        {states.map((state, i) => (
+          <motion.div
+            key={i}
+            className={`${styles.node} ${styles[state]}`}
+            initial={{ opacity: 0, scale: 0.2, y: 8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              delay: i * 0.04,
+              type: 'spring',
+              stiffness: 320,
+              damping: 18,
+            }}
+          >
+            {state === 'active' && <span className={styles.pulse} />}
+          </motion.div>
+        ))}
+      </div>
+
+      <motion.span
+        className={styles.dayCount}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: totalDays * 0.04 + 0.1 }}
+      >
+        D{currentDay}
+        <span className={styles.divider}>/</span>
+        {totalDays}
+      </motion.span>
+    </div>
+  );
+};
+
+export default RosterTimeline;
+
+import { motion } from 'framer-motion';
+import styles from './WireframeGlobe.module.css';
+
+/**
+ * WireframeGlobe — rotating SVG wireframe sphere.
+ *
+ * Built from a single SVG with latitude ellipses (parallels) and
+ * varying-rx vertical ellipses (meridians). The whole SVG is wrapped
+ * in a Framer Motion div that rotates continuously on Y.
+ *
+ * Note: SVG is 2D; the rotateY transform produces a holographic spin
+ * effect rather than true 3D depth. For full 3D rotation, swap in Three.js.
+ *
+ * Props:
+ *   size     (number) Viewport size in px.   Default 260.
+ *   label    (string) Corner label.          Default 'GLOBAL OPS'.
+ *   coord    (string) Coordinate readout.    Default Nullagine WA.
+ *   duration (number) Seconds per rotation.  Default 22.
+ */
+const WireframeGlobe = ({
+  size = 260,
+  label = 'GLOBAL OPS',
+  coord = 'NULLAGINE · 22.9°S 120.1°E',
+  duration = 22,
+}) => {
+  const latitudes = [-60, -30, 0, 30, 60];
+  const meridianCount = 8;
+
+  return (
+    <div className={styles.container}>
+      <span className={styles.cornerLabel}>{label}</span>
+      <span className={styles.coordTag}>{coord}</span>
+
+      <div className={styles.scene} style={{ width: size, height: size }}>
+        <motion.div
+          className={styles.sphere}
+          animate={{ rotateY: 360 }}
+          transition={{
+            duration,
+            repeat: Infinity,
+            ease: 'linear',
+          }}
+        >
+          <svg
+            viewBox="-100 -100 200 200"
+            width="100%"
+            height="100%"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <radialGradient id="globeGlow">
+                <stop offset="0%"   stopColor="rgba(0,212,255,0.18)" />
+                <stop offset="65%"  stopColor="rgba(0,212,255,0.06)" />
+                <stop offset="100%" stopColor="transparent" />
+              </radialGradient>
+
+              <linearGradient id="meridianGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stopColor="rgba(0,212,255,0.1)" />
+                <stop offset="50%"  stopColor="rgba(0,212,255,0.5)" />
+                <stop offset="100%" stopColor="rgba(0,212,255,0.1)" />
+              </linearGradient>
+            </defs>
+
+            {/* Atmospheric glow */}
+            <circle cx="0" cy="0" r="86" fill="url(#globeGlow)" />
+
+            {/* Latitude parallels */}
+            {latitudes.map((lat) => {
+              const rad = (lat * Math.PI) / 180;
+              const cy = -80 * Math.sin(rad);
+              const rx = 80 * Math.cos(rad);
+              return (
+                <ellipse
+                  key={`lat-${lat}`}
+                  cx="0"
+                  cy={cy}
+                  rx={rx}
+                  ry={rx * 0.18}
+                  fill="none"
+                  stroke="rgba(0,212,255,0.4)"
+                  strokeWidth="0.55"
+                />
+              );
+            })}
+
+            {/* Equator (stronger stroke) */}
+            <ellipse
+              cx="0" cy="0" rx="80" ry="14"
+              fill="none"
+              stroke="rgba(0,212,255,0.7)"
+              strokeWidth="0.9"
+            />
+
+            {/* Meridians via varying-rx vertical ellipses */}
+            {Array.from({ length: meridianCount }, (_, i) => {
+              const angle = (i / meridianCount) * Math.PI;
+              const rx = Math.abs(80 * Math.cos(angle));
+              return (
+                <ellipse
+                  key={`mer-${i}`}
+                  cx="0"
+                  cy="0"
+                  rx={rx || 0.5}
+                  ry="80"
+                  fill="none"
+                  stroke="url(#meridianGrad)"
+                  strokeWidth="0.55"
+                />
+              );
+            })}
+
+            {/* Sphere outline */}
+            <circle
+              cx="0" cy="0" r="80"
+              fill="none"
+              stroke="rgba(0,212,255,0.85)"
+              strokeWidth="1.2"
+            />
+
+            {/* Site marker — Nullagine WA approximated */}
+            <g transform="translate(38 22)">
+              <circle r="2.5" fill="#fbbf24">
+                <animate
+                  attributeName="r"
+                  values="2;5;2"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  values="1;0.4;1"
+                  dur="2s"
+                  repeatCount="indefinite"
+                />
+              </circle>
+              <circle
+                r="6"
+                fill="none"
+                stroke="rgba(251,191,36,0.5)"
+                strokeWidth="0.5"
+              />
+            </g>
+          </svg>
+        </motion.div>
+      </div>
+
+      <div className={styles.scanLine} />
+      <div className={styles.grid} />
+    </div>
+  );
+};
+
+export default WireframeGlobe;
 
 .side::-webkit-scrollbar,.main::-webkit-scrollbar,.intel-list::-webkit-scrollbar,.jc-msgs::-webkit-scrollbar{width:5px}
 .side::-webkit-scrollbar-thumb,.main::-webkit-scrollbar-thumb,.intel-list::-webkit-scrollbar-thumb,.jc-msgs::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}

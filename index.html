@@ -498,7 +498,7 @@ const ROSTER_START=new Date('2026-05-29T00:00:00'),ROSTER_LEN=7,FINAL_DAY=new Da
 const SHIFT_START=17*60+30,SHIFT_LEN=12*60;
 
 function pad(n){return String(n).padStart(2,'0');}
-function getShiftDate(){const n=new Date();if(n.getHours()<6){const y=new Date(n);y.setDate(y.getDate()-1);return y;}return n;}
+function getShiftDate(){return new Date();}
 function dayKeyFor(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'-NS';}
 function monthKeyFor(d){return d.toLocaleDateString('en-AU',{month:'short'}).toLowerCase()+String(d.getFullYear()).slice(-2);}
 let viewDate=getShiftDate();

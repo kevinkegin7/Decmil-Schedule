@@ -9,7 +9,7 @@
 :root{--bg:#03070d;--bg2:#070f1a;--panel:rgba(8,18,32,.7);--panel2:rgba(12,24,40,.9);--line:rgba(0,212,255,.15);--line2:rgba(0,212,255,.35);--cyan:#00d4ff;--cyan-dim:#0891b2;--txt:#e0f2fe;--txt2:#7dd3fc;--txt3:#475569;--amber:#fbbf24;--red:#ff3355;--green:#22ff88;--purple:#c084fc;--orange:#ff8533;--gemini:#4285f4;--claude:#cc785c;--openai:#10a37f;--glow:0 0 8px rgba(0,212,255,.6),0 0 20px rgba(0,212,255,.2)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);height:100%;overflow:hidden}
-body{font-family:'Rajdhani',sans-serif;color:var(--txt);min-height:100vh;position:relative;background:radial-gradient(ellipse at top,rgba(0,212,255,.05),transparent 60%),linear-gradient(180deg,#03070d,#050a14)}
+body{font-family:'Rajdhani',sans-serif;color:var(--txt);min-height:100vh;background:radial-gradient(ellipse at top,rgba(0,212,255,.05),transparent 60%),linear-gradient(180deg,#03070d,#050a14)}
 body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.3;background-image:linear-gradient(rgba(0,212,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.05) 1px,transparent 1px);background-size:50px 50px}
 .app{position:relative;z-index:1;height:100vh;display:grid;grid-template-areas:"hdr hdr hdr" "side main intel" "dock dock dock";grid-template-columns:300px 1fr 340px;grid-template-rows:54px 1fr 64px;gap:10px;padding:10px}
 .hdr{grid-area:hdr;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--panel2);border:1px solid var(--line2);border-radius:6px}
@@ -25,7 +25,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
 .hdr-strip{display:flex;gap:14px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2)}
 .hdr-strip b{color:var(--cyan);font-weight:400}
-.brain-pill{display:inline-block;padding:1px 7px;border-radius:99px;font-weight:700;letter-spacing:1px}
+.brain-pill{display:inline-block;padding:1px 7px;border-radius:99px;font-weight:700}
 .brain-pill.gemini{background:rgba(66,133,244,.18);color:var(--gemini);border:1px solid rgba(66,133,244,.4)}
 .brain-pill.claude{background:rgba(204,120,92,.18);color:var(--claude);border:1px solid rgba(204,120,92,.4)}
 .brain-pill.openai{background:rgba(16,163,127,.18);color:var(--openai);border:1px solid rgba(16,163,127,.4)}
@@ -44,7 +44,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .frame .lbl{font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:2px;color:var(--txt2);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
 .lbl .add-mini{background:transparent;border:1px solid var(--line2);color:var(--cyan);padding:1px 7px;font-size:8px;font-family:'Orbitron',sans-serif;font-weight:600;cursor:pointer;border-radius:2px;letter-spacing:1px}
 .clock-wrap{text-align:center;padding:4px 0 8px}
-.clock{font-family:'Orbitron',sans-serif;font-size:30px;font-weight:700;color:var(--cyan);text-shadow:var(--glow);font-variant-numeric:tabular-nums;line-height:1}
+.clock{font-family:'Orbitron',sans-serif;font-size:30px;font-weight:700;color:var(--cyan);text-shadow:var(--glow);font-variant-numeric:tabular-nums}
 .shift-meta{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt2);margin-top:6px}
 .prog-track{height:5px;background:rgba(0,212,255,.08);border-radius:1px;overflow:hidden;margin:6px 0 4px}
 .prog-fill{height:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan));box-shadow:var(--glow);transition:width .5s}
@@ -60,22 +60,21 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .rp-head{display:flex;justify-content:space-between;font-family:'Orbitron',sans-serif;font-size:9px;color:var(--txt2);margin-bottom:8px;letter-spacing:1px}
 .rp-head span{color:var(--amber)}
 .rp-timeline{display:flex;gap:2px;align-items:center}
-.rt-node{flex:1;height:6px;background:rgba(0,212,255,.1);border-radius:2px;transition:.3s;position:relative}
-.rt-node.t-DS{background:rgba(0,212,255,.25)}.rt-node.t-DS.filled{background:var(--cyan);box-shadow:0 0 4px rgba(0,212,255,.5)}
-.rt-node.t-NS{background:rgba(192,132,252,.25)}.rt-node.t-NS.filled{background:var(--purple);box-shadow:0 0 4px rgba(192,132,252,.5)}
+.rt-node{flex:1;height:6px;background:rgba(0,212,255,.1);border-radius:2px;transition:.3s}
+.rt-node.t-DS{background:rgba(0,212,255,.25)}.rt-node.t-DS.filled{background:var(--cyan)}
+.rt-node.t-NS{background:rgba(192,132,252,.25)}.rt-node.t-NS.filled{background:var(--purple)}
 .rt-node.t-change{background:rgba(251,191,36,.25)}.rt-node.t-change.filled{background:var(--amber)}
 .rt-node.t-flyin,.rt-node.t-flyout{background:rgba(34,255,136,.25)}
 .rt-node.t-flyin.filled,.rt-node.t-flyout.filled{background:var(--green)}
-.rt-node.active{background:#fff!important;box-shadow:0 0 8px #fff,0 0 14px rgba(0,212,255,.6);animation:pulseNode 1.5s ease-in-out infinite}
+.rt-node.t-leave{background:rgba(192,132,252,.25)}.rt-node.t-leave.filled{background:var(--purple)}
+.rt-node.active{background:#fff!important;box-shadow:0 0 8px #fff,0 0 14px rgba(0,212,255,.6);animation:pulseNode 1.5s infinite}
 @keyframes pulseNode{50%{opacity:.5}}
 .rp-labels{display:flex;justify-content:space-between;align-items:baseline;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:var(--cyan);margin-top:8px}
 .rp-labels .sub{font-size:8px;color:var(--txt3);font-weight:400;letter-spacing:1px}
-.rp-legend{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:.5px}
-.rp-legend i{display:inline-block;width:8px;height:5px;border-radius:1px;margin-right:3px;vertical-align:middle}
 .mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .ms{background:rgba(0,212,255,.04);border:1px solid var(--line);border-radius:3px;padding:8px 4px;text-align:center}
 .ms .l{font-family:'Orbitron',sans-serif;font-size:7px;letter-spacing:1px;color:var(--txt3);margin-bottom:3px}
-.ms .v{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--cyan);line-height:1}
+.ms .v{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--cyan)}
 .ms .v small{font-size:8px;color:var(--txt3)}
 .ms .s{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--txt3);margin-top:3px}
 .globe-wrap{position:relative;display:flex;justify-content:center;align-items:center;margin:14px 0 4px;min-height:170px}
@@ -108,8 +107,8 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .ring-btn{width:18px;height:18px;border:1px solid var(--line2);background:transparent;color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;cursor:pointer;border-radius:2px;padding:0}
 .ct-task{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:var(--txt);text-align:center;margin-bottom:6px;min-height:32px;display:flex;align-items:center;justify-content:center}
 .ct-big{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:700;color:var(--amber);text-align:center;font-variant-numeric:tabular-nums;letter-spacing:2px;text-shadow:0 0 10px rgba(251,191,36,.5)}
-.ct-big.urgent{color:var(--red);text-shadow:0 0 10px rgba(255,51,85,.6);animation:flash 1s infinite}
-.ct-big.safe{color:var(--green);text-shadow:0 0 10px rgba(34,255,136,.5)}
+.ct-big.urgent{color:var(--red);animation:flash 1s infinite}
+.ct-big.safe{color:var(--green)}
 @keyframes flash{50%{opacity:.5}}
 .ct-meta{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);text-align:center;margin-top:4px}
 .ct-bar{height:4px;background:rgba(0,212,255,.08);border-radius:1px;overflow:hidden;margin-top:8px}
@@ -118,23 +117,28 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .cal-nav{background:transparent;border:1px solid var(--line);color:var(--cyan);width:22px;height:22px;border-radius:3px;cursor:pointer;font-size:14px;padding:0}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
 .cal-hdr{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--txt3);text-align:center;padding:4px 0}
-.cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;border-radius:3px;background:rgba(0,212,255,.03);border:1px solid var(--line);color:var(--txt2);user-select:none;cursor:default}
-.cal-cell.empty{background:transparent;border:none}
-.cal-cell.DS{background:rgba(0,212,255,.18);border-color:var(--cyan-dim);color:var(--cyan)}
-.cal-cell.NS{background:rgba(192,132,252,.15);border-color:rgba(192,132,252,.4);color:var(--purple)}
+.cal-cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;border-radius:3px;background:rgba(0,212,255,.03);border:1px solid var(--line);color:var(--txt2);user-select:none;cursor:pointer;transition:.15s}
+.cal-cell:hover{transform:scale(1.05)}
+.cal-cell.empty{background:transparent;border:none;cursor:default}
+.cal-cell.empty:hover{transform:none}
+.cal-cell.DS{background:rgba(0,212,255,.2);border-color:var(--cyan-dim);color:var(--cyan)}
+.cal-cell.NS{background:rgba(192,132,252,.18);border-color:rgba(192,132,252,.4);color:var(--purple)}
 .cal-cell.flyin,.cal-cell.flyout{background:rgba(34,255,136,.15);border-color:rgba(34,255,136,.4);color:var(--green)}
 .cal-cell.change{background:rgba(251,191,36,.18);border-color:rgba(251,191,36,.5);color:var(--amber);font-weight:700}
+.cal-cell.leave{background:rgba(192,132,252,.12);border-color:rgba(192,132,252,.35);color:var(--purple);opacity:.8}
 .cal-cell.rnr{background:rgba(34,255,136,.1);border-color:rgba(34,255,136,.3);color:var(--green);opacity:.85}
-.cal-cell.leave{background:rgba(192,132,252,.1);border-color:rgba(192,132,252,.3);color:var(--purple);opacity:.85}
+.cal-cell.off{background:rgba(71,85,105,.18);color:var(--txt3);border-color:var(--line)}
 .cal-cell.today{box-shadow:0 0 0 2px #fff;font-weight:700}
 .cal-cell.viewing{box-shadow:0 0 0 2px var(--amber)}
 .cal-legend{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:8px}
 .cal-legend span{padding:2px 5px;border-radius:2px}
-.cal-legend .lDS{background:rgba(0,212,255,.18);color:var(--cyan)}
-.cal-legend .lNS{background:rgba(192,132,252,.15);color:var(--purple)}
+.cal-legend .lDS{background:rgba(0,212,255,.2);color:var(--cyan)}
+.cal-legend .lNS{background:rgba(192,132,252,.18);color:var(--purple)}
+.cal-legend .lL{background:rgba(192,132,252,.12);color:var(--purple)}
+.cal-legend .lR{background:rgba(34,255,136,.1);color:var(--green)}
 .cal-legend .lF{background:rgba(34,255,136,.15);color:var(--green)}
 .cal-legend .lC{background:rgba(251,191,36,.18);color:var(--amber)}
-.cal-legend .lR{background:rgba(34,255,136,.1);color:var(--green)}
+.cal-hint{font-family:'Share Tech Mono',monospace;font-size:8.5px;color:var(--txt3);margin-top:7px;text-align:center;line-height:1.4}
 .blocker{padding:8px 12px;background:rgba(255,133,51,.06);border:1px solid rgba(255,133,51,.35);border-left:3px solid var(--orange);border-radius:3px;font-size:11px;color:#fdba74;display:flex;gap:8px;line-height:1.4;margin-bottom:6px;position:relative}
 .blocker.info{background:rgba(0,212,255,.05);border-color:var(--line2);border-left-color:var(--cyan);color:var(--txt2)}
 .blocker.danger{background:rgba(255,51,85,.06);border-color:rgba(255,51,85,.35);border-left-color:var(--red);color:#fda4af}
@@ -159,13 +163,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .mode-badge.NS{background:rgba(192,132,252,.15);color:var(--purple);border:1px solid rgba(192,132,252,.4)}
 .mode-badge.flyin,.mode-badge.flyout{background:rgba(34,255,136,.15);color:var(--green);border:1px solid rgba(34,255,136,.4)}
 .mode-badge.change{background:rgba(251,191,36,.15);color:var(--amber);border:1px solid rgba(251,191,36,.4)}
-.mode-badge.rnr,.mode-badge.leave{background:rgba(34,255,136,.1);color:var(--green);border:1px solid rgba(34,255,136,.3)}
-.mode-badge.off{background:rgba(71,85,105,.18);color:var(--txt3);border:1px solid var(--line)}
+.mode-badge.leave{background:rgba(192,132,252,.1);color:var(--purple);border:1px solid rgba(192,132,252,.3)}
+.mode-badge.rnr{background:rgba(34,255,136,.1);color:var(--green);border:1px solid rgba(34,255,136,.3)}
+.mode-badge.off,.mode-badge.none{background:rgba(71,85,105,.18);color:var(--txt3);border:1px solid var(--line)}
 .dn-today-btn{background:rgba(0,212,255,.15);border:1px solid var(--cyan);color:var(--cyan);padding:4px 10px;border-radius:99px;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;cursor:pointer;letter-spacing:1px;flex-shrink:0}
 .dn-today-btn.hidden{visibility:hidden}
 .queue-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;padding:0 4px}
 .queue-head h3{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:2px;color:var(--cyan);text-shadow:var(--glow)}
-.queue-head.personal h3{color:var(--green);text-shadow:0 0 8px rgba(34,255,136,.5)}
+.queue-head.personal h3{color:var(--green)}
 .queue-head .cnt{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--txt2)}
 .queue-head .cnt b{color:var(--cyan)}
 .slots{display:flex;flex-direction:column;gap:6px}
@@ -176,7 +181,6 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .task.done{border-left-color:var(--green);background:rgba(34,255,136,.04)}
 .task.done .title{color:var(--green);text-decoration:line-through;opacity:.7}
 .task.now{border-left-color:var(--cyan);background:rgba(0,212,255,.05);box-shadow:var(--glow)}
-.task.blocked{border-left-color:var(--orange)}
 .task.p1{border-left-color:var(--red)}.task.p2{border-left-color:var(--amber)}.task.p3{border-left-color:var(--green)}
 .task.meet{border-left-color:var(--purple)}.task.break{border-left-color:var(--txt3)}
 .task.fam{border-left-color:var(--green)}.task.trv{border-left-color:var(--purple)}.task.fin{border-left-color:var(--amber)}
@@ -190,7 +194,6 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .b-fixed,.b-admin{background:rgba(8,145,178,.18);color:var(--cyan);border:1px solid var(--line2)}
 .b-meet{background:rgba(192,132,252,.15);color:var(--purple);border:1px solid rgba(192,132,252,.4)}
 .b-break{background:rgba(71,85,105,.2);color:var(--txt2);border:1px solid var(--line)}
-.b-blocked{background:rgba(255,133,51,.15);color:var(--orange);border:1px solid rgba(255,133,51,.4)}
 .b-fam{background:rgba(34,255,136,.15);color:var(--green);border:1px solid rgba(34,255,136,.4)}
 .b-trv{background:rgba(192,132,252,.15);color:var(--purple);border:1px solid rgba(192,132,252,.4)}
 .b-fin{background:rgba(251,191,36,.15);color:var(--amber);border:1px solid rgba(251,191,36,.4)}
@@ -214,7 +217,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .empty-state b{display:block;margin-bottom:8px;font-family:'Orbitron',sans-serif;font-size:13px;letter-spacing:2px}
 .empty-state.rest b{color:var(--amber)}
 .empty-state.personal b{color:var(--green)}
-.empty-state.flyin b,.empty-state.flyout b{color:var(--green)}
+.empty-state.leave b{color:var(--purple)}
 .intel-frame{flex:0 0 auto}
 .intel-frame.chat{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
 .intel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line)}
@@ -224,7 +227,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .intel-tab.active{background:rgba(0,212,255,.1);color:var(--cyan);border-color:var(--line2)}
 .intel-list{max-height:260px;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
 .intel-item{padding:6px;background:rgba(0,212,255,.03);border-left:2px solid var(--cyan-dim);font-size:11px;line-height:1.3;display:flex;gap:8px;color:var(--txt);text-decoration:none;border-radius:2px}
-.intel-thumb{width:56px;height:48px;flex-shrink:0;object-fit:cover;border-radius:2px;border:1px solid var(--line);background:rgba(0,0,0,.3)}
+.intel-thumb{width:56px;height:48px;flex-shrink:0;object-fit:cover;border-radius:2px;border:1px solid var(--line)}
 .intel-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:space-between}
 .intel-title{font-size:11px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .intel-item .meta{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--txt3);margin-top:3px}
@@ -321,18 +324,12 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
   <div class="frame">
     <div class="lbl">▸ TACTICAL STATUS</div>
     <div class="roster-panel">
-      <div class="rp-head">SWING <span id="rpHeadSub">22 May → 12 Jun</span></div>
+      <div class="rp-head">SWING <span id="rpHeadSub">--</span></div>
       <div class="rp-timeline" id="rosterTimeline"></div>
-      <div class="rp-labels"><span id="rosterCountTxt">D-- OF 22</span><span class="sub" id="rosterStateTxt">--</span></div>
-      <div class="rp-legend">
-        <span><i style="background:var(--cyan)"></i>DS</span>
-        <span><i style="background:var(--purple)"></i>NS</span>
-        <span><i style="background:var(--amber)"></i>REST</span>
-        <span><i style="background:var(--green)"></i>FLY</span>
-      </div>
+      <div class="rp-labels"><span id="rosterCountTxt">D-- OF --</span><span class="sub" id="rosterStateTxt">--</span></div>
     </div>
     <div class="mini-stats">
-      <div class="ms"><div class="l">FLYOUT</div><div class="v"><span id="prjDays">-</span><small>d</small></div><div class="s">12 JUN</div></div>
+      <div class="ms"><div class="l">FLYOUT</div><div class="v"><span id="prjDays">-</span><small>d</small></div><div class="s" id="flyDateLbl">--</div></div>
       <div class="ms"><div class="l">MONTH</div><div class="v">D<span id="monthDay">-</span><small id="monthTotal">/31</small></div><div class="s" id="monthName">--</div></div>
     </div>
     <div class="globe-wrap"><div id="globeCanvas"></div></div>
@@ -340,7 +337,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
   </div>
 
   <div class="frame">
-    <div class="lbl">▸ BLOCKERS / ALERTS <button class="add-mini" onclick="openBlocker()">+ ADD</button></div>
+    <div class="lbl">▸ BLOCKERS <button class="add-mini" onclick="openBlocker()">+ ADD</button></div>
     <div id="blockersList"></div>
   </div>
 
@@ -358,10 +355,11 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
   </div>
 
   <div class="frame">
-    <div class="lbl">▸ CALENDAR</div>
+    <div class="lbl">▸ CALENDAR · TAP TO EDIT</div>
     <div class="cal-month"><button class="cal-nav" onclick="calNav(-1)">‹</button><span id="calMonthName">--</span><button class="cal-nav" onclick="calNav(1)">›</button></div>
     <div id="calGridBox"></div>
-    <div class="cal-legend"><span class="lDS">DS</span><span class="lNS">NS</span><span class="lF">FLY</span><span class="lC">REST</span><span class="lR">R&R</span></div>
+    <div class="cal-legend"><span class="lDS">DS</span><span class="lNS">NS</span><span class="lL">LEAVE</span><span class="lR">R&R</span><span class="lF">FLY</span><span class="lC">REST</span></div>
+    <div class="cal-hint">Tap a day to cycle: blank → DS → NS → Leave → R&R → Fly-in → Fly-out → Change → Off → blank</div>
   </div>
 </aside>
 
@@ -421,22 +419,14 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 </div>
 </div>
 
-<div class="modal" id="taskModal"><div class="modal-box"><h2>▸ Task Detail</h2>
+<div class="modal" id="taskModal"><div class="modal-box"><h2>▸ Task</h2>
   <div class="row2"><div class="fld"><label>Start</label><input id="f_start" placeholder="04:30"></div><div class="fld"><label>End</label><input id="f_end" placeholder="05:00"></div></div>
   <div class="fld"><label>Title</label><input id="f_title"></div>
   <div class="fld"><label>Detail</label><input id="f_sub"></div>
   <div class="row2"><div class="fld"><label>Category</label><select id="f_type">
-    <optgroup label="Work">
-      <option value="p1">P1</option><option value="p2">P2</option><option value="p3">P3</option>
-      <option value="fixed">Fixed</option><option value="meet">Meeting</option><option value="break">Break</option>
-      <option value="admin">Admin</option><option value="blocked">Blocked</option>
-    </optgroup>
-    <optgroup label="Personal · R&R">
-      <option value="fam">Family</option><option value="trv">Travel</option><option value="fin">Finance</option>
-      <option value="gym">Gym</option><option value="self">Self-care</option><option value="learn">Learning</option>
-      <option value="pr">Personal Record</option>
-    </optgroup>
-  </select></div><div class="fld"><label>KPI</label><select id="f_kpi"><option value="">None</option><option value="so">Safety Obs</option><option value="hse">HSE Insp</option><option value="env">Env</option><option value="cri">Critical</option></select></div></div>
+    <optgroup label="Work"><option value="p1">P1</option><option value="p2">P2</option><option value="p3">P3</option><option value="fixed">Fixed</option><option value="meet">Meet</option><option value="break">Break</option><option value="admin">Admin</option></optgroup>
+    <optgroup label="Personal"><option value="fam">Family</option><option value="trv">Travel</option><option value="fin">Finance</option><option value="gym">Gym</option><option value="self">Self-care</option><option value="learn">Learn</option><option value="pr">PR</option></optgroup>
+  </select></div><div class="fld"><label>KPI</label><select id="f_kpi"><option value="">None</option><option value="so">Safety</option><option value="hse">HSE</option><option value="env">Env</option><option value="cri">Crit</option></select></div></div>
   <div class="modal-btns"><button class="mbtn danger" id="delBtn" onclick="delTask()" style="display:none">Delete</button><button class="mbtn ghost" onclick="closeTask()">Cancel</button><button class="mbtn primary" onclick="saveTask()">Save</button></div>
 </div></div>
 
@@ -456,7 +446,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 </div></div>
 
 <div class="modal" id="mailModal"><div class="modal-box" style="max-width:720px"><h2>▸ Email → Tasks</h2>
-  <div class="fld"><label>Paste email</label><textarea id="mailContent" placeholder="Paste email — Jarvis extracts tasks via active AI brain." style="min-height:140px;font-family:'Share Tech Mono',monospace;font-size:11px"></textarea></div>
+  <div class="fld"><label>Paste email</label><textarea id="mailContent" style="min-height:140px;font-family:'Share Tech Mono',monospace;font-size:11px"></textarea></div>
   <div class="modal-btns"><button class="mbtn ghost" onclick="closeMail()">Cancel</button><button class="mbtn primary" id="extractBtn" onclick="parseEmail()">▸ EXTRACT</button></div>
   <div id="extractStatus"></div>
   <div id="extractedList" style="margin-top:12px;display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto"></div>
@@ -470,7 +460,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
   <div class="modal-btns"><button class="mbtn ghost" onclick="closeBlocker()">Cancel</button><button class="mbtn primary" onclick="saveBlocker()">Add</button></div>
 </div></div>
 
-<div class="modal" id="wrapModal"><div class="modal-box"><h2 id="wrapTitle">▸ Wrap Day</h2>
+<div class="modal" id="wrapModal"><div class="modal-box"><h2 id="wrapTitle">▸ Wrap</h2>
   <div class="hint" id="wrapHint"></div>
   <div id="wrapPreview" class="wrap-preview"></div>
   <div class="modal-btns"><button class="mbtn ghost" onclick="closeWrap()">Cancel</button><button class="mbtn primary" onclick="confirmWrap()">▸ WRAP & CARRY</button></div>
@@ -482,44 +472,78 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 <script>
 const DEFAULT_CFG={apiKey:"AIzaSyDbxaBCE-tPmc6byx-hv9eeqx_DfRYr0q0",databaseURL:"https://decmil---hseq-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"decmil---hseq",appId:"1:615574493396:web:f0c963945c4dc66b720341"};
 
-// === ROSTER: explicit per-day shift entries ===
-function buildRoster(){
-  const r={};
-  // Fly-in 22 May (partial DS)
-  r['2026-05-22']={type:'flyin',start:'11:40',end:'16:00',idx:1};
-  // DS block 23-28 May
-  for(let d=23;d<=28;d++)r['2026-05-'+pad(d)]={type:'DS',start:'04:30',end:'16:00',idx:d-21};
-  // NS block 29 May - 4 Jun (spans midnight)
-  for(let d=29;d<=31;d++)r['2026-05-'+pad(d)]={type:'NS',start:'17:30',end:'05:30',idx:d-21};
-  for(let d=1;d<=4;d++)r['2026-06-'+pad(d)]={type:'NS',start:'17:30',end:'05:30',idx:d+10};
-  // Changeover rest 5 Jun
-  r['2026-06-05']={type:'change',start:null,end:null,idx:15};
-  // DS block 6-11 Jun
-  for(let d=6;d<=11;d++)r['2026-06-'+pad(d)]={type:'DS',start:'04:30',end:'16:00',idx:d+10};
-  // Fly-out 12 Jun (partial DS)
-  r['2026-06-12']={type:'flyout',start:'04:30',end:'08:00',idx:22};
-  return r;
-}
 function pad(n){return String(n).padStart(2,'0');}
-const ROSTER=buildRoster();
-const ROSTER_LEN=22;
-const FLYOUT_DATE=new Date('2026-06-12T00:00:00');
 
-// === UTILITIES ===
+// === ROSTER: stored in localStorage as {dateKey: type} ===
+const HOURS={DS:{start:'04:30',end:'16:00'},NS:{start:'17:30',end:'05:30'},flyin:{start:'11:40',end:'16:00'},flyout:{start:'04:30',end:'08:00'},change:{start:null,end:null},leave:{start:null,end:null},rnr:{start:null,end:null},off:{start:null,end:null}};
+const CYCLE=[null,'DS','NS','leave','rnr','flyin','flyout','change','off'];
+const SWING_TYPES=['DS','NS','flyin','flyout','change','leave'];
+const BREAK_TYPES=['rnr','off'];
+
+let rosterState={};try{rosterState=JSON.parse(localStorage.getItem('roster_state')||'{}');}catch(e){}
+// Seed initial swing if empty (first ever load)
+if(Object.keys(rosterState).length===0){
+  rosterState['2026-05-22']='flyin';
+  for(let d=23;d<=28;d++)rosterState['2026-05-'+pad(d)]='DS';
+  for(let d=29;d<=31;d++)rosterState['2026-05-'+pad(d)]='NS';
+  for(let d=1;d<=4;d++)rosterState['2026-06-'+pad(d)]='NS';
+  rosterState['2026-06-05']='change';
+  for(let d=6;d<=11;d++)rosterState['2026-06-'+pad(d)]='DS';
+  rosterState['2026-06-12']='flyout';
+  localStorage.setItem('roster_state',JSON.stringify(rosterState));
+}
+function saveRoster(){localStorage.setItem('roster_state',JSON.stringify(rosterState));}
+
 function dateKey(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
 function monthKeyFor(d){return d.toLocaleDateString('en-AU',{month:'short'}).toLowerCase()+String(d.getFullYear()).slice(-2);}
 function mins(t){if(!t)return 0;const a=t.split(':');return(+a[0])*60+(+a[1]);}
-function shiftInfo(d){return ROSTER[dateKey(d)]||null;}
-// Time from shift start, handling NS midnight-cross
+function shiftInfo(d){const t=rosterState[dateKey(d)];if(!t)return null;const h=HOURS[t]||{};return {type:t,start:h.start,end:h.end};}
 function tTimeIn(taskTime,shiftStart){const tm=mins(taskTime),sm=mins(shiftStart);return tm>=sm?tm-sm:(1440-sm)+tm;}
 function shiftTotalMin(entry){if(!entry||!entry.start||!entry.end)return 0;const sm=mins(entry.start),em=mins(entry.end);return entry.type==='NS'?(1440-sm)+em:em-sm;}
 
-// === SHIFT-AWARE "TODAY" ===
-// If yesterday was an NS shift and current time is before 05:30, we're still on yesterday's shift
+// Dynamic swing position: walk back/forward from date to find swing block
+function getSwingFor(d){
+  const key=dateKey(d);
+  const t=rosterState[key];
+  if(!t||BREAK_TYPES.includes(t))return null;
+  if(!SWING_TYPES.includes(t))return null;
+  // Walk back
+  const startD=new Date(d);
+  while(true){
+    const p=new Date(startD);p.setDate(p.getDate()-1);
+    const pt=rosterState[dateKey(p)];
+    if(!pt||!SWING_TYPES.includes(pt))break;
+    startD.setDate(startD.getDate()-1);
+  }
+  // Walk forward
+  const endD=new Date(d);
+  while(true){
+    const n=new Date(endD);n.setDate(n.getDate()+1);
+    const nt=rosterState[dateKey(n)];
+    if(!nt||!SWING_TYPES.includes(nt))break;
+    endD.setDate(endD.getDate()+1);
+  }
+  const idx=Math.round((d-startD)/86400000)+1;
+  const total=Math.round((endD-startD)/86400000)+1;
+  // Build keys array
+  const keys=[];const c=new Date(startD);
+  for(let i=0;i<total;i++){keys.push(dateKey(c));c.setDate(c.getDate()+1);}
+  return {idx,total,keys,startD:new Date(startD),endD:new Date(endD)};
+}
+
+function getNextFlyoutFrom(d){
+  const today=new Date(d);today.setHours(0,0,0,0);
+  const keys=Object.keys(rosterState).sort();
+  for(const k of keys){const dt=new Date(k+'T00:00:00');if(dt<today)continue;if(rosterState[k]==='flyout')return dt;}
+  // No explicit flyout: return end of current swing
+  const sw=getSwingFor(today);return sw?sw.endD:null;
+}
+
+// Shift-aware "today": if yesterday was NS and time < 05:30, still on yesterday's shift
 function getShiftDate(){
   const now=new Date();
   const yest=new Date(now);yest.setDate(yest.getDate()-1);
-  const ye=ROSTER[dateKey(yest)];
+  const ye=shiftInfo(yest);
   if(ye&&ye.type==='NS'){
     const endTs=new Date(now);endTs.setHours(5,30,0,0);
     if(now<endTs)return yest;
@@ -529,21 +553,18 @@ function getShiftDate(){
 
 let viewDate=getShiftDate();
 let DAY_KEY,KPI_KEY;
-function refreshKeys(){const entry=shiftInfo(viewDate);DAY_KEY=dateKey(viewDate)+'-'+(entry?entry.type:'OFF');KPI_KEY=monthKeyFor(viewDate);}
+function refreshKeys(){const e=shiftInfo(viewDate);DAY_KEY=dateKey(viewDate)+'-'+(e?e.type:'OFF');KPI_KEY=monthKeyFor(viewDate);}
 refreshKeys();
 
-// === MODE DETECTION ===
-function getMode(d){const e=shiftInfo(d);if(!e)return 'personal';if(e.type==='change')return 'rest';return 'work';}
+function getMode(d){const e=shiftInfo(d);if(!e)return 'personal';if(e.type==='change')return 'rest';if(e.type==='leave')return 'personal';return 'work';}
 function currentMode(){return getMode(viewDate);}
 
-// === ELAPSED IN CURRENT SHIFT (for countdown / current-task) ===
 function elapsedInShift(){
   const entry=shiftInfo(viewDate);
   if(!entry||!entry.start)return null;
   const now=new Date();
   const nm=now.getHours()*60+now.getMinutes();
-  const sm=mins(entry.start);
-  const em=mins(entry.end);
+  const sm=mins(entry.start),em=mins(entry.end);
   if(entry.type==='NS'){
     const nowK=dateKey(now);
     if(nowK===dateKey(viewDate)){if(nm<sm)return -1;return nm-sm;}
@@ -557,16 +578,15 @@ function elapsedInShift(){
   return nm-sm;
 }
 
-// === SEEDS ===
 const SEED_NS=[
   {id:'ns01',s:'17:30',e:'18:00',type:'fixed',title:'Pre-start meeting facilitation',sub:'iPad / Breathos · QR sign-on',done:false},
   {id:'ns02',s:'18:00',e:'18:15',type:'fixed',title:'Personnel check + crew list to mgmt',sub:'',done:false},
   {id:'ns03',s:'18:45',e:'19:00',type:'fixed',title:'Fatigue Self Assessment collection',sub:'',done:false},
   {id:'ns04',s:'22:00',e:'22:30',type:'break',title:'Meal break',sub:'',done:false},
   {id:'ns05',s:'02:30',e:'03:00',type:'break',title:'Second break',sub:'',done:false},
-  {id:'ns06',s:'04:00',e:'04:30',type:'p3',title:'Second site walk',sub:'End-of-shift conditions check',done:false},
+  {id:'ns06',s:'04:00',e:'04:30',type:'p3',title:'Second site walk',sub:'',done:false},
   {id:'ns07',s:'03:00',e:'04:00',type:'fixed',title:"Tomorrow's pre-start finalise",sub:'',done:false},
-  {id:'ns08',s:'04:30',e:'05:00',type:'fixed',title:'Fatigue SA upload + filing',sub:'Photograph → SharePoint 10.5 if scanner offline',done:false},
+  {id:'ns08',s:'04:30',e:'05:00',type:'fixed',title:'Fatigue SA upload + filing',sub:'',done:false},
   {id:'ns09',s:'05:00',e:'05:30',type:'fixed',title:'End-of-shift wrap-up + handover',sub:'',done:false},
 ];
 const SEED_DS=[
@@ -575,10 +595,10 @@ const SEED_DS=[
   {id:'ds03',s:'05:30',e:'06:00',type:'fixed',title:'Pre-start: Workshop',sub:'',done:false},
   {id:'ds04',s:'06:00',e:'06:30',type:'fixed',title:'Pre-start: Main office',sub:'',done:false},
   {id:'ds05',s:'12:00',e:'12:30',type:'break',title:'Lunch',sub:'',done:false},
-  {id:'ds06',s:'14:30',e:'15:30',type:'admin',title:'JMP/register updates + CCV uploads',sub:'',done:false},
-  {id:'ds07',s:'15:30',e:'16:00',type:'fixed',title:'End-of-shift wrap-up + SAI360',sub:'Handover to incoming shift',done:false},
+  {id:'ds06',s:'14:30',e:'15:30',type:'admin',title:'JMP/register + CCV uploads',sub:'',done:false},
+  {id:'ds07',s:'15:30',e:'16:00',type:'fixed',title:'End-of-shift wrap-up + SAI360',sub:'',done:false},
 ];
-const SEED_BY_TYPE={NS:SEED_NS,DS:SEED_DS,flyin:[],flyout:[],change:[]};
+const SEED_BY_TYPE={NS:SEED_NS,DS:SEED_DS,flyin:[],flyout:[],change:[],leave:[]};
 function seedForType(t){return SEED_BY_TYPE[t]||[];}
 function fixedIdsForType(t){return seedForType(t).map(x=>x.id);}
 
@@ -589,7 +609,7 @@ let tasks=[],kpiState={so:0,hse:0,env:0,cri:0},blockers={},meta={};
 let editingId=null,extractedTasks=[];
 const badgeText={p1:'P1',p2:'P2',p3:'P3',fixed:'FIXED',meet:'MEET',break:'BREAK',admin:'ADMIN',blocked:'BLOCKED',fam:'FAMILY',trv:'TRAVEL',fin:'FINANCE',gym:'GYM',self:'SELF-CARE',learn:'LEARN',pr:'PR'};
 
-let calState={};try{calState=JSON.parse(localStorage.getItem('cal_state')||'{}');}catch(e){calState={};}
+let calViewMonth=new Date();calViewMonth.setDate(1);
 
 function setDot(s){document.getElementById('dot').className='dot '+s;document.getElementById('sysLink').textContent=s==='on'?'ONLINE':'OFFLINE';}
 function getCfg(){try{return JSON.parse(localStorage.getItem('fb_cfg'));}catch(e){return null;}}
@@ -610,10 +630,8 @@ function attachDayListener(){
   tasksRef.on('value',function(snap){
     const v=snap.val();
     if(!v){if(seed.length){const o={};seed.forEach(t=>o[t.id]=t);tasksRef.set(o);return;}tasks=[];render();return;}
-    // Top-up missing fixed-spine tasks
     if(seed.length)seed.forEach(ft=>{if(!v[ft.id])tasksRef.child(ft.id).set(ft);});
     const list=Object.keys(v).map(k=>v[k]);
-    // Sort by time-in-shift, anchored to shift start
     const shiftStart=entry?entry.start:'00:00';
     list.sort((a,b)=>tTimeIn(a.s||'00:00',shiftStart||'00:00')-tTimeIn(b.s||'00:00',shiftStart||'00:00'));
     tasks=list;render();
@@ -644,45 +662,47 @@ function renderDayNav(){
   document.getElementById('dnTodayBtn').classList.toggle('hidden',diff===0);
   const entry=shiftInfo(viewDate);
   const cross=document.getElementById('dnCross');
-  if(entry&&entry.type==='NS'){const nx=new Date(v);nx.setDate(nx.getDate()+1);cross.textContent='→ '+nx.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}).toUpperCase()+' · NS '+entry.start+'–'+entry.end;cross.style.display='block';}
-  else if(entry){cross.textContent=entry.type.toUpperCase()+' · '+(entry.start||'')+(entry.end?'–'+entry.end:'');cross.style.display='block';}
-  else{cross.textContent='OFF ROSTER';cross.style.display='block';}
+  if(entry&&entry.type==='NS'){const nx=new Date(v);nx.setDate(nx.getDate()+1);cross.textContent='→ '+nx.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}).toUpperCase()+' · '+entry.start+'–'+entry.end;cross.style.display='block';}
+  else if(entry&&entry.start){cross.textContent=entry.type.toUpperCase()+' · '+entry.start+'–'+entry.end;cross.style.display='block';}
+  else if(entry){cross.textContent=entry.type.toUpperCase();cross.style.display='block';}
+  else{cross.textContent='NOT SCHEDULED';cross.style.display='block';}
   const mb=document.getElementById('modeBadge');
-  if(entry){mb.textContent={DS:'DAY SHIFT',NS:'NIGHT SHIFT',flyin:'FLY-IN',flyout:'FLY-OUT',change:'CHANGEOVER · REST'}[entry.type]||entry.type.toUpperCase();mb.className='mode-badge '+entry.type;}
-  else{const cs=calState[dateKey(v)];if(cs==='rnr')mb.textContent='R&R';else if(cs==='leave')mb.textContent='LEAVE';else mb.textContent='OFF';mb.className='mode-badge '+(cs||'off');}
-  const isPersonal=currentMode()==='personal';
-  const isRest=currentMode()==='rest';
-  document.getElementById('queueTitle').textContent=isPersonal?'▸ PERSONAL QUEUE':(isRest?'▸ REST DAY':'▸ MISSION QUEUE');
+  if(entry){mb.textContent={DS:'DAY SHIFT',NS:'NIGHT SHIFT',flyin:'FLY-IN',flyout:'FLY-OUT',change:'CHANGEOVER · REST',leave:'LEAVE',rnr:'R&R',off:'OFF'}[entry.type]||entry.type.toUpperCase();mb.className='mode-badge '+entry.type;}
+  else{mb.textContent='NOT SCHEDULED';mb.className='mode-badge none';}
+  const mode=currentMode();
+  const isPersonal=mode==='personal';
+  const isRest=mode==='rest';
+  document.getElementById('queueTitle').textContent=isPersonal?'▸ PERSONAL':(isRest?'▸ REST DAY':'▸ MISSION QUEUE');
   document.getElementById('queueHead').classList.toggle('personal',isPersonal);
-  document.getElementById('addBtn').textContent=isPersonal?'+ ADD PERSONAL':'+ ADD TASK';
+  document.getElementById('addBtn').textContent=isPersonal?'+ ADD PERSONAL':'+ ADD MISSION';
   document.getElementById('addBtn').classList.toggle('personal',isPersonal);
-  document.getElementById('tickerWrap').className='intel-ticker'+(entry?' t-'+entry.type:(isPersonal?' t-rnr':''));
+  document.getElementById('tickerWrap').className='intel-ticker'+(entry?' t-'+entry.type:' t-rnr');
 }
 
 function renderShiftState(){
   const el=document.getElementById('shiftState');
   const mode=currentMode();
   if(!isViewingToday()){el.textContent='▸ PREVIEW';el.className='shift-state';return;}
-  if(mode==='personal'){el.textContent=meta.wrappedAt?'▸ R&R WRAPPED':(meta.startedAt?'▸ R&R ACTIVE':'▸ R&R MODE');el.className='shift-state personal';return;}
-  if(mode==='rest'){el.textContent='▸ REST DAY · CHANGEOVER';el.className='shift-state';return;}
-  if(meta.wrappedAt){el.textContent='▸ SHIFT WRAPPED';el.className='shift-state wrapped';}
+  if(mode==='personal'){el.textContent=meta.wrappedAt?'▸ WRAPPED':(meta.startedAt?'▸ ACTIVE':'▸ PERSONAL MODE');el.className='shift-state personal';return;}
+  if(mode==='rest'){el.textContent='▸ REST DAY';el.className='shift-state';return;}
+  if(meta.wrappedAt){el.textContent='▸ WRAPPED';el.className='shift-state wrapped';}
   else if(meta.startedAt){el.textContent='▸ SHIFT ACTIVE';el.className='shift-state active';}
   else el.textContent='▸ AWAITING START';
 }
 
 function startShift(){if(!metaRef){alert('Connect Firebase first');return;}metaRef.update({startedAt:Date.now(),wrappedAt:null});}
 
-function getNextRnRDayFrom(d){const nd=new Date(d);for(let i=1;i<365;i++){nd.setDate(nd.getDate()+1);if(!ROSTER[dateKey(nd)])return new Date(nd);}return null;}
-function getNextWorkDayFrom(d){const nd=new Date(d);for(let i=1;i<365;i++){nd.setDate(nd.getDate()+1);if(ROSTER[dateKey(nd)])return new Date(nd);}return null;}
+function getNextRnRFrom(d){const nd=new Date(d);for(let i=1;i<365;i++){nd.setDate(nd.getDate()+1);const t=rosterState[dateKey(nd)];if(t==='rnr'||t==='leave'||!t)return new Date(nd);}return null;}
 
 function openWrap(){
   if(!tasksRef){alert('Connect Firebase first');return;}
   const mode=currentMode();
-  const fids=shiftInfo(viewDate)?fixedIdsForType(shiftInfo(viewDate).type):[];
+  const entry=shiftInfo(viewDate);
+  const fids=entry?fixedIdsForType(entry.type):[];
   const carryable=tasks.filter(t=>!t.done&&t.type!=='break'&&fids.indexOf(t.id)===-1);
-  document.getElementById('wrapTitle').textContent=mode==='personal'?'▸ Wrap R&R Day':'▸ Wrap Shift';
+  document.getElementById('wrapTitle').textContent=mode==='personal'?'▸ Wrap R&R':'▸ Wrap Shift';
   let target=null;
-  if(mode==='personal'){target=getNextRnRDayFrom(viewDate);document.getElementById('wrapHint').innerHTML='Carry to next R&R: <b style="color:var(--green)">'+(target?target.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—')+'</b>';}
+  if(mode==='personal'){target=getNextRnRFrom(viewDate);document.getElementById('wrapHint').innerHTML='Carry to next R&R: <b style="color:var(--green)">'+(target?target.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—')+'</b>';}
   else{target=new Date(viewDate);target.setDate(target.getDate()+1);document.getElementById('wrapHint').innerHTML='Carry to <b style="color:var(--cyan)">'+target.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'})+'</b>';}
   if(carryable.length===0)document.getElementById('wrapPreview').innerHTML='<div style="text-align:center;color:var(--green);padding:20px;font-family:Orbitron,sans-serif;font-size:11px">✓ NOTHING TO CARRY</div>';
   else document.getElementById('wrapPreview').innerHTML=carryable.map(t=>'<label class="wrap-item"><input type="checkbox" checked data-id="'+t.id+'"><div class="wrap-item-body"><span class="badge b-'+t.type+'">'+(badgeText[t.type]||t.type)+'</span> '+t.title+'<div class="wrap-item-time">'+(t.s||'')+(t.e?'–'+t.e:'')+'</div></div></label>').join('');
@@ -692,64 +712,67 @@ function openWrap(){
 function closeWrap(){document.getElementById('wrapModal').classList.remove('open');}
 function confirmWrap(){
   const target=window._wrapTarget;if(!target){closeWrap();return;}
-  const targetEntry=shiftInfo(target);const targetMode=targetEntry?targetEntry.type:'OFF';
-  const targetKey=dateKey(target)+'-'+targetMode;
-  const targetRef=db.ref('decmil_schedule/'+targetKey+'/tasks');
+  const te=shiftInfo(target);const tm=te?te.type:'OFF';
+  const tk=dateKey(target)+'-'+tm;
+  const tr=db.ref('decmil_schedule/'+tk+'/tasks');
   let moved=0;
   document.querySelectorAll('#wrapPreview input[type=checkbox]:checked').forEach(c=>{
     const id=c.dataset.id;const t=tasks.find(x=>x.id===id);if(!t)return;
     const newId='c'+Date.now()+'_'+(moved++);
-    const carried=Object.assign({},t,{id:newId,done:false,source:'carry'});
-    targetRef.child(newId).set(carried);
+    tr.child(newId).set(Object.assign({},t,{id:newId,done:false,source:'carry'}));
     tasksRef.child(t.id).remove();
   });
   metaRef.update({wrappedAt:Date.now()});
   closeWrap();
 }
 
-function renderBlockers(){const el=document.getElementById('blockersList');const keys=Object.keys(blockers);if(keys.length===0){el.innerHTML='<div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--txt3);text-align:center;padding:8px">No active blockers</div>';return;}el.innerHTML=keys.map(k=>{const b=blockers[k];const icon=b.type==='danger'?'⛔':(b.type==='info'?'ℹ':'⚠');return '<div class="blocker '+(b.type||'warning')+'"><span style="font-family:Orbitron,sans-serif;font-size:13px;color:inherit">'+icon+'</span><div class="body"><b>'+b.title+'</b>'+(b.detail?' · '+b.detail:'')+'</div><button class="close-x" onclick="removeBlocker(\''+k+'\')">×</button></div>';}).join('');}
+function renderBlockers(){const el=document.getElementById('blockersList');const keys=Object.keys(blockers);if(keys.length===0){el.innerHTML='<div style="font-family:Share Tech Mono,monospace;font-size:10px;color:var(--txt3);text-align:center;padding:8px">No active blockers</div>';return;}el.innerHTML=keys.map(k=>{const b=blockers[k];const icon=b.type==='danger'?'⛔':(b.type==='info'?'ℹ':'⚠');return '<div class="blocker '+(b.type||'warning')+'"><span style="font-family:Orbitron,sans-serif;font-size:13px">'+icon+'</span><div class="body"><b>'+b.title+'</b>'+(b.detail?' · '+b.detail:'')+'</div><button class="close-x" onclick="removeBlocker(\''+k+'\')">×</button></div>';}).join('');}
 function openBlocker(){document.getElementById('bk_title').value='';document.getElementById('bk_detail').value='';document.getElementById('bk_type').value='warning';document.getElementById('blockerModal').classList.add('open');}
 function closeBlocker(){document.getElementById('blockerModal').classList.remove('open');}
-function saveBlocker(){if(!blockersRef){alert('Connect Firebase first');return;}const t=document.getElementById('bk_title').value.trim();if(!t){alert('Title required');return;}const id='bk'+Date.now();blockersRef.child(id).set({id,title:t.toUpperCase(),detail:document.getElementById('bk_detail').value.trim(),type:document.getElementById('bk_type').value,createdAt:Date.now()});closeBlocker();}
+function saveBlocker(){if(!blockersRef){alert('Connect first');return;}const t=document.getElementById('bk_title').value.trim();if(!t){alert('Title required');return;}const id='bk'+Date.now();blockersRef.child(id).set({id,title:t.toUpperCase(),detail:document.getElementById('bk_detail').value.trim(),type:document.getElementById('bk_type').value,createdAt:Date.now()});closeBlocker();}
 function removeBlocker(id){if(confirm('Dismiss?'))blockersRef.child(id).remove();}
 
 function renderStats(){
   const today=new Date();today.setHours(0,0,0,0);
-  // Roster timeline 22 nodes
   const sd=getShiftDate();sd.setHours(0,0,0,0);
-  const todayEntry=shiftInfo(sd);
-  const todayIdx=todayEntry?todayEntry.idx:0;
+  const swing=getSwingFor(sd);
   let tlHTML='';
-  const ordered=Object.keys(ROSTER).map(k=>({key:k,...ROSTER[k]})).sort((a,b)=>a.idx-b.idx);
-  ordered.forEach(e=>{
-    let cls='rt-node t-'+e.type;
-    if(e.idx<todayIdx)cls+=' filled';
-    else if(e.idx===todayIdx)cls+=' active';
-    tlHTML+='<div class="'+cls+'" title="D'+e.idx+' · '+e.key+' · '+e.type+'"></div>';
-  });
+  if(swing){
+    swing.keys.forEach((k,i)=>{
+      const t=rosterState[k]||'';
+      let cls='rt-node t-'+t;
+      if(i<swing.idx-1)cls+=' filled';
+      else if(i===swing.idx-1)cls+=' active';
+      tlHTML+='<div class="'+cls+'" title="D'+(i+1)+' · '+k+' · '+t+'"></div>';
+    });
+    document.getElementById('rosterCountTxt').textContent='D'+swing.idx+' OF '+swing.total;
+    document.getElementById('rpHeadSub').textContent=swing.startD.toLocaleDateString('en-AU',{day:'numeric',month:'short'})+' → '+swing.endD.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+  }else{
+    tlHTML='<div style="flex:1;color:var(--txt3);text-align:center;font-family:Share Tech Mono,monospace;font-size:10px;padding:4px">— OFF ROSTER —</div>';
+    document.getElementById('rosterCountTxt').textContent='OFF';
+    document.getElementById('rpHeadSub').textContent='Not scheduled';
+  }
   document.getElementById('rosterTimeline').innerHTML=tlHTML;
-  document.getElementById('rosterCountTxt').textContent=todayIdx?('D'+todayIdx+' OF '+ROSTER_LEN):'OFF ROSTER';
-  document.getElementById('rosterStateTxt').textContent=todayEntry?({DS:'DAY SHIFT',NS:'NIGHT SHIFT',flyin:'FLY-IN',flyout:'FLY-OUT',change:'CHANGEOVER REST'}[todayEntry.type]):'R&R / OFF';
-  // Flyout countdown
-  const toFly=Math.max(0,Math.ceil((FLYOUT_DATE-today)/86400000));
+  const todayEntry=shiftInfo(sd);
+  document.getElementById('rosterStateTxt').textContent=todayEntry?({DS:'DAY SHIFT',NS:'NIGHT SHIFT',flyin:'FLY-IN',flyout:'FLY-OUT',change:'CHANGEOVER',leave:'LEAVE'}[todayEntry.type]||todayEntry.type.toUpperCase()):'OFF';
+  const flyDate=getNextFlyoutFrom(today);
+  const toFly=flyDate?Math.max(0,Math.ceil((flyDate-today)/86400000)):0;
   document.getElementById('prjDays').textContent=toFly;
-  // Month
+  document.getElementById('flyDateLbl').textContent=flyDate?flyDate.toLocaleDateString('en-AU',{day:'numeric',month:'short'}).toUpperCase():'--';
   const yr=today.getFullYear();
   const daysInMonth=new Date(yr,today.getMonth()+1,0).getDate();
   document.getElementById('monthDay').textContent=today.getDate();
   document.getElementById('monthTotal').textContent='/'+daysInMonth;
   document.getElementById('monthName').textContent=today.toLocaleDateString('en-AU',{month:'short'}).toUpperCase()+' '+yr;
   document.getElementById('kpiMonthLbl').textContent=monthKeyFor(viewDate).toUpperCase();
-  // Shift date header
   const entry=shiftInfo(viewDate);
-  const stxt=entry?entry.type.toUpperCase():(calState[dateKey(viewDate)]||'OFF').toUpperCase();
-  document.getElementById('shiftDate').textContent=viewDate.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}).toUpperCase()+' · '+stxt+' · '+toFly+'d to flyout';
-  // Ticker
+  const stxt=entry?entry.type.toUpperCase():'OFF';
+  document.getElementById('shiftDate').textContent=viewDate.toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}).toUpperCase()+' · '+stxt+(toFly?' · '+toFly+'d to flyout':'');
   let msg;
-  if(currentMode()==='personal'){msg='▸ R&R MODE  ▸ PERSONAL OPS  ▸ '+toFly+'d UNTIL NEXT SWING  ▸ ALL SYSTEMS NOMINAL  ';}
-  else if(currentMode()==='rest'){msg='▸ CHANGEOVER REST DAY  ▸ NS COMPLETE  ▸ DS RESUMES TOMORROW  ▸ '+toFly+'d TO FLYOUT  ';}
-  else if(entry){msg='▸ DECMIL SITE SECURE  ▸ '+entry.type.toUpperCase()+' SHIFT · D'+todayIdx+' OF '+ROSTER_LEN+'  ▸ '+toFly+'d TO FLYOUT (12 JUN)  ▸ SECTOR S5 PILBARA  ';}
-  else msg='▸ OFF ROSTER  ▸ '+toFly+'d  ';
+  if(currentMode()==='personal'){msg='▸ R&R MODE  ▸ PERSONAL OPS  ▸ '+(toFly?toFly+'d UNTIL NEXT FLYOUT  ':'')+'▸ ALL SYSTEMS NOMINAL  ';}
+  else if(currentMode()==='rest'){msg='▸ CHANGEOVER REST  ▸ SHIFT TRANSITION  ▸ '+toFly+'d TO FLYOUT  ';}
+  else if(entry&&swing){msg='▸ DECMIL SITE SECURE  ▸ '+entry.type.toUpperCase()+' · D'+swing.idx+' OF '+swing.total+'  ▸ '+toFly+'d TO FLYOUT  ▸ SECTOR S5 PILBARA  ';}
+  else msg='▸ '+(entry?entry.type.toUpperCase():'OFF ROSTER')+'  ▸ '+(toFly?toFly+'d  ':'');
   const tEl=document.getElementById('tickerText');if(tEl)tEl.textContent=msg;
 }
 
@@ -760,31 +783,34 @@ function fmtHMS(s){if(s<0)s=0;return pad(Math.floor(s/3600))+':'+pad(Math.floor(
 function renderCountdown(){
   const entry=shiftInfo(viewDate);
   const mode=currentMode();
-  if(!isViewingToday()||mode==='personal'||mode==='rest'||!entry){document.getElementById('ctTask').textContent=mode==='personal'?'R&R':(mode==='rest'?'REST DAY':'PREVIEW');document.getElementById('ctBig').textContent='--:--:--';document.getElementById('ctBig').className='ct-big';document.getElementById('ctMeta').textContent='No live countdown';document.getElementById('ctBarFill').style.width='0%';return;}
+  if(!isViewingToday()||mode==='personal'||mode==='rest'||!entry){document.getElementById('ctTask').textContent=mode==='personal'?'PERSONAL':(mode==='rest'?'REST DAY':'PREVIEW');document.getElementById('ctBig').textContent='--:--:--';document.getElementById('ctBig').className='ct-big';document.getElementById('ctMeta').textContent='No countdown';document.getElementById('ctBarFill').style.width='0%';return;}
   const elapsed=elapsedInShift();
   const total=shiftTotalMin(entry);
-  if(elapsed===null||elapsed<0){document.getElementById('ctTask').textContent='— STANDBY —';document.getElementById('ctBig').textContent='--:--:--';document.getElementById('ctBig').className='ct-big';document.getElementById('ctMeta').textContent=elapsed===-1?'Shift starts '+entry.start:'Shift not active';document.getElementById('ctBarFill').style.width='0%';return;}
-  // Find current task
+  if(elapsed===null||elapsed<0){document.getElementById('ctTask').textContent='— STANDBY —';document.getElementById('ctBig').textContent='--:--:--';document.getElementById('ctBig').className='ct-big';document.getElementById('ctMeta').textContent=elapsed===-1?'Shift starts '+entry.start:'Not active';document.getElementById('ctBarFill').style.width='0%';return;}
   const cur=tasks.find(t=>{if(!t.s||!t.e||t.type==='break')return false;const ts=tTimeIn(t.s,entry.start),te=tTimeIn(t.e,entry.start);return ts<=elapsed&&te>elapsed;});
   const next=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>elapsed;});
   const taskEl=document.getElementById('ctTask'),bigEl=document.getElementById('ctBig'),metaEl=document.getElementById('ctMeta'),barEl=document.getElementById('ctBarFill');
   if(cur){const te=tTimeIn(cur.e,entry.start);const remMin=te-elapsed;const diffS=Math.max(0,remMin*60-new Date().getSeconds());const totS=(tTimeIn(cur.e,entry.start)-tTimeIn(cur.s,entry.start))*60;const epct=Math.max(0,Math.min(100,100-(diffS/totS*100)));taskEl.textContent=cur.title;bigEl.textContent=fmtHMS(diffS);bigEl.className='ct-big'+(diffS<300?' urgent':(diffS<900?'':' safe'));metaEl.textContent='REMAINING · '+cur.s+'–'+cur.e;barEl.style.width=epct+'%';}
   else if(next){const ts=tTimeIn(next.s,entry.start);const diffMin=ts-elapsed;const diffS=Math.max(0,diffMin*60-new Date().getSeconds());taskEl.textContent=next.title;bigEl.textContent=fmtHMS(diffS);bigEl.className='ct-big';metaEl.textContent='STARTS '+next.s;barEl.style.width='0%';}
   else{taskEl.textContent='— STANDBY —';bigEl.textContent='--:--:--';bigEl.className='ct-big';metaEl.textContent='No more tasks';barEl.style.width='0%';}
-  // Overall shift progress
   document.getElementById('shiftRem').textContent=fmtHMS(Math.max(0,(total-elapsed)*60));
-  document.getElementById('progfill').style.width=Math.max(0,Math.min(100,Math.round(elapsed/total*100)))+'%';
-  document.getElementById('shiftpct').textContent=Math.max(0,Math.min(100,Math.round(elapsed/total*100)))+'%';
+  const pct=Math.max(0,Math.min(100,Math.round(elapsed/total*100)));
+  document.getElementById('progfill').style.width=pct+'%';
+  document.getElementById('shiftpct').textContent=pct+'%';
 }
 
-const CAL_PERSONAL_TYPES=['blank','rnr','leave','off'];
-let calViewMonth=new Date();calViewMonth.setDate(1);
+// === Calendar tap-to-cycle: the simple primitive ===
 function cycleCalDay(key){
-  // If on roster, can't change (it's locked)
-  if(ROSTER[key]){alert('This day is in the roster ('+ROSTER[key].type.toUpperCase()+'). Can\'t override.');return;}
-  const cur=calState[key]||'blank';const idx=CAL_PERSONAL_TYPES.indexOf(cur);const next=CAL_PERSONAL_TYPES[(idx+1)%CAL_PERSONAL_TYPES.length];
-  if(next==='blank')delete calState[key];else calState[key]=next;
-  localStorage.setItem('cal_state',JSON.stringify(calState));renderCalendar();renderDayNav();if(db)attachDayListener();
+  const cur=rosterState[key]||null;
+  const idx=CYCLE.indexOf(cur);
+  const next=CYCLE[(idx+1)%CYCLE.length];
+  if(next===null)delete rosterState[key];
+  else rosterState[key]=next;
+  saveRoster();
+  renderCalendar();
+  renderDayNav();
+  renderStats();
+  if(db)attachDayListener();
 }
 function calNav(d){calViewMonth.setMonth(calViewMonth.getMonth()+d);renderCalendar();}
 function renderCalendar(){
@@ -798,10 +824,7 @@ function renderCalendar(){
   for(let d=1;d<=lastDay.getDate();d++){
     const key=yr+'-'+pad(mo+1)+'-'+pad(d);const cellDate=new Date(yr,mo,d);
     const isToday=cellDate.getTime()===today.getTime();const isViewing=cellDate.getTime()===viewing.getTime()&&!isToday;
-    const rentry=ROSTER[key];
-    let cls='';
-    if(rentry)cls=rentry.type;
-    else if(calState[key])cls=calState[key];
+    const cls=rosterState[key]||'';
     html+='<div class="cal-cell '+cls+(isToday?' today':'')+(isViewing?' viewing':'')+'" onclick="cycleCalDay(\''+key+'\')">'+d+'</div>';
   }
   html+='</div>';
@@ -814,24 +837,23 @@ function render(){
   const isPersonal=mode==='personal';const isRest=mode==='rest';
   const viewing=isViewingToday();
   const elapsed=viewing&&entry?elapsedInShift():null;
-  // Current task
   const cur=(elapsed!==null&&elapsed>=0&&entry)?tasks.find(t=>{if(!t.s||!t.e||t.type==='break')return false;const ts=tTimeIn(t.s,entry.start),te=tTimeIn(t.e,entry.start);return ts<=elapsed&&te>elapsed;}):null;
   let nowText='— STANDBY —',nextText='';
-  if(isRest){nowText='— REST DAY —';nextText='Changeover between NS and DS';}
-  else if(isPersonal){nowText='— R&R MODE —';nextText=tasks.length+' personal item(s)';}
+  if(isRest){nowText='— REST DAY —';nextText='Changeover · no work';}
+  else if(isPersonal){nowText='— '+(entry?entry.type.toUpperCase():'PERSONAL')+' —';nextText=tasks.length+' personal item(s)';}
   else if(viewing&&entry&&tasks.length){
-    if(elapsed===-1){nowText='— PRE-SHIFT —';nextText='Shift starts <b>'+entry.start+'</b>';}
-    else if(elapsed===null){nowText='— SHIFT ENDED —';nextText='Wrap up the day';}
-    else if(cur){nowText=cur.title;const nx=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>elapsed;});nextText=nx?'NEXT '+nx.s+' · <b>'+nx.title+'</b>':'No more tasks';}
+    if(elapsed===-1){nowText='— PRE-SHIFT —';nextText='Starts <b>'+entry.start+'</b>';}
+    else if(elapsed===null){nowText='— SHIFT ENDED —';nextText='';}
+    else if(cur){nowText=cur.title;const nx=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>elapsed;});nextText=nx?'NEXT '+nx.s+' · <b>'+nx.title+'</b>':'';}
     else{const nx=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>elapsed;});if(nx){nowText='— TRANSITION —';nextText='NEXT '+nx.s+' · <b>'+nx.title+'</b>';}}
   }else if(!viewing&&entry){nowText='PREVIEW · '+entry.type.toUpperCase();nextText=tasks.length+' planned';}
-  else if(!entry){nowText='OFF ROSTER';nextText='';}
+  else if(!entry){nowText='NOT SCHEDULED';nextText='Tap day in calendar to set';}
   document.getElementById('statusNow').innerHTML=nowText;
   document.getElementById('statusNext').innerHTML=nextText;
-  // Empty states
-  if(isRest){document.getElementById('slots').innerHTML='<div class="empty-state rest"><b>▸ CHANGEOVER REST DAY</b>No tasks scheduled. NS just finished, DS resumes tomorrow.<br>Use this day to recover.</div>';}
-  else if(isPersonal&&tasks.length===0){document.getElementById('slots').innerHTML='<div class="empty-state personal"><b>▸ R&R QUEUE EMPTY</b>Add personal items: family, gym, travel, finance, self-care, learning, PRs…</div>';}
-  else if(entry&&(entry.type==='flyin'||entry.type==='flyout')&&tasks.length===0){document.getElementById('slots').innerHTML='<div class="empty-state '+entry.type+'"><b>▸ '+entry.type.toUpperCase()+' DAY</b>'+(entry.type==='flyin'?'Arrival around 11:40. Add what you need to handle on arrival.':'09:00 flight. Add handover items.')+'</div>';}
+  if(isRest){document.getElementById('slots').innerHTML='<div class="empty-state rest"><b>▸ REST DAY</b>Changeover between shifts. No tasks scheduled.</div>';}
+  else if(mode==='personal'&&entry&&entry.type==='leave'&&tasks.length===0){document.getElementById('slots').innerHTML='<div class="empty-state leave"><b>▸ LEAVE DAY</b>Personal time. Add what you want to track.</div>';}
+  else if(isPersonal&&tasks.length===0){document.getElementById('slots').innerHTML='<div class="empty-state personal"><b>▸ '+(entry?entry.type.toUpperCase():'PERSONAL')+'</b>Family · Travel · Gym · Finance · Self-care · Learning · PRs</div>';}
+  else if(!entry&&tasks.length===0){document.getElementById('slots').innerHTML='<div class="empty-state"><b>▸ NOT SCHEDULED</b>Tap this day in the calendar to assign a shift type.</div>';}
   else{
     document.getElementById('slots').innerHTML=tasks.map(t=>{
       const isNow=cur&&cur.id===t.id&&!t.done;
@@ -849,7 +871,7 @@ function render(){
 function toggleDone(id){const t=tasks.find(x=>x.id===id);if(!t)return;const nd=!t.done;if(t.kpi)bump(t.kpi,nd?1:-1);if(tasksRef)tasksRef.child(id).update({done:nd});}
 function openTask(id){editingId=id||null;document.getElementById('delBtn').style.display=id?'block':'none';const defType=currentMode()==='personal'?'self':'p2';const t=id?tasks.find(x=>x.id===id):{s:'',e:'',title:'',sub:'',type:defType,kpi:''};document.getElementById('f_start').value=t.s||'';document.getElementById('f_end').value=t.e||'';document.getElementById('f_title').value=t.title||'';document.getElementById('f_sub').value=t.sub||'';document.getElementById('f_type').value=t.type;document.getElementById('f_kpi').value=t.kpi||'';document.getElementById('taskModal').classList.add('open');}
 function closeTask(){document.getElementById('taskModal').classList.remove('open');}
-function saveTask(){if(!tasksRef){alert('Connect Firebase first');return;}const id=editingId||('t'+Date.now());let pd=false;if(editingId){const ex=tasks.find(x=>x.id===id);pd=ex?ex.done:false;}tasksRef.child(id).set({id,s:document.getElementById('f_start').value.trim(),e:document.getElementById('f_end').value.trim(),title:document.getElementById('f_title').value.trim(),sub:document.getElementById('f_sub').value.trim(),type:document.getElementById('f_type').value,kpi:document.getElementById('f_kpi').value,done:pd});closeTask();}
+function saveTask(){if(!tasksRef){alert('Connect first');return;}const id=editingId||('t'+Date.now());let pd=false;if(editingId){const ex=tasks.find(x=>x.id===id);pd=ex?ex.done:false;}tasksRef.child(id).set({id,s:document.getElementById('f_start').value.trim(),e:document.getElementById('f_end').value.trim(),title:document.getElementById('f_title').value.trim(),sub:document.getElementById('f_sub').value.trim(),type:document.getElementById('f_type').value,kpi:document.getElementById('f_kpi').value,done:pd});closeTask();}
 function delTask(){if(editingId&&tasksRef&&confirm('Delete?')){tasksRef.child(editingId).remove();closeTask();}}
 function openSetup(){const c=getCfg()||DEFAULT_CFG;document.getElementById('cfg_api').value=c.apiKey;document.getElementById('cfg_db').value=c.databaseURL;document.getElementById('cfg_pid').value=c.projectId;document.getElementById('cfg_app').value=c.appId;document.getElementById('fbModal').classList.add('open');}
 function closeSetup(){document.getElementById('fbModal').classList.remove('open');}
@@ -870,15 +892,13 @@ function toggleMic(){if(!rec)rec=setupMic();if(!rec){jarvisSay('Voice not suppor
 
 function addMsg(role,text,brain){const m=document.getElementById('jcMsgs');m.classList.remove('empty');const d=document.createElement('div');d.className='jc-msg '+role;d.textContent=text;if(brain)d.setAttribute('data-brain',brain);m.appendChild(d);m.scrollTop=m.scrollHeight;}
 function jSend(){const inp=document.getElementById('jInput');const q=inp.value.trim();if(!q)return;inp.value='';addMsg('user',q);handleQuery(q);}
-function handleQuery(q){const lq=q.toLowerCase();if(/\b(start (my )?(shift|day))\b/i.test(lq)){startShift();jarvisSay('Shift started.',true,'JARVIS');return;}if(/\b(wrap|end) (my )?(day|shift)\b/i.test(lq)){openWrap();return;}if(/\b(brief|sitrep)\b/i.test(lq)){briefing();return;}if(/\b(what'?s? next|next task)\b/i.test(lq)){speakNext();return;}if(/\b(go to|show) (today|tomorrow|yesterday)\b/i.test(lq)){const w=lq.match(/\b(today|tomorrow|yesterday)\b/)[1];if(w==='today')gotoToday();else if(w==='tomorrow'){gotoToday();navDay(1);}else{gotoToday();navDay(-1);}return;}const brain=getActiveBrain();if(brain==='jarvis'){jarvisSay('Local mode. Try: brief, next, start, wrap, tomorrow.',true,'JARVIS');return;}if(!getKey(brain)){jarvisSay(brain.toUpperCase()+' offline.',true,'JARVIS');return;}askAI(q,brain);}
-
-function speakNext(){const entry=shiftInfo(viewDate);if(!entry){jarvisSay('Off roster.',true,'JARVIS');return;}const el=elapsedInShift();if(el===null){jarvisSay('Shift not active.',true,'JARVIS');return;}const nx=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>el;});if(nx)jarvisSay('Next: '+nx.s+', '+nx.title,true,'JARVIS');else jarvisSay('Nothing queued.',true,'JARVIS');}
-function briefing(){const today=new Date();today.setHours(0,0,0,0);const sd=getShiftDate();sd.setHours(0,0,0,0);const e=shiftInfo(sd);const idx=e?e.idx:0;const toFly=Math.max(0,Math.ceil((FLYOUT_DATE-today)/86400000));const mode=currentMode();let t='';if(mode==='personal')t='R&R mode. '+tasks.filter(x=>!x.done).length+' items outstanding.';else if(mode==='rest')t='Rest day. NS complete, DS resumes tomorrow. '+toFly+' days to flyout.';else{const done=tasks.filter(t=>t.done&&t.type!=='break').length;const tot=tasks.filter(t=>t.type!=='break').length;t='Day '+idx+' of '+ROSTER_LEN+'. '+(e?e.type.toUpperCase():'')+'. Queue '+done+' of '+tot+'. Flyout in '+toFly+' days.';}jarvisSay(t,true,'JARVIS');}
-
-function buildContext(){const today=new Date();today.setHours(0,0,0,0);const sd=getShiftDate();sd.setHours(0,0,0,0);const e=shiftInfo(sd);const idx=e?e.idx:0;const toFly=Math.max(0,Math.ceil((FLYOUT_DATE-today)/86400000));const open=tasks.filter(t=>!t.done&&t.type!=='break').map(t=>(t.s||'')+' '+t.title).join('; ');return 'Kevin Kegin, HSE Advisor, Decmil PRJ0172. Day '+idx+'/'+ROSTER_LEN+' ('+(e?e.type:'OFF')+'). Flyout in '+toFly+'d. Open: '+(open||'none');}
-const SYS_PROMPT='You are JARVIS, Kevin\'s HSE tactical AI. British, calm, direct. Keep replies under 80 words.';
+function handleQuery(q){const lq=q.toLowerCase();if(/\b(start (my )?(shift|day))\b/i.test(lq)){startShift();jarvisSay('Shift started.',true,'JARVIS');return;}if(/\b(wrap|end) (my )?(day|shift)\b/i.test(lq)){openWrap();return;}if(/\b(brief|sitrep)\b/i.test(lq)){briefing();return;}if(/\b(what'?s? next|next task)\b/i.test(lq)){speakNext();return;}if(/\b(go to|show) (today|tomorrow|yesterday)\b/i.test(lq)){const w=lq.match(/\b(today|tomorrow|yesterday)\b/)[1];if(w==='today')gotoToday();else if(w==='tomorrow'){gotoToday();navDay(1);}else{gotoToday();navDay(-1);}return;}const brain=getActiveBrain();if(brain==='jarvis'){jarvisSay('Local mode. Try: brief, next, start, wrap.',true,'JARVIS');return;}if(!getKey(brain)){jarvisSay(brain.toUpperCase()+' offline.',true,'JARVIS');return;}askAI(q,brain);}
+function speakNext(){const entry=shiftInfo(viewDate);if(!entry){jarvisSay('Not scheduled.',true,'JARVIS');return;}const el=elapsedInShift();if(el===null){jarvisSay('Shift not active.',true,'JARVIS');return;}const nx=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>el;});if(nx)jarvisSay('Next: '+nx.s+', '+nx.title,true,'JARVIS');else jarvisSay('Nothing queued.',true,'JARVIS');}
+function briefing(){const today=new Date();today.setHours(0,0,0,0);const sd=getShiftDate();sd.setHours(0,0,0,0);const swing=getSwingFor(sd);const e=shiftInfo(sd);const flyDate=getNextFlyoutFrom(today);const toFly=flyDate?Math.max(0,Math.ceil((flyDate-today)/86400000)):0;const mode=currentMode();let t='';if(mode==='personal')t='Personal mode. '+tasks.filter(x=>!x.done).length+' items outstanding.';else if(mode==='rest')t='Rest day. '+toFly+' days to flyout.';else if(swing&&e){const done=tasks.filter(t=>t.done&&t.type!=='break').length;const tot=tasks.filter(t=>t.type!=='break').length;t='Day '+swing.idx+' of '+swing.total+'. '+e.type.toUpperCase()+'. Queue '+done+' of '+tot+'. Flyout in '+toFly+' days.';}else t='Off roster.';jarvisSay(t,true,'JARVIS');}
+function buildContext(){const today=new Date();today.setHours(0,0,0,0);const sd=getShiftDate();sd.setHours(0,0,0,0);const swing=getSwingFor(sd);const e=shiftInfo(sd);const flyDate=getNextFlyoutFrom(today);const toFly=flyDate?Math.max(0,Math.ceil((flyDate-today)/86400000)):0;const open=tasks.filter(t=>!t.done&&t.type!=='break').map(t=>(t.s||'')+' '+t.title).join('; ');return 'Kevin Kegin HSE Decmil PRJ0172. '+(swing?'Day '+swing.idx+'/'+swing.total:'')+' '+(e?e.type:'OFF')+'. Flyout in '+toFly+'d. Open: '+(open||'none');}
+const SYS_PROMPT='You are JARVIS, Kevin\'s HSE tactical AI. Calm, direct, under 80 words.';
 async function askAI(q,brain){addMsg('jarvis','...',brain.toUpperCase());let ans='';try{if(brain==='gemini')ans=await callGemini(q);else if(brain==='claude')ans=await callClaude(q);else ans=await callOpenAI(q);}catch(e){ans='Connection failed';}const msgs=document.getElementById('jcMsgs');if(msgs.lastChild&&msgs.lastChild.textContent==='...')msgs.removeChild(msgs.lastChild);jarvisSay(ans.trim(),true,brain.toUpperCase());}
-async function callGemini(q){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:SYS_PROMPT+'\n'+buildContext()+'\nUser: '+q}]}],tools:[{google_search:{}}]})});const d=await r.json();return d.candidates&&d.candidates[0]?.content?.parts[0]?.text||'No response';}
+async function callGemini(q){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:SYS_PROMPT+'\n'+buildContext()+'\nUser: '+q}]}],tools:[{google_search:{}}]})});const d=await r.json();return d.candidates?.[0]?.content?.parts[0]?.text||'No response';}
 async function callClaude(q){const k=getKey('claude');const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:300,system:SYS_PROMPT+'\n'+buildContext(),messages:[{role:'user',content:q}]})});const d=await r.json();return d.content?.[0]?.text||'No response';}
 async function callOpenAI(q){const k=getKey('openai');const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:300,messages:[{role:'system',content:SYS_PROMPT+'\n'+buildContext()},{role:'user',content:q}]})});const d=await r.json();return d.choices?.[0]?.message?.content||'No response';}
 
@@ -886,7 +906,7 @@ function openMail(){document.getElementById('mailContent').value='';document.get
 function closeMail(){document.getElementById('mailModal').classList.remove('open');}
 function clearExtracted(){extractedTasks=[];document.getElementById('extractedList').innerHTML='';document.getElementById('addExtractedBar').style.display='none';}
 const EMAIL_PROMPT='Extract actionable tasks from email. Return ONLY a JSON array: [{"title":"brief","time":"HH:MM or null","priority":"p1|p2|p3","detail":"context"}]. Email:\n';
-async function parseEmail(){const c=document.getElementById('mailContent').value.trim();if(!c){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Paste email first</div>';return;}const brain=getActiveBrain();if(brain==='jarvis'||!getKey(brain)){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Switch to G/C/O brain</div>';return;}document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2);padding:10px">'+brain.toUpperCase()+' parsing…</div>';let raw='';try{if(brain==='gemini')raw=await callGeminiRaw(EMAIL_PROMPT+c);else if(brain==='claude')raw=await callClaudeRaw(EMAIL_PROMPT+c);else raw=await callOpenAIRaw(EMAIL_PROMPT+c);}catch(e){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red)">Failed</div>';return;}raw=raw.replace(/```json/gi,'').replace(/```/g,'').trim();let arr=null;try{arr=JSON.parse(raw);}catch(e){const m=raw.match(/\[[\s\S]*\]/);if(m)try{arr=JSON.parse(m[0]);}catch(e2){}}if(!Array.isArray(arr)||arr.length===0){document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2)">No tasks found</div>';return;}extractedTasks=arr;document.getElementById('extractStatus').innerHTML='<div style="color:var(--cyan)">'+arr.length+' tasks</div>';document.getElementById('extractedList').innerHTML=arr.map((t,i)=>'<label style="display:flex;gap:8px;padding:8px;background:rgba(0,212,255,.04);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:3px;cursor:pointer"><input type="checkbox" checked data-idx="'+i+'" style="accent-color:var(--cyan)"><div><div style="font-size:13px"><span class="badge b-'+(t.priority||'p2')+'">'+(t.priority||'p2').toUpperCase()+'</span> '+(t.title||'')+'</div>'+(t.detail?'<div style="font-size:11px;color:var(--txt2)">'+t.detail+'</div>':'')+'</div></label>').join('');document.getElementById('addExtractedBar').style.display='flex';}
+async function parseEmail(){const c=document.getElementById('mailContent').value.trim();if(!c){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Paste email first</div>';return;}const brain=getActiveBrain();if(brain==='jarvis'||!getKey(brain)){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Switch to G/C/O</div>';return;}document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2);padding:10px">'+brain.toUpperCase()+' parsing…</div>';let raw='';try{if(brain==='gemini')raw=await callGeminiRaw(EMAIL_PROMPT+c);else if(brain==='claude')raw=await callClaudeRaw(EMAIL_PROMPT+c);else raw=await callOpenAIRaw(EMAIL_PROMPT+c);}catch(e){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red)">Failed</div>';return;}raw=raw.replace(/```json/gi,'').replace(/```/g,'').trim();let arr=null;try{arr=JSON.parse(raw);}catch(e){const m=raw.match(/\[[\s\S]*\]/);if(m)try{arr=JSON.parse(m[0]);}catch(e2){}}if(!Array.isArray(arr)||arr.length===0){document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2)">No tasks found</div>';return;}extractedTasks=arr;document.getElementById('extractStatus').innerHTML='<div style="color:var(--cyan)">'+arr.length+' tasks</div>';document.getElementById('extractedList').innerHTML=arr.map((t,i)=>'<label style="display:flex;gap:8px;padding:8px;background:rgba(0,212,255,.04);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:3px;cursor:pointer"><input type="checkbox" checked data-idx="'+i+'" style="accent-color:var(--cyan)"><div><div style="font-size:13px"><span class="badge b-'+(t.priority||'p2')+'">'+(t.priority||'p2').toUpperCase()+'</span> '+(t.title||'')+'</div>'+(t.detail?'<div style="font-size:11px;color:var(--txt2)">'+t.detail+'</div>':'')+'</div></label>').join('');document.getElementById('addExtractedBar').style.display='flex';}
 function addExtractedTasks(){if(!tasksRef){alert('Connect first');return;}let added=0;document.querySelectorAll('#extractedList input[type=checkbox]:checked').forEach(c=>{const t=extractedTasks[+c.dataset.idx];if(!t)return;const id='e'+Date.now()+'_'+(added++);const tm=t.time||'09:00';const[hh,mm]=tm.split(':').map(Number);const end=pad((hh+(mm+30>=60?1:0))%24)+':'+pad((mm+30)%60);tasksRef.child(id).set({id,s:tm,e:end,type:t.priority||'p2',title:t.title||'Untitled',sub:t.detail||'',done:false,source:'email'});});closeMail();}
 async function callGeminiRaw(p){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});const d=await r.json();return d.candidates?.[0]?.content?.parts[0]?.text||'';}
 async function callClaudeRaw(p){const k=getKey('claude');const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:1500,messages:[{role:'user',content:p}]})});const d=await r.json();return d.content?.[0]?.text||'';}
@@ -897,7 +917,6 @@ let intelLatest=[];
 async function loadFeed(key){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ FETCHING…</div>';try{const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(FEEDS[key]));const d=await r.json();if(!d.items){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ NO DATA</div>';return;}intelLatest=d.items.slice(0,10);document.getElementById('intelList').innerHTML=intelLatest.map(it=>{const dt=new Date(it.pubDate);const ago=Math.round((Date.now()-dt)/60000);const img=it.thumbnail||(it.enclosure&&it.enclosure.link)||'';return '<a class="intel-item" href="'+it.link+'" target="_blank">'+(img?'<img class="intel-thumb" src="'+img+'" loading="lazy" onerror="this.style.display=\'none\'">':'')+'<div class="intel-body"><div class="intel-title">'+it.title+'</div><div class="meta">'+(ago<60?ago+'m':Math.round(ago/60)+'h')+' AGO</div></div></a>';}).join('');}catch(e){document.getElementById('intelList').innerHTML='<div class="intel-loading">▸ UPLINK FAILED</div>';}}
 function switchFeed(k){document.querySelectorAll('.intel-tab').forEach(t=>t.classList.toggle('active',t.dataset.feed===k));loadFeed(k);}
 
-// === Three.js globe ===
 function initGlobe(){if(typeof THREE==='undefined')return;const mount=document.getElementById('globeCanvas');if(!mount)return;const W=170,H=170;const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(45,1,0.1,100);camera.position.z=2.7;const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});renderer.setSize(W,H);renderer.setClearColor(0x000000,0);mount.appendChild(renderer.domElement);const wireGeo=new THREE.SphereGeometry(1.02,18,12);const wireMat=new THREE.LineBasicMaterial({color:0x00d4ff,opacity:0.35,transparent:true});const wireMesh=new THREE.LineSegments(new THREE.WireframeGeometry(wireGeo),wireMat);scene.add(wireMesh);const earthGeo=new THREE.SphereGeometry(1,48,32);const earthMat=new THREE.MeshBasicMaterial({color:0x00d4ff,opacity:0.2,transparent:true});const earth=new THREE.Mesh(earthGeo,earthMat);scene.add(earth);const loader=new THREE.TextureLoader();loader.crossOrigin='anonymous';loader.load('https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/textures/planets/earth_atmos_2048.jpg',tex=>{earth.material.map=tex;earth.material.opacity=0.75;earth.material.color.setHex(0xffffff);earth.material.needsUpdate=true;},undefined,()=>{});scene.rotation.x=0.18;function animate(){requestAnimationFrame(animate);earth.rotation.y+=0.003;wireMesh.rotation.y+=0.003;renderer.render(scene,camera);}animate();}
 
 function tickMinute(){const n=new Date();document.getElementById('clock').textContent=pad(n.getHours())+':'+pad(n.getMinutes());render();renderStats();renderDayNav();}

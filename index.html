@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JARVIS · DECMIL</title>
+<title>DECNET · DECMIL</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#03070d;--bg2:#070f1a;--panel:rgba(8,18,32,.7);--panel2:rgba(12,24,40,.9);--line:rgba(0,212,255,.15);--line2:rgba(0,212,255,.35);--cyan:#00d4ff;--cyan-dim:#0891b2;--txt:#e0f2fe;--txt2:#7dd3fc;--txt3:#475569;--amber:#fbbf24;--red:#ff3355;--green:#22ff88;--purple:#c084fc;--orange:#ff8533;--gemini:#4285f4;--claude:#cc785c;--openai:#10a37f;--glow:0 0 8px rgba(0,212,255,.6),0 0 20px rgba(0,212,255,.2)}
@@ -236,13 +236,13 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .jc-msgs.empty::before{content:"// Awaiting query…";font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--txt3);align-self:center;margin:auto}
 .jc-msg{font-size:12px;line-height:1.4;padding:7px 10px;border-radius:6px;max-width:92%;word-wrap:break-word}
 .jc-msg.user{align-self:flex-end;background:rgba(0,212,255,.1);border:1px solid var(--line2)}
-.jc-msg.jarvis{align-self:flex-start;background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.25)}
-.jc-msg.jarvis::before{content:attr(data-brain) " ▸ ";font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;color:var(--purple)}
-.jc-msg.jarvis[data-brain="GEMINI"]::before{color:var(--gemini)}
-.jc-msg.jarvis[data-brain="CLAUDE"]::before{color:var(--claude)}
-.jc-msg.jarvis[data-brain="OPENAI"]::before{color:var(--openai)}
-.jc-msg.jarvis[data-brain="JARVIS"]::before{color:var(--cyan)}
-.jarvis-bar{width:100%;max-width:1200px;background:var(--panel2);border:1px solid var(--line2);border-radius:50px;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px}
+.jc-msg.DECNET{align-self:flex-start;background:rgba(192,132,252,.08);border:1px solid rgba(192,132,252,.25)}
+.jc-msg.DECNET::before{content:attr(data-brain) " ▸ ";font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:1.5px;color:var(--purple)}
+.jc-msg.DECNET[data-brain="GEMINI"]::before{color:var(--gemini)}
+.jc-msg.DECNET[data-brain="CLAUDE"]::before{color:var(--claude)}
+.jc-msg.DECNET[data-brain="OPENAI"]::before{color:var(--openai)}
+.jc-msg.DECNET[data-brain="DECNET"]::before{color:var(--cyan)}
+.DECNET-bar{width:100%;max-width:1200px;background:var(--panel2);border:1px solid var(--line2);border-radius:50px;padding:6px 8px 6px 14px;display:flex;align-items:center;gap:8px}
 .brain-switch{display:flex;gap:3px;background:rgba(0,0,0,.3);padding:3px;border-radius:99px;border:1px solid var(--line)}
 .bsw{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;background:transparent}
 .bsw.j{color:var(--cyan)}.bsw.g{color:var(--gemini)}.bsw.c{color:var(--claude)}.bsw.o{color:var(--openai)}
@@ -287,7 +287,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 <div class="app">
 
 <div class="hdr">
-  <div class="hdr-title"><span class="dot" id="dot"></span> JARVIS · DECMIL</div>
+  <div class="hdr-title"><span class="dot" id="dot"></span> DECNET · DECMIL</div>
   <div class="hdr-strip">
     <span>OP: <b>KEVIN KEGIN</b></span>
     <span>PRJ: <b>PRJ0172</b></span>
@@ -398,20 +398,20 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
     <div class="intel-list" id="intelList"><div class="intel-loading">▸ FETCHING…</div></div>
   </div>
   <div class="frame intel-frame chat">
-    <div class="intel-head"><h3>▸ JARVIS CONSOLE</h3></div>
+    <div class="intel-head"><h3>▸ DECNET CONSOLE</h3></div>
     <div class="jc-msgs empty" id="jcMsgs"></div>
   </div>
 </aside>
 
 <div class="dock-area">
-  <div class="jarvis-bar">
+  <div class="DECNET-bar">
     <div class="brain-switch">
-      <button class="bsw j" data-brain="jarvis" onclick="setBrain('jarvis')">J</button>
+      <button class="bsw j" data-brain="DECNET" onclick="setBrain('DECNET')">J</button>
       <button class="bsw g" data-brain="gemini" onclick="setBrain('gemini')">G</button>
       <button class="bsw c" data-brain="claude" onclick="setBrain('claude')">C</button>
       <button class="bsw o" data-brain="openai" onclick="setBrain('openai')">O</button>
     </div>
-    <input class="j-input" id="jInput" placeholder="Ask Jarvis…" onkeydown="if(event.key==='Enter')jSend()">
+    <input class="j-input" id="jInput" placeholder="Ask DECNET…" onkeydown="if(event.key==='Enter')jSend()">
     <button class="j-btn brief" onclick="briefing()">📊</button>
     <button class="j-btn mic" id="micBtn" onclick="toggleMic()">🎙</button>
     <button class="j-btn" onclick="jSend()">▸</button>
@@ -614,9 +614,9 @@ let calViewMonth=new Date();calViewMonth.setDate(1);
 function setDot(s){document.getElementById('dot').className='dot '+s;document.getElementById('sysLink').textContent=s==='on'?'ONLINE':'OFFLINE';}
 function getCfg(){try{return JSON.parse(localStorage.getItem('fb_cfg'));}catch(e){return null;}}
 function getKey(b){return localStorage.getItem('key_'+b)||'';}
-function getActiveBrain(){return localStorage.getItem('active_brain')||'jarvis';}
+function getActiveBrain(){return localStorage.getItem('active_brain')||'DECNET';}
 function setBrain(b){localStorage.setItem('active_brain',b);updateBrainUI();}
-function updateBrainUI(){const b=getActiveBrain();document.querySelectorAll('.bsw').forEach(el=>el.classList.toggle('active',el.dataset.brain===b));const pill=document.getElementById('sysBrain');if(b==='jarvis'){pill.textContent='JARVIS';pill.className='brain-pill';pill.style.cssText='color:#00d4ff;background:rgba(0,212,255,.18);border:1px solid rgba(0,212,255,.4)';}else if(getKey(b)){pill.textContent=b.toUpperCase();pill.className='brain-pill '+b;pill.style.cssText='';}else{pill.textContent='OFFLINE';pill.className='brain-pill off';pill.style.cssText='';}}
+function updateBrainUI(){const b=getActiveBrain();document.querySelectorAll('.bsw').forEach(el=>el.classList.toggle('active',el.dataset.brain===b));const pill=document.getElementById('sysBrain');if(b==='DECNET'){pill.textContent='DECNET';pill.className='brain-pill';pill.style.cssText='color:#00d4ff;background:rgba(0,212,255,.18);border:1px solid rgba(0,212,255,.4)';}else if(getKey(b)){pill.textContent=b.toUpperCase();pill.className='brain-pill '+b;pill.style.cssText='';}else{pill.textContent='OFFLINE';pill.className='brain-pill off';pill.style.cssText='';}}
 
 function attachDayListener(){
   if(tasksRef)tasksRef.off();if(metaRef)metaRef.off();
@@ -884,20 +884,20 @@ function toggleSide(){document.getElementById('sidePanel').classList.toggle('mob
 let voice=null;
 function pickVoice(){const vs=speechSynthesis.getVoices();voice=vs.find(v=>/Google UK English Male/i.test(v.name))||vs.find(v=>v.lang.startsWith('en-GB'))||vs.find(v=>v.lang.startsWith('en-AU'))||vs[0];}
 if('speechSynthesis' in window){speechSynthesis.onvoiceschanged=pickVoice;pickVoice();}
-function jarvisSay(text,addToChat,brain){if(addToChat)addMsg('jarvis',text,brain||'JARVIS');if(!('speechSynthesis' in window))return;try{speechSynthesis.cancel();}catch(e){}const u=new SpeechSynthesisUtterance(text);if(voice)u.voice=voice;u.rate=.98;speechSynthesis.speak(u);}
+function DECNETSay(text,addToChat,brain){if(addToChat)addMsg('DECNET',text,brain||'DECNET');if(!('speechSynthesis' in window))return;try{speechSynthesis.cancel();}catch(e){}const u=new SpeechSynthesisUtterance(text);if(voice)u.voice=voice;u.rate=.98;speechSynthesis.speak(u);}
 
 let rec=null,listening=false;
 function setupMic(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR)return null;const r=new SR();r.lang='en-AU';r.continuous=false;r.interimResults=false;r.onresult=e=>{document.getElementById('jInput').value=e.results[0][0].transcript;jSend();};r.onend=()=>{listening=false;document.getElementById('micBtn').classList.remove('listening');};r.onerror=()=>{listening=false;document.getElementById('micBtn').classList.remove('listening');};return r;}
-function toggleMic(){if(!rec)rec=setupMic();if(!rec){jarvisSay('Voice not supported',true);return;}if(listening){try{rec.stop();}catch(e){}listening=false;document.getElementById('micBtn').classList.remove('listening');}else{try{rec.start();listening=true;document.getElementById('micBtn').classList.add('listening');}catch(e){}}}
+function toggleMic(){if(!rec)rec=setupMic();if(!rec){DECNETSay('Voice not supported',true);return;}if(listening){try{rec.stop();}catch(e){}listening=false;document.getElementById('micBtn').classList.remove('listening');}else{try{rec.start();listening=true;document.getElementById('micBtn').classList.add('listening');}catch(e){}}}
 
 function addMsg(role,text,brain){const m=document.getElementById('jcMsgs');m.classList.remove('empty');const d=document.createElement('div');d.className='jc-msg '+role;d.textContent=text;if(brain)d.setAttribute('data-brain',brain);m.appendChild(d);m.scrollTop=m.scrollHeight;}
 function jSend(){const inp=document.getElementById('jInput');const q=inp.value.trim();if(!q)return;inp.value='';addMsg('user',q);handleQuery(q);}
-function handleQuery(q){const lq=q.toLowerCase();if(/\b(start (my )?(shift|day))\b/i.test(lq)){startShift();jarvisSay('Shift started.',true,'JARVIS');return;}if(/\b(wrap|end) (my )?(day|shift)\b/i.test(lq)){openWrap();return;}if(/\b(brief|sitrep)\b/i.test(lq)){briefing();return;}if(/\b(what'?s? next|next task)\b/i.test(lq)){speakNext();return;}if(/\b(go to|show) (today|tomorrow|yesterday)\b/i.test(lq)){const w=lq.match(/\b(today|tomorrow|yesterday)\b/)[1];if(w==='today')gotoToday();else if(w==='tomorrow'){gotoToday();navDay(1);}else{gotoToday();navDay(-1);}return;}const brain=getActiveBrain();if(brain==='jarvis'){jarvisSay('Local mode. Try: brief, next, start, wrap.',true,'JARVIS');return;}if(!getKey(brain)){jarvisSay(brain.toUpperCase()+' offline.',true,'JARVIS');return;}askAI(q,brain);}
-function speakNext(){const entry=shiftInfo(viewDate);if(!entry){jarvisSay('Not scheduled.',true,'JARVIS');return;}const el=elapsedInShift();if(el===null){jarvisSay('Shift not active.',true,'JARVIS');return;}const nx=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>el;});if(nx)jarvisSay('Next: '+nx.s+', '+nx.title,true,'JARVIS');else jarvisSay('Nothing queued.',true,'JARVIS');}
-function briefing(){const today=new Date();today.setHours(0,0,0,0);const sd=getShiftDate();sd.setHours(0,0,0,0);const swing=getSwingFor(sd);const e=shiftInfo(sd);const flyDate=getNextFlyoutFrom(today);const toFly=flyDate?Math.max(0,Math.ceil((flyDate-today)/86400000)):0;const mode=currentMode();let t='';if(mode==='personal')t='Personal mode. '+tasks.filter(x=>!x.done).length+' items outstanding.';else if(mode==='rest')t='Rest day. '+toFly+' days to flyout.';else if(swing&&e){const done=tasks.filter(t=>t.done&&t.type!=='break').length;const tot=tasks.filter(t=>t.type!=='break').length;t='Day '+swing.idx+' of '+swing.total+'. '+e.type.toUpperCase()+'. Queue '+done+' of '+tot+'. Flyout in '+toFly+' days.';}else t='Off roster.';jarvisSay(t,true,'JARVIS');}
+function handleQuery(q){const lq=q.toLowerCase();if(/\b(start (my )?(shift|day))\b/i.test(lq)){startShift();DECNETSay('Shift started.',true,'DECNET');return;}if(/\b(wrap|end) (my )?(day|shift)\b/i.test(lq)){openWrap();return;}if(/\b(brief|sitrep)\b/i.test(lq)){briefing();return;}if(/\b(what'?s? next|next task)\b/i.test(lq)){speakNext();return;}if(/\b(go to|show) (today|tomorrow|yesterday)\b/i.test(lq)){const w=lq.match(/\b(today|tomorrow|yesterday)\b/)[1];if(w==='today')gotoToday();else if(w==='tomorrow'){gotoToday();navDay(1);}else{gotoToday();navDay(-1);}return;}const brain=getActiveBrain();if(brain==='DECNET'){DECNETSay('Local mode. Try: brief, next, start, wrap.',true,'DECNET');return;}if(!getKey(brain)){DECNETSay(brain.toUpperCase()+' offline.',true,'DECNET');return;}askAI(q,brain);}
+function speakNext(){const entry=shiftInfo(viewDate);if(!entry){DECNETSay('Not scheduled.',true,'DECNET');return;}const el=elapsedInShift();if(el===null){DECNETSay('Shift not active.',true,'DECNET');return;}const nx=tasks.find(t=>{if(!t.s||t.type==='break')return false;return tTimeIn(t.s,entry.start)>el;});if(nx)DECNETSay('Next: '+nx.s+', '+nx.title,true,'DECNET');else DECNETSay('Nothing queued.',true,'DECNET');}
+function briefing(){const today=new Date();today.setHours(0,0,0,0);const sd=getShiftDate();sd.setHours(0,0,0,0);const swing=getSwingFor(sd);const e=shiftInfo(sd);const flyDate=getNextFlyoutFrom(today);const toFly=flyDate?Math.max(0,Math.ceil((flyDate-today)/86400000)):0;const mode=currentMode();let t='';if(mode==='personal')t='Personal mode. '+tasks.filter(x=>!x.done).length+' items outstanding.';else if(mode==='rest')t='Rest day. '+toFly+' days to flyout.';else if(swing&&e){const done=tasks.filter(t=>t.done&&t.type!=='break').length;const tot=tasks.filter(t=>t.type!=='break').length;t='Day '+swing.idx+' of '+swing.total+'. '+e.type.toUpperCase()+'. Queue '+done+' of '+tot+'. Flyout in '+toFly+' days.';}else t='Off roster.';DECNETSay(t,true,'DECNET');}
 function buildContext(){const today=new Date();today.setHours(0,0,0,0);const sd=getShiftDate();sd.setHours(0,0,0,0);const swing=getSwingFor(sd);const e=shiftInfo(sd);const flyDate=getNextFlyoutFrom(today);const toFly=flyDate?Math.max(0,Math.ceil((flyDate-today)/86400000)):0;const open=tasks.filter(t=>!t.done&&t.type!=='break').map(t=>(t.s||'')+' '+t.title).join('; ');return 'Kevin Kegin HSE Decmil PRJ0172. '+(swing?'Day '+swing.idx+'/'+swing.total:'')+' '+(e?e.type:'OFF')+'. Flyout in '+toFly+'d. Open: '+(open||'none');}
-const SYS_PROMPT='You are JARVIS, Kevin\'s HSE tactical AI. Calm, direct, under 80 words.';
-async function askAI(q,brain){addMsg('jarvis','...',brain.toUpperCase());let ans='';try{if(brain==='gemini')ans=await callGemini(q);else if(brain==='claude')ans=await callClaude(q);else ans=await callOpenAI(q);}catch(e){ans='Connection failed';}const msgs=document.getElementById('jcMsgs');if(msgs.lastChild&&msgs.lastChild.textContent==='...')msgs.removeChild(msgs.lastChild);jarvisSay(ans.trim(),true,brain.toUpperCase());}
+const SYS_PROMPT='You are DECNET, Kevin\'s HSE tactical AI. Calm, direct, under 80 words.';
+async function askAI(q,brain){addMsg('DECNET','...',brain.toUpperCase());let ans='';try{if(brain==='gemini')ans=await callGemini(q);else if(brain==='claude')ans=await callClaude(q);else ans=await callOpenAI(q);}catch(e){ans='Connection failed';}const msgs=document.getElementById('jcMsgs');if(msgs.lastChild&&msgs.lastChild.textContent==='...')msgs.removeChild(msgs.lastChild);DECNETSay(ans.trim(),true,brain.toUpperCase());}
 async function callGemini(q){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:SYS_PROMPT+'\n'+buildContext()+'\nUser: '+q}]}],tools:[{google_search:{}}]})});const d=await r.json();return d.candidates?.[0]?.content?.parts[0]?.text||'No response';}
 async function callClaude(q){const k=getKey('claude');const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:300,system:SYS_PROMPT+'\n'+buildContext(),messages:[{role:'user',content:q}]})});const d=await r.json();return d.content?.[0]?.text||'No response';}
 async function callOpenAI(q){const k=getKey('openai');const r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+k},body:JSON.stringify({model:'gpt-4o-mini',max_tokens:300,messages:[{role:'system',content:SYS_PROMPT+'\n'+buildContext()},{role:'user',content:q}]})});const d=await r.json();return d.choices?.[0]?.message?.content||'No response';}
@@ -906,7 +906,7 @@ function openMail(){document.getElementById('mailContent').value='';document.get
 function closeMail(){document.getElementById('mailModal').classList.remove('open');}
 function clearExtracted(){extractedTasks=[];document.getElementById('extractedList').innerHTML='';document.getElementById('addExtractedBar').style.display='none';}
 const EMAIL_PROMPT='Extract actionable tasks from email. Return ONLY a JSON array: [{"title":"brief","time":"HH:MM or null","priority":"p1|p2|p3","detail":"context"}]. Email:\n';
-async function parseEmail(){const c=document.getElementById('mailContent').value.trim();if(!c){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Paste email first</div>';return;}const brain=getActiveBrain();if(brain==='jarvis'||!getKey(brain)){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Switch to G/C/O</div>';return;}document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2);padding:10px">'+brain.toUpperCase()+' parsing…</div>';let raw='';try{if(brain==='gemini')raw=await callGeminiRaw(EMAIL_PROMPT+c);else if(brain==='claude')raw=await callClaudeRaw(EMAIL_PROMPT+c);else raw=await callOpenAIRaw(EMAIL_PROMPT+c);}catch(e){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red)">Failed</div>';return;}raw=raw.replace(/```json/gi,'').replace(/```/g,'').trim();let arr=null;try{arr=JSON.parse(raw);}catch(e){const m=raw.match(/\[[\s\S]*\]/);if(m)try{arr=JSON.parse(m[0]);}catch(e2){}}if(!Array.isArray(arr)||arr.length===0){document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2)">No tasks found</div>';return;}extractedTasks=arr;document.getElementById('extractStatus').innerHTML='<div style="color:var(--cyan)">'+arr.length+' tasks</div>';document.getElementById('extractedList').innerHTML=arr.map((t,i)=>'<label style="display:flex;gap:8px;padding:8px;background:rgba(0,212,255,.04);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:3px;cursor:pointer"><input type="checkbox" checked data-idx="'+i+'" style="accent-color:var(--cyan)"><div><div style="font-size:13px"><span class="badge b-'+(t.priority||'p2')+'">'+(t.priority||'p2').toUpperCase()+'</span> '+(t.title||'')+'</div>'+(t.detail?'<div style="font-size:11px;color:var(--txt2)">'+t.detail+'</div>':'')+'</div></label>').join('');document.getElementById('addExtractedBar').style.display='flex';}
+async function parseEmail(){const c=document.getElementById('mailContent').value.trim();if(!c){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Paste email first</div>';return;}const brain=getActiveBrain();if(brain==='DECNET'||!getKey(brain)){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red);padding:10px">Switch to G/C/O</div>';return;}document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2);padding:10px">'+brain.toUpperCase()+' parsing…</div>';let raw='';try{if(brain==='gemini')raw=await callGeminiRaw(EMAIL_PROMPT+c);else if(brain==='claude')raw=await callClaudeRaw(EMAIL_PROMPT+c);else raw=await callOpenAIRaw(EMAIL_PROMPT+c);}catch(e){document.getElementById('extractStatus').innerHTML='<div style="color:var(--red)">Failed</div>';return;}raw=raw.replace(/```json/gi,'').replace(/```/g,'').trim();let arr=null;try{arr=JSON.parse(raw);}catch(e){const m=raw.match(/\[[\s\S]*\]/);if(m)try{arr=JSON.parse(m[0]);}catch(e2){}}if(!Array.isArray(arr)||arr.length===0){document.getElementById('extractStatus').innerHTML='<div style="color:var(--txt2)">No tasks found</div>';return;}extractedTasks=arr;document.getElementById('extractStatus').innerHTML='<div style="color:var(--cyan)">'+arr.length+' tasks</div>';document.getElementById('extractedList').innerHTML=arr.map((t,i)=>'<label style="display:flex;gap:8px;padding:8px;background:rgba(0,212,255,.04);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:3px;cursor:pointer"><input type="checkbox" checked data-idx="'+i+'" style="accent-color:var(--cyan)"><div><div style="font-size:13px"><span class="badge b-'+(t.priority||'p2')+'">'+(t.priority||'p2').toUpperCase()+'</span> '+(t.title||'')+'</div>'+(t.detail?'<div style="font-size:11px;color:var(--txt2)">'+t.detail+'</div>':'')+'</div></label>').join('');document.getElementById('addExtractedBar').style.display='flex';}
 function addExtractedTasks(){if(!tasksRef){alert('Connect first');return;}let added=0;document.querySelectorAll('#extractedList input[type=checkbox]:checked').forEach(c=>{const t=extractedTasks[+c.dataset.idx];if(!t)return;const id='e'+Date.now()+'_'+(added++);const tm=t.time||'09:00';const[hh,mm]=tm.split(':').map(Number);const end=pad((hh+(mm+30>=60?1:0))%24)+':'+pad((mm+30)%60);tasksRef.child(id).set({id,s:tm,e:end,type:t.priority||'p2',title:t.title||'Untitled',sub:t.detail||'',done:false,source:'email'});});closeMail();}
 async function callGeminiRaw(p){const k=getKey('gemini');const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});const d=await r.json();return d.candidates?.[0]?.content?.parts[0]?.text||'';}
 async function callClaudeRaw(p){const k=getKey('claude');const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5',max_tokens:1500,messages:[{role:'user',content:p}]})});const d=await r.json();return d.content?.[0]?.text||'';}

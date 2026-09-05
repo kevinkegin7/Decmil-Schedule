@@ -1,0 +1,26 @@
+{
+  "name": "decmil-take5-compliance",
+  "version": "1.0.0",
+  "description": "Take 5 Compliance role exemption fix for Site Diary R4",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "node src/take5-role-classification.test.js && node test/run-browser-tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinkegin7/Decmil-Schedule.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevinkegin7/Decmil-Schedule/issues"
+  },
+  "homepage": "https://github.com/kevinkegin7/Decmil-Schedule#readme",
+  "devDependencies": {
+    "jquery": "^3.7.0"
+  },
+  "private": true
+}

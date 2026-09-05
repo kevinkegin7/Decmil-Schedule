@@ -228,20 +228,25 @@ This is how the v7 prototype behaved, and the reasoning still holds.
 
 ---
 
-## 6. Client changes (`take5.js`)
+## 6. Client changes (`take5.js`) — done, deployable now
 
-Once the server sends `Required`:
+`src/take5.js` is a drop-in replacement for `/js/take5.js` that applies the
+classification in the browser. See `docs/deploying-take5-js.md`. It corrects
+everything the page can correct from the data it already receives:
 
-- Map it in `loadCapture()` alongside the existing fields — and map `OnSite`
-  and `Status` too, which are currently sent and discarded.
-- `captureSummary()` — count only `OnSite && Required`; report exempt
-  separately rather than folding it into the denominator.
-- `renderList()` — render an exempt row with a muted "Not required —
-  excluded from %" state instead of a stepper, plus the override toggle.
-- `exportCaptureExcel()` — add a `Required` column so the spreadsheet and the
-  screen agree.
-- `renderDashboard()` — surface `ExemptCount` next to "On site in range" so
-  the numbers visibly reconcile.
+- Daily Capture: exempt rows visible but muted, no stepper, out of the %;
+  `OnSite` and `Status` now mapped and honoured; Excel gets a `Required` column
+- Dashboard hero, action list, **Notify supervisors**, compliance by crew,
+  leaderboards, lookup, running totals and the dashboard Excel: recomputed
+  from `TableRows` over required people, with the exempt count shown
+- Per-person override from the capture list (browser-local until §4's
+  endpoint exists)
+
+It cannot fix the **trend chart**, whose per-period percentages arrive
+pre-computed, and it labels that chart as still including exempt roles. The
+server-side change in §4 removes that caveat and makes overrides shared. Once
+the server sends `Required` on each row, the client should prefer it over its
+own classification — a one-line change in `requiredOf()`.
 
 ---
 

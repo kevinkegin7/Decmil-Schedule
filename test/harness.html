@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Take 5 harness</title>
+<!-- The mount points and controls the real Razor page (/Take5) provides. Ids must match. -->
+<style>
+  :root { --good:#1F8A4C; --good-d:#1C7D45; --good-bg:#E6F3EC; --warn:#E08B00; --warn-d:#B26A00; --warn-bg:#FBF0DC;
+          --bad:#C0392B; --bad-d:#C0392B; --bad-bg:#FBE6E9; --faint:#8A909C; --grey:#5B6270; --line:#DDE0E5;
+          --navy:#1f396c; --teal:#3f96b4; }
+  body { font-family: system-ui, sans-serif; margin: 20px; }
+  .wrow { display: grid; grid-template-columns: 4px 1fr 110px 120px 130px 70px; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .strip { display: flex; gap: 12px; } .cell { border: 1px solid var(--line); padding: 8px 12px; }
+  .tab.on { font-weight: 700; }
+</style>
+</head>
+<body>
+<div id="t5">
+  <div class="hdr">
+    <div class="sub">Minimum <span id="t5MinCopy">3</span> Take 5 tags per worker, per day on site.</div>
+    <div id="t5DayNav"><button id="t5Prev">‹</button><input type="date" id="t5Date"><button id="t5Next">›</button></div>
+    <div id="t5RangeNav" style="display:none"><input type="date" id="t5Start"> to <input type="date" id="t5End"></div>
+    <div class="tabs">
+      <button class="tab on" data-tab="capture">Daily Capture</button>
+      <button class="tab" data-tab="dashboard">Dashboard</button>
+    </div>
+  </div>
+  <div id="t5Capture"></div>
+  <div id="t5Dashboard" style="display:none"></div>
+</div>
+<script src="/vendor/jquery.min.js"></script>
+<script src="/test/fixture.js"></script>
+<script src="/test/mock-api.js"></script>
+<script src="/src/take5.js"></script>
+</body>
+</html>

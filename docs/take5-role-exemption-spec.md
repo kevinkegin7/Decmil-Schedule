@@ -184,7 +184,16 @@ public static class Take5RoleRules
    excluded. Historic trend points must be recomputed under the same rule or
    the chart will show a step change on the deploy date.
 3. **`Notify`** — the supervisor email is built from `ActionList`, so it
-   corrects itself once `ActionList` is filtered.
+   corrects itself once `ActionList` is filtered. This is a live complaint:
+   on 4 Sept the action list held 129 names and included office personnel
+   (e.g. crews "Site Office - A Crew" and "Site Office HS - B Crew"), all of
+   whom went into the "Notify supervisors" email. `take5.js` does not choose
+   who is in that email — `notifyBodyText()` only formats `ActionList` —
+   so there is nothing to change client-side.
+
+   Consider also a threshold on `ActionList` (e.g. below minimum on 3+ days
+   in range) so the email stays actionable: at 30% compliance an unfiltered
+   list is most of the site, and supervisors will stop reading it.
 
 ### Per-person override
 
@@ -236,12 +245,11 @@ Once the server sends `Required`:
 
 ---
 
-## 7. Open question for IT
+## 7. Scope check — one bug, not two
 
-**Does `GetCapture` return the whole roster, or only people actually on site
-that day?**
-
-The payload includes an `OnSite` field, which `take5.js` maps out of existence:
+It was initially unclear whether `GetCapture` returned the whole roster or
+only the day's on-site personnel, since the payload carries an `OnSite` field
+that `take5.js` maps out of existence before counting every row as present:
 
 ```js
 state.capture = rows.map(function (r) {
@@ -250,13 +258,27 @@ state.capture = rows.map(function (r) {
 });
 ```
 
-It then counts every surviving row as present (`state.capture.length`). If the
-endpoint returns the full roster with a flag to filter on, then people on
-leave and on R&R are inflating the denominator too — and on a 183-person
-return that would be a larger distortion than the 35 exempt roles.
+The dashboard for 4 Sept settles it: **"On site in range: 184 · 0 on leave ·
+184 on prestart."** The list is the prestart, not the roster, so people on
+leave are not inflating the denominator. The exempt-role problem is the
+whole problem.
 
-This needs answering before the fix is sized, because it may be two bugs
-rather than one.
+Two things IT should still confirm:
+
+- **"0 on leave" on a 184-person project looks wrong.** Either the roster's
+  leave flag is not reaching Take 5, or it is genuinely zero that day.
+- `take5.js` should still map `OnSite` and honour it (§6). It costs nothing
+  and guards the capture tab if the endpoint's behaviour ever changes.
+
+### How much of the low compliance is this defect?
+
+Not most of it. On 4 Sept: 55 of 184 worker-days compliant (30%), average
+1.1 tags per worker-day against a target of 3.0. Removing the ~35 exempt
+personnel moves the figure to roughly 55 of 149 — about **37%**. The defect
+is worth ~7 percentage points and a hard 81% ceiling; the remaining gap is
+genuine under-reporting by the crews. Both are worth fixing, but the
+denominator fix should not be presented as an explanation for the low
+number.
 
 ---
 

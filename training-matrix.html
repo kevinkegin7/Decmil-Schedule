@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Training Matrix Register · DECMIL</title>
+<style>
+:root{
+  --bg:#f4f6f9;--panel:#ffffff;--panel2:#f8fafc;--ink:#0f2233;--ink2:#4a6076;--ink3:#8195a6;
+  --line:#e2e8f0;--line2:#cbd6e2;--brand:#0b3d5c;--brand2:#0f5a86;--accent:#ff7a00;
+  --green:#0d9757;--greenbg:#e5f6ee;--amber:#c47d00;--amberbg:#fdf3dd;--red:#d13b3b;--redbg:#fbe6e6;
+  --blue:#1f6fd6;--bluebg:#e6effb;--grey:#8195a6;--greybg:#eef2f6;
+  --shadow:0 1px 3px rgba(15,34,51,.08),0 1px 2px rgba(15,34,51,.04);
+  --shadow2:0 8px 30px rgba(15,34,51,.14);
+}
+[data-theme="dark"]{
+  --bg:#0a1420;--panel:#0f1e2e;--panel2:#132539;--ink:#e6eef6;--ink2:#9fb4c8;--ink3:#6a8199;
+  --line:#1e3247;--line2:#2a445e;--brand:#39a0d8;--brand2:#5bb6e6;--accent:#ff8c1a;
+  --green:#2fd68a;--greenbg:#0f2e22;--amber:#ffc14d;--amberbg:#33290d;--red:#ff6b6b;--redbg:#341717;
+  --blue:#63a4ff;--bluebg:#122237;--grey:#7f97ac;--greybg:#16273a;
+  --shadow:0 1px 3px rgba(0,0,0,.4);--shadow2:0 10px 34px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--brand2)}
+
+.top{position:sticky;top:0;z-index:40;background:var(--brand);color:#fff;display:flex;align-items:center;
+  gap:14px;padding:0 18px;height:56px;box-shadow:var(--shadow)}
+.top .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px;font-size:16px}
+.top .logo .mark{width:26px;height:26px;border-radius:6px;background:var(--accent);display:flex;
+  align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff}
+.top .logo small{font-weight:500;opacity:.85;letter-spacing:1.5px;font-size:10px;text-transform:uppercase}
+.top .spacer{flex:1}
+.top .save-dot{font-size:11px;opacity:.85;display:flex;align-items:center;gap:6px}
+.top .save-dot i{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block}
+.icon-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;
+  border-radius:7px;height:34px;padding:0 12px;font-size:13px;font-weight:600;display:inline-flex;
+  align-items:center;gap:6px}
+.icon-btn:hover{background:rgba(255,255,255,.22)}
+
+.tabs{display:flex;gap:2px;background:var(--panel);border-bottom:1px solid var(--line);padding:0 12px;
+  position:sticky;top:56px;z-index:35;overflow-x:auto}
+.tab{background:transparent;border:none;border-bottom:3px solid transparent;color:var(--ink2);
+  padding:13px 16px;font-size:13.5px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--brand);border-bottom-color:var(--accent)}
+.tab .badge{background:var(--redbg);color:var(--red);border-radius:99px;font-size:11px;font-weight:700;
+  padding:1px 7px;min-width:20px;text-align:center}
+
+.wrap{max-width:1500px;margin:0 auto;padding:18px}
+.view{display:none}
+.view.active{display:block}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+.tile .k{font-size:12px;color:var(--ink3);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.tile .v{font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+.tile .s{font-size:12px;color:var(--ink2);margin-top:2px}
+.tile.good .v{color:var(--green)} .tile.warn .v{color:var(--amber)}
+.tile.bad .v{color:var(--red)} .tile.info .v{color:var(--blue)} .tile.brand .v{color:var(--brand)}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);margin-bottom:18px}
+.card-h{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.card-h h3{margin:0;font-size:15px;font-weight:700}
+.card-h .sub{color:var(--ink3);font-size:12px;font-weight:500}
+.card-b{padding:6px 0}
+.card-b.pad{padding:16px 18px}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.toolbar .grow{flex:1}
+input,select,textarea{font-family:inherit;font-size:13.5px;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line2);border-radius:8px;padding:8px 10px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--brand2);box-shadow:0 0 0 3px rgba(15,90,134,.12)}
+.search{min-width:220px}
+.btn{background:var(--brand);color:#fff;border:1px solid var(--brand);border-radius:8px;padding:8px 14px;
+  font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--brand2);border-color:var(--brand2)}
+.btn.ghost{background:transparent;color:var(--brand);border-color:var(--line2)}
+.btn.ghost:hover{background:var(--panel2)}
+.btn.accent{background:var(--accent);border-color:var(--accent)}
+.btn.accent:hover{filter:brightness(1.05)}
+.btn.danger{background:transparent;color:var(--red);border-color:var(--red)}
+.btn.danger:hover{background:var(--redbg)}
+.btn.sm{padding:5px 10px;font-size:12px}
+
+.tbl-scroll{overflow:auto;border-radius:12px}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+thead th{background:var(--panel2);color:var(--ink2);font-weight:700;font-size:11.5px;text-transform:uppercase;
+  letter-spacing:.4px;position:sticky;top:0;z-index:2}
+tbody tr:hover{background:var(--panel2)}
+td .muted{color:var(--ink3)}
+.row-actions{display:flex;gap:6px}
+
+.matrix-wrap{overflow:auto;max-height:72vh;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+table.matrix{border-collapse:separate;border-spacing:0;min-width:100%}
+table.matrix th,table.matrix td{border-right:1px solid var(--line);padding:0}
+table.matrix thead th{background:var(--panel2);position:sticky;top:0;z-index:3;vertical-align:bottom;
+  height:220px;padding:8px 4px}
+table.matrix thead th.corner{left:0;z-index:5;min-width:210px;max-width:210px;text-align:left;
+  vertical-align:bottom;padding:12px}
+table.matrix thead th .rot{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;
+  font-size:11px;font-weight:700;color:var(--ink);margin:0 auto;max-height:204px;overflow:hidden;text-overflow:ellipsis}
+table.matrix thead th .rot small{color:var(--ink3);font-weight:500}
+table.matrix tbody th.person{position:sticky;left:0;z-index:2;background:var(--panel);text-align:left;
+  min-width:210px;max-width:210px;padding:8px 12px;border-right:2px solid var(--line2)}
+table.matrix tbody tr:hover th.person{background:var(--panel2)}
+.person .nm{font-weight:700;font-size:13px;color:var(--ink)}
+.person .rl{font-size:11px;color:var(--ink3)}
+table.matrix td.cell{text-align:center;cursor:pointer;min-width:64px;height:42px;position:relative;transition:.1s}
+table.matrix td.cell:hover{box-shadow:inset 0 0 0 2px var(--brand2)}
+.cell .pill{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:24px;
+  border-radius:6px;font-size:11px;font-weight:700;padding:0 6px}
+.cell .dt{display:block;font-size:9.5px;color:var(--ink3);margin-top:1px}
+.cell.req-row{background:rgba(255,122,0,.03)}
+
+.st-valid .pill,.chip.st-valid{background:var(--greenbg);color:var(--green)}
+.st-expiring .pill,.chip.st-expiring{background:var(--amberbg);color:var(--amber)}
+.st-expired .pill,.chip.st-expired{background:var(--redbg);color:var(--red)}
+.st-booked .pill,.chip.st-booked{background:var(--bluebg);color:var(--blue)}
+.st-gap .pill,.chip.st-gap{background:var(--redbg);color:var(--red);box-shadow:inset 0 0 0 1.5px var(--red)}
+.st-na .pill,.chip.st-na{background:var(--greybg);color:var(--grey)}
+.st-exempt .pill,.chip.st-exempt{background:var(--greybg);color:var(--ink2);font-style:italic}
+.st-none .pill{background:transparent;color:var(--ink3)}
+
+.chip{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 14px}
+.legend .chip{cursor:default}
+
+.empty{text-align:center;padding:40px 20px;color:var(--ink3)}
+.empty h4{margin:0 0 6px;color:var(--ink2);font-size:15px}
+
+.overlay{position:fixed;inset:0;background:rgba(10,20,32,.55);backdrop-filter:blur(2px);z-index:100;
+  display:none;align-items:center;justify-content:center;padding:18px}
+.overlay.show{display:flex}
+.modal{background:var(--panel);border-radius:14px;box-shadow:var(--shadow2);width:100%;max-width:560px;
+  max-height:90vh;overflow:auto}
+.modal-h{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.modal-h h3{margin:0;font-size:16px}
+.modal-h .close{margin-left:auto;background:transparent;border:none;font-size:22px;color:var(--ink3);line-height:1}
+.modal-b{padding:18px 20px}
+.modal-f{padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--ink2);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.field input,.field select,.field textarea{width:100%}
+.field .hint{font-size:11.5px;color:var(--ink3);margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.status-picker{display:flex;flex-wrap:wrap;gap:8px}
+.status-picker label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:8px;
+  padding:6px 10px;font-size:12.5px;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0}
+.status-picker input{width:auto;margin:0}
+.status-picker label.on{border-color:var(--brand2);background:var(--panel2)}
+
+.req-grid td.rc{text-align:center;cursor:pointer;user-select:none}
+.req-grid td.rc:hover{background:var(--panel2)}
+.req-grid .tick{color:var(--green);font-weight:800}
+.req-grid .dash{color:var(--ink3)}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);
+  color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;z-index:200;opacity:0;
+  transition:.25s;box-shadow:var(--shadow2);pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.hide{display:none!important}
+.rt{margin-left:auto}
+.tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:6px;
+  padding:2px 8px;font-size:11.5px;color:var(--ink2);font-weight:600}
+label.inl{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);font-weight:600}
+label.inl input{width:auto}
+@media(max-width:640px){.wrap{padding:12px}.grid2{grid-template-columns:1fr}.top .logo small{display:none}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="logo"><span class="mark">D</span>DECMIL<small>Training Matrix Register</small></div>
+  <div class="spacer"></div>
+  <div class="save-dot" id="saveDot"><i></i> Saved locally</div>
+  <button class="icon-btn" id="themeBtn" title="Toggle theme">🌙 Theme</button>
+  <button class="icon-btn" id="helpBtn" title="Help">?</button>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab active" data-view="dashboard">📊 Dashboard</button>
+  <button class="tab" data-view="matrix">▦ Matrix</button>
+  <button class="tab" data-view="alerts">🔔 Alerts <span class="badge hide" id="alertBadge">0</span></button>
+  <button class="tab" data-view="people">👤 People</button>
+  <button class="tab" data-view="courses">📚 Courses</button>
+  <button class="tab" data-view="requirements">✔ Requirements</button>
+  <button class="tab" data-view="data">💾 Data</button>
+</div>
+
+<div class="wrap">
+
+  <div class="view active" id="view-dashboard">
+    <div class="tiles" id="dashTiles"></div>
+    <div class="card">
+      <div class="card-h"><h3>Compliance by course</h3><span class="sub">Valid records vs. people who require the course</span></div>
+      <div class="card-b" id="courseCompliance"></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>Compliance by role</h3></div>
+      <div class="card-b" id="roleCompliance"></div>
+    </div>
+  </div>
+
+  <div class="view" id="view-matrix">
+    <div class="toolbar">
+      <input class="search" id="mSearch" placeholder="🔍 Search person…">
+      <select id="mDept"><option value="">All departments</option></select>
+      <select id="mRole"><option value="">All roles</option></select>
+      <select id="mStatus">
+        <option value="">Any status</option>
+        <option value="gap">Gaps only</option>
+        <option value="expired">Has expired</option>
+        <option value="expiring">Has expiring</option>
+      </select>
+      <label class="inl"><input type="checkbox" id="mReqOnly"> Required courses only</label>
+      <span class="grow"></span>
+      <button class="btn ghost sm" id="mExportWide">⬇ Grid CSV</button>
+      <button class="btn ghost sm" id="mExport">⬇ Register CSV</button>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div class="matrix-wrap" id="matrixWrap"></div>
+  </div>
+
+  <div class="view" id="view-alerts">
+    <div class="toolbar">
+      <select id="aWindow">
+        <option value="30">Expiring within 30 days</option>
+        <option value="60">Expiring within 60 days</option>
+        <option value="90">Expiring within 90 days</option>
+      </select>
+      <span class="grow"></span>
+      <button class="btn ghost sm" id="aExport">⬇ Export action list</button>
+    </div>
+    <div class="card"><div class="card-h"><h3 style="color:var(--red)">Expired</h3><span class="sub" id="expiredCount"></span></div><div class="card-b" id="expiredList"></div></div>
+    <div class="card"><div class="card-h"><h3 style="color:var(--amber)">Expiring soon</h3><span class="sub" id="expiringCount"></span></div><div class="card-b" id="expiringList"></div></div>
+    <div class="card"><div class="card-h"><h3 style="color:var(--red)">Gaps — required but not held</h3><span class="sub" id="gapCount"></span></div><div class="card-b" id="gapList"></div></div>
+  </div>
+
+  <div class="view" id="view-people">
+    <div class="toolbar">
+      <input class="search" id="pSearch" placeholder="🔍 Search people…">
+      <span class="grow"></span>
+      <button class="btn accent" id="addPerson">＋ Add person</button>
+    </div>
+    <div class="card"><div class="tbl-scroll"><table id="peopleTbl"></table></div></div>
+  </div>
+
+  <div class="view" id="view-courses">
+    <div class="toolbar">
+      <input class="search" id="cSearch" placeholder="🔍 Search courses…">
+      <span class="grow"></span>
+      <button class="btn ghost" id="applyValidity">⚙ Apply standard validity</button>
+      <button class="btn accent" id="addCourse">＋ Add course</button>
+    </div>
+    <div class="card"><div class="tbl-scroll"><table id="coursesTbl"></table></div></div>
+  </div>
+
+  <div class="view" id="view-requirements">
+    <div class="toolbar">
+      <span class="sub" style="color:var(--ink2)">Tick which courses each role must hold. Missing required courses show as <span class="chip st-gap">GAP</span> in the matrix.</span>
+      <span class="grow"></span>
+      <button class="btn ghost sm" id="applyReqTemplate">⚙ Apply baseline template</button>
+    </div>
+    <div class="matrix-wrap" style="max-height:72vh"><table class="req-grid" id="reqTbl"></table></div>
+  </div>
+
+  <div class="view" id="view-data">
+    <div class="card"><div class="card-h"><h3>DECMIL quick setup</h3><span class="sub">One-click defaults so alerts &amp; compliance switch on</span></div><div class="card-b pad">
+      <p class="muted" style="color:var(--ink2)">Your spreadsheet doesn't store expiry periods or role requirements, so imported records read as "valid" until you set these. Apply sensible starting defaults, then fine-tune per course / role.</p>
+      <div class="toolbar" style="margin-top:6px">
+        <button class="btn accent" id="applyAll">✨ Apply standard validity + baseline requirements</button>
+        <button class="btn ghost" id="applyValidity2">⚙ Validity only</button>
+        <button class="btn ghost" id="applyReqTemplate2">⚙ Requirements only</button>
+      </div>
+      <p class="hint" style="color:var(--ink3);margin-top:10px">Validity rules (editable per course): First Aid 36mo · WAH/EWP/Forklift/Crane VOCs 24mo · High-risk work &amp; plant licences 60mo · Inductions / Drug&amp;Alcohol / Isolation / Light Vehicle 12mo · plant Operate &amp; Test&amp;Move VOCs 24mo. Trade qualifications stay non-expiring. Baseline requirements mark the universal site items (Induction, Drug&amp;Alcohol, Isolation, Light Vehicle) as required for every role.</p>
+    </div></div>
+    <div class="card"><div class="card-h"><h3>Backup &amp; restore</h3></div><div class="card-b pad">
+      <p class="muted" style="color:var(--ink2)">Everything lives in this browser (localStorage). Export a JSON backup regularly, or to move to another device.</p>
+      <div class="toolbar" style="margin-top:6px">
+        <button class="btn" id="expJson">⬇ Export JSON backup</button>
+        <button class="btn ghost" id="impJsonBtn">⬆ Import JSON backup</button>
+        <input type="file" id="impJson" accept="application/json" class="hide">
+      </div>
+    </div></div>
+    <div class="card"><div class="card-h"><h3>Spreadsheet import / export</h3></div><div class="card-b pad">
+      <p class="muted" style="color:var(--ink2)">Export the full register (one row per person &amp; course) as CSV, or a wide grid matching a spreadsheet layout. Import people or training records from a CSV.</p>
+      <div class="toolbar" style="margin-top:6px">
+        <button class="btn" id="expRegister">⬇ Export register CSV</button>
+        <button class="btn" id="expGrid">⬇ Export grid (wide) CSV</button>
+        <button class="btn ghost" id="impPeopleBtn">⬆ Import people CSV</button>
+        <input type="file" id="impPeople" accept=".csv" class="hide">
+        <button class="btn ghost" id="impRecordsBtn">⬆ Import records CSV</button>
+        <input type="file" id="impRecords" accept=".csv" class="hide">
+      </div>
+      <p class="hint" style="color:var(--ink3);margin-top:10px">People CSV columns: <code>name, role, employeeId, department</code>.<br>
+      Records CSV columns: <code>employeeId (or name), courseCode (or courseName), completedDate (YYYY-MM-DD), evidenceUrl, notes</code>.</p>
+    </div></div>
+    <div class="card"><div class="card-h"><h3>Sample &amp; reset</h3></div><div class="card-b pad">
+      <div class="toolbar">
+        <button class="btn ghost" id="loadSample">Load sample data</button>
+        <button class="btn danger" id="resetAll">Reset everything</button>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<div class="overlay" id="cellOverlay">
+  <div class="modal">
+    <div class="modal-h"><h3 id="cellTitle">Training record</h3><button class="close" data-close>×</button></div>
+    <div class="modal-b">
+      <div class="field">
+        <label>Status</label>
+        <div class="status-picker" id="statusPicker">
+          <label><input type="radio" name="cstatus" value="completed"> ✅ Completed</label>
+          <label><input type="radio" name="cstatus" value="booked"> 📅 Booked</label>
+          <label><input type="radio" name="cstatus" value="exempt"> ⊘ Exempt / N/A</label>
+          <label><input type="radio" name="cstatus" value="none"> ✖ No record</label>
+        </div>
+      </div>
+      <div class="grid2" id="dateFields">
+        <div class="field"><label>Completed / issued</label><input type="date" id="cCompleted"><div class="hint" id="cValidityHint"></div></div>
+        <div class="field"><label>Expires</label><input type="date" id="cExpiry"><div class="hint">Blank = never expires</div></div>
+      </div>
+      <div class="field" id="bookedField"><label>Scheduled date</label><input type="date" id="cBooked"></div>
+      <div class="field"><label>Evidence / certificate link</label><input type="url" id="cEvidence" placeholder="https://…"><div class="hint">Link to a stored certificate, SharePoint doc, etc.</div></div>
+      <div class="field"><label>Notes</label><textarea id="cNotes" rows="2"></textarea></div>
+    </div>
+    <div class="modal-f">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn" id="cellSave">Save record</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="personOverlay">
+  <div class="modal">
+    <div class="modal-h"><h3 id="personTitle">Add person</h3><button class="close" data-close>×</button></div>
+    <div class="modal-b">
+      <div class="field"><label>Full name *</label><input id="pName"></div>
+      <div class="grid2">
+        <div class="field"><label>Role / position</label><input id="pRole" list="rolesList"><datalist id="rolesList"></datalist></div>
+        <div class="field"><label>Department</label><input id="pDept" list="deptsList"><datalist id="deptsList"></datalist></div>
+      </div>
+      <div class="field"><label>Employee ID</label><input id="pEmpId"></div>
+    </div>
+    <div class="modal-f">
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn" id="personSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="courseOverlay">
+  <div class="modal">
+    <div class="modal-h"><h3 id="courseTitle">Add course</h3><button class="close" data-close>×</button></div>
+    <div class="modal-b">
+      <div class="field"><label>Course name *</label><input id="coName"></div>
+      <div class="grid2">
+        <div class="field"><label>Code</label><input id="coCode" placeholder="e.g. WAH"></div>
+        <div class="field"><label>Category</label><input id="coCat" list="catsList" placeholder="e.g. HSE"><datalist id="catsList"></datalist></div>
+      </div>
+      <div class="grid2">
+        <div class="field"><label>Validity (months)</label><input type="number" id="coValidity" min="0" placeholder="0 = never expires"><div class="hint">Expiry auto-calculated from completed date</div></div>
+        <div class="field"><label>Expiring window (days)</label><input type="number" id="coWindow" min="1" value="30"><div class="hint">Amber "expiring soon" lead time</div></div>
+      </div>
+    </div>
+    <div class="modal-f">
+      <button class="btn danger rt hide" id="courseDelete">Delete</button>
+      <button class="btn ghost" data-close>Cancel</button>
+      <button class="btn" id="courseSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const KEY = "decmil_tmr_v1";
+const uid = () => 'x'+Math.random().toString(36).slice(2,9);
+const todayISO = () => new Date().toISOString().slice(0,10);
+
+let DB = load();
+
+function blankDB(){ return {people:[], courses:[], requirements:{}, records:{}, meta:{version:1}}; }
+function load(){
+  try{ const raw = localStorage.getItem(KEY); if(raw) return normalize(JSON.parse(raw)); }catch(e){}
+  return blankDB();
+}
+function normalize(db){
+  db.people = db.people||[]; db.courses = db.courses||[];
+  db.requirements = db.requirements||{}; db.records = db.records||{}; db.meta = db.meta||{version:1};
+  return db;
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(DB)); flashSave(); }
+  catch(e){ toast("⚠ Could not save — storage full?"); }
+}
+function flashSave(){
+  const d = document.getElementById('saveDot');
+  d.innerHTML = '<i></i> Saved '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+}
+
+const rk = (pid,cid) => pid+"::"+cid;
+function addMonths(iso, months){
+  if(!iso) return "";
+  const d = new Date(iso+"T00:00:00");
+  const day = d.getDate();
+  d.setMonth(d.getMonth()+Number(months));
+  if(d.getDate()<day) d.setDate(0);
+  return d.toISOString().slice(0,10);
+}
+function daysBetween(aIso,bIso){
+  const a = new Date(aIso+"T00:00:00"), b = new Date(bIso+"T00:00:00");
+  return Math.round((a-b)/86400000);
+}
+function fmtDate(iso){
+  if(!iso) return "";
+  const d = new Date(iso+"T00:00:00");
+  return d.toLocaleDateString('en-AU',{day:'2-digit',month:'short',year:'numeric'});
+}
+function courseById(id){ return DB.courses.find(c=>c.id===id); }
+function personById(id){ return DB.people.find(p=>p.id===id); }
+function isRequired(role, courseId){
+  const list = DB.requirements[role||""];
+  return !!(list && list.includes(courseId));
+}
+const esc = s => (s==null?"":String(s)).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+function cellStatus(person, course){
+  const rec = DB.records[rk(person.id, course.id)];
+  const required = isRequired(person.role, course.id);
+  if(!rec || rec.status==="none" || (!rec.completedDate && rec.status!=="booked" && rec.status!=="exempt")){
+    return { st: required ? "gap" : "none", label: required ? "GAP" : "", rec, required };
+  }
+  if(rec.status==="exempt") return { st:"exempt", label:"N/A", rec, required };
+  if(rec.status==="booked") return { st:"booked", label:"BKD", date:rec.bookedDate, rec, required };
+  const expiry = rec.expiryDate || "";
+  if(!expiry) return { st:"valid", label:"✓", date:rec.completedDate, rec, required };
+  const win = (course.expiringWindowDays||30);
+  const dLeft = daysBetween(expiry, todayISO());
+  if(dLeft < 0) return { st:"expired", label:"EXP", date:expiry, dLeft, rec, required };
+  if(dLeft <= win) return { st:"expiring", label:dLeft+"d", date:expiry, dLeft, rec, required };
+  return { st:"valid", label:"✓", date:expiry, dLeft, rec, required };
+}
+
+const STLABEL = {valid:"Valid",expiring:"Expiring soon",expired:"Expired",booked:"Booked",gap:"Gap (required)",na:"N/A",exempt:"Exempt",none:"No record"};
+
+let toastT;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+const tabs = document.getElementById('tabs');
+tabs.addEventListener('click', e=>{
+  const b = e.target.closest('.tab'); if(!b) return;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t===b));
+  const v = b.dataset.view;
+  document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active', x.id==='view-'+v));
+  renderView(v);
+});
+function renderView(v){
+  if(v==='dashboard') renderDashboard();
+  else if(v==='matrix') renderMatrix();
+  else if(v==='alerts') renderAlerts();
+  else if(v==='people') renderPeople();
+  else if(v==='courses') renderCourses();
+  else if(v==='requirements') renderRequirements();
+}
+
+function computeStats(){
+  let required=0, valid=0, expiring=0, expired=0, gap=0, booked=0;
+  DB.people.forEach(p=>DB.courses.forEach(c=>{
+    const s = cellStatus(p,c);
+    if(s.required){
+      required++;
+      if(s.st==="valid") valid++;
+      else if(s.st==="expiring"){valid++; expiring++;}
+      else if(s.st==="expired") expired++;
+      else if(s.st==="gap") gap++;
+      else if(s.st==="booked") booked++;
+    }
+  }));
+  const compliance = required ? Math.round(valid/required*100) : 100;
+  return {required, valid, expiring, expired, gap, booked, compliance};
+}
+function renderDashboard(){
+  const s = computeStats();
+  const tiles = document.getElementById('dashTiles');
+  tiles.innerHTML = `
+    <div class="tile brand"><div class="k">Compliance</div><div class="v">${s.compliance}%</div><div class="s">${s.valid}/${s.required} required trainings valid</div></div>
+    <div class="tile bad"><div class="k">Expired</div><div class="v">${s.expired}</div><div class="s">need immediate action</div></div>
+    <div class="tile warn"><div class="k">Expiring soon</div><div class="v">${s.expiring}</div><div class="s">within window</div></div>
+    <div class="tile bad"><div class="k">Gaps</div><div class="v">${s.gap}</div><div class="s">required but not held</div></div>
+    <div class="tile info"><div class="k">Booked</div><div class="v">${s.booked}</div><div class="s">scheduled</div></div>
+    <div class="tile"><div class="k">People / Courses</div><div class="v">${DB.people.length}<span style="font-size:16px;color:var(--ink3)"> / ${DB.courses.length}</span></div><div class="s">on register</div></div>`;
+  updateAlertBadge(s);
+
+  const cc = document.getElementById('courseCompliance');
+  if(!DB.courses.length){ cc.innerHTML = emptyBlock("No courses yet","Add courses in the Courses tab."); }
+  else{
+    let rows = DB.courses.map(c=>{
+      let req=0,ok=0,exp=0,expd=0,g=0;
+      DB.people.forEach(p=>{ if(isRequired(p.role,c.id)){ req++; const st=cellStatus(p,c).st;
+        if(st==="valid"||st==="expiring") ok++; if(st==="expiring") exp++; if(st==="expired") expd++; if(st==="gap") g++; }});
+      const pct = req?Math.round(ok/req*100):100;
+      return {c,req,ok,exp,expd,g,pct};
+    }).filter(r=>r.req>0).sort((a,b)=>a.pct-b.pct);
+    if(!rows.length) cc.innerHTML = emptyBlock("No requirements set yet","Mark required courses per role (Requirements tab) to see compliance here.");
+    else cc.innerHTML = `<div class="tbl-scroll"><table><thead><tr><th>Course</th><th>Required by</th><th>Valid</th><th>Expiring</th><th>Expired</th><th>Gap</th><th style="min-width:160px">Compliance</th></tr></thead><tbody>${
+      rows.map(r=>`<tr><td><b>${esc(r.c.name)}</b> ${r.c.code?`<span class="tag">${esc(r.c.code)}</span>`:''}</td>
+        <td>${r.req}</td><td style="color:var(--green)">${r.ok}</td><td style="color:var(--amber)">${r.exp}</td>
+        <td style="color:var(--red)">${r.expd}</td><td style="color:var(--red)">${r.g}</td>
+        <td>${bar(r.pct)}</td></tr>`).join('')
+    }</tbody></table></div>`;
+  }
+
+  const rc = document.getElementById('roleCompliance');
+  const roles = [...new Set(DB.people.map(p=>p.role||"—"))];
+  if(!DB.people.length){ rc.innerHTML = emptyBlock("No people yet","Add people in the People tab, or load sample data."); }
+  else{
+    let rows = roles.map(role=>{
+      let req=0,ok=0; const ppl = DB.people.filter(p=>(p.role||"—")===role);
+      ppl.forEach(p=>DB.courses.forEach(c=>{ if(isRequired(p.role,c.id)){ req++; const st=cellStatus(p,c).st; if(st==="valid"||st==="expiring") ok++; }}));
+      return {role, n:ppl.length, pct: req?Math.round(ok/req*100):100, req};
+    }).sort((a,b)=>a.pct-b.pct);
+    rc.innerHTML = `<div class="tbl-scroll"><table><thead><tr><th>Role</th><th>People</th><th>Req. trainings</th><th style="min-width:160px">Compliance</th></tr></thead><tbody>${
+      rows.map(r=>`<tr><td><b>${esc(r.role)}</b></td><td>${r.n}</td><td>${r.req}</td><td>${r.req?bar(r.pct):'<span class="muted">—</span>'}</td></tr>`).join('')
+    }</tbody></table></div>`;
+  }
+}
+function bar(pct){
+  const col = pct>=90?'var(--green)':pct>=70?'var(--amber)':'var(--red)';
+  return `<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:8px;background:var(--greybg);border-radius:99px;overflow:hidden"><div style="width:${pct}%;height:100%;background:${col}"></div></div><b style="width:38px;text-align:right;color:${col}">${pct}%</b></div>`;
+}
+function emptyBlock(h,s){ return `<div class="empty"><h4>${esc(h)}</h4><div>${esc(s)}</div></div>`; }
+function updateAlertBadge(s){
+  s = s||computeStats();
+  const n = s.expired + s.expiring + s.gap;
+  const b = document.getElementById('alertBadge');
+  b.textContent = n; b.classList.toggle('hide', n===0);
+}
+
+function matrixFilters(){
+  return {
+    q: document.getElementById('mSearch').value.trim().toLowerCase(),
+    dept: document.getElementById('mDept').value,
+    role: document.getElementById('mRole').value,
+    status: document.getElementById('mStatus').value,
+    reqOnly: document.getElementById('mReqOnly').checked
+  };
+}
+function renderMatrix(){
+  syncFilterOptions();
+  renderLegend();
+  const f = matrixFilters();
+  const wrap = document.getElementById('matrixWrap');
+  if(!DB.people.length || !DB.courses.length){
+    wrap.innerHTML = emptyBlock("Nothing to show yet","Add people and courses, or load sample data from the Data tab.");
+    return;
+  }
+  let courses = DB.courses.slice();
+  if(f.reqOnly){
+    const anyReq = new Set();
+    Object.values(DB.requirements).forEach(list=>(list||[]).forEach(id=>anyReq.add(id)));
+    courses = courses.filter(c=>anyReq.has(c.id));
+  }
+  let people = DB.people.filter(p=>{
+    if(f.q && !(p.name||"").toLowerCase().includes(f.q) && !(p.employeeId||"").toLowerCase().includes(f.q)) return false;
+    if(f.dept && (p.department||"")!==f.dept) return false;
+    if(f.role && (p.role||"")!==f.role) return false;
+    if(f.status){
+      const has = courses.some(c=>{ const st=cellStatus(p,c).st; return f.status===st; });
+      if(!has) return false;
+    }
+    return true;
+  });
+  if(!people.length){ wrap.innerHTML = emptyBlock("No matches","Adjust your filters."); return; }
+
+  let html = '<table class="matrix"><thead><tr><th class="corner">Person &nbsp;·&nbsp; '+people.length+' shown</th>';
+  courses.forEach(c=>{
+    html += `<th title="${esc(c.name)}${c.validityMonths?' — valid '+c.validityMonths+' months':' — no expiry'}"><div class="rot">${esc(c.name)}<br><small>${c.code?esc(c.code)+' · ':''}${c.validityMonths?c.validityMonths+'mo':'perm'}</small></div></th>`;
+  });
+  html += '</tr></thead><tbody>';
+  people.forEach(p=>{
+    html += `<tr><th class="person"><div class="nm">${esc(p.name)}</div><div class="rl">${esc(p.role||'—')}${p.department?' · '+esc(p.department):''}</div></th>`;
+    courses.forEach(c=>{
+      const s = cellStatus(p,c);
+      const req = s.required;
+      html += `<td class="cell st-${s.st}${req?' req-row':''}" data-p="${p.id}" data-c="${c.id}" title="${esc(p.name)} — ${esc(c.name)}: ${STLABEL[s.st]||''}">`;
+      if(s.st!=='none'){
+        html += `<span class="pill">${esc(s.label)}</span>`;
+        if(s.date && (s.st==='expired'||s.st==='expiring'||s.st==='valid'||s.st==='booked')) html += `<span class="dt">${fmtDate(s.date)}</span>`;
+      } else html += '<span class="pill">·</span>';
+      html += '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  wrap.innerHTML = html;
+  wrap.querySelectorAll('td.cell').forEach(td=>td.addEventListener('click', ()=>openCell(td.dataset.p, td.dataset.c)));
+}
+function renderLegend(){
+  const items = [['valid','Valid'],['expiring','Expiring soon'],['expired','Expired'],['booked','Booked'],['gap','Gap (required)'],['exempt','Exempt / N/A']];
+  document.getElementById('legend').innerHTML = items.map(([k,l])=>`<span class="chip st-${k}">${l}</span>`).join('');
+}
+function syncFilterOptions(){
+  const depts = [...new Set(DB.people.map(p=>p.department).filter(Boolean))].sort();
+  const roles = [...new Set(DB.people.map(p=>p.role).filter(Boolean))].sort();
+  fillSelect('mDept', depts, 'All departments');
+  fillSelect('mRole', roles, 'All roles');
+}
+function fillSelect(id, arr, allLabel){
+  const sel = document.getElementById(id); const cur = sel.value;
+  sel.innerHTML = `<option value="">${allLabel}</option>` + arr.map(v=>`<option>${esc(v)}</option>`).join('');
+  if(arr.includes(cur)) sel.value = cur;
+}
+['mSearch','mDept','mRole','mStatus','mReqOnly'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', renderMatrix);
+});
+
+let editing = null;
+function openCell(pid, cid){
+  const p = personById(pid), c = courseById(cid); if(!p||!c) return;
+  editing = {pid, cid};
+  const rec = DB.records[rk(pid,cid)] || {};
+  document.getElementById('cellTitle').innerHTML = `${esc(p.name)} — ${esc(c.name)}`;
+  const st = rec.status || (rec.completedDate?'completed':'none');
+  document.querySelectorAll('input[name=cstatus]').forEach(r=>r.checked = (r.value===st));
+  document.getElementById('cCompleted').value = rec.completedDate||"";
+  document.getElementById('cExpiry').value = rec.expiryDate||"";
+  document.getElementById('cBooked').value = rec.bookedDate||"";
+  document.getElementById('cEvidence').value = rec.evidenceUrl||"";
+  document.getElementById('cNotes').value = rec.notes||"";
+  document.getElementById('cValidityHint').textContent = c.validityMonths ? `Valid ${c.validityMonths} months → expiry auto-fills` : 'No expiry for this course';
+  syncCellFields();
+  document.getElementById('cellOverlay').classList.add('show');
+}
+function syncCellFields(){
+  const st = document.querySelector('input[name=cstatus]:checked')?.value || 'none';
+  document.querySelectorAll('#statusPicker label').forEach(l=>l.classList.toggle('on', l.querySelector('input').checked));
+  document.getElementById('dateFields').style.display = st==='completed'?'grid':'none';
+  document.getElementById('bookedField').style.display = st==='booked'?'block':'none';
+}
+document.querySelectorAll('input[name=cstatus]').forEach(r=>r.addEventListener('change', syncCellFields));
+document.getElementById('cCompleted').addEventListener('change', e=>{
+  const c = courseById(editing.cid);
+  if(c && c.validityMonths && e.target.value){
+    document.getElementById('cExpiry').value = addMonths(e.target.value, c.validityMonths);
+  }
+});
+document.getElementById('cellSave').addEventListener('click', ()=>{
+  const st = document.querySelector('input[name=cstatus]:checked')?.value || 'none';
+  const key = rk(editing.pid, editing.cid);
+  if(st==='none'){ delete DB.records[key]; }
+  else{
+    const rec = { status: st };
+    if(st==='completed'){ rec.completedDate = document.getElementById('cCompleted').value; rec.expiryDate = document.getElementById('cExpiry').value; }
+    if(st==='booked'){ rec.bookedDate = document.getElementById('cBooked').value; }
+    rec.evidenceUrl = document.getElementById('cEvidence').value.trim();
+    rec.notes = document.getElementById('cNotes').value.trim();
+    DB.records[key] = rec;
+  }
+  save(); closeModals(); renderMatrix(); toast("Record updated");
+});
+
+function collectAlerts(win){
+  const expired=[], expiring=[], gaps=[];
+  DB.people.forEach(p=>DB.courses.forEach(c=>{
+    const s = cellStatus(p,c);
+    if(s.st==='expired') expired.push({p,c,s});
+    else if(s.st==='valid' || s.st==='expiring'){
+      if(s.date){ const d = daysBetween(s.date, todayISO()); if(d>=0 && d<=win) expiring.push({p,c,s,d}); }
+    }
+    if(s.st==='gap') gaps.push({p,c,s});
+  }));
+  expired.sort((a,b)=> (a.s.date||"").localeCompare(b.s.date||""));
+  expiring.sort((a,b)=> a.d-b.d);
+  gaps.sort((a,b)=> (a.p.name||"").localeCompare(b.p.name||""));
+  return {expired, expiring, gaps};
+}
+function renderAlerts(){
+  const win = Number(document.getElementById('aWindow').value);
+  const {expired, expiring, gaps} = collectAlerts(win);
+  document.getElementById('expiredCount').textContent = expired.length+" item(s)";
+  document.getElementById('expiringCount').textContent = expiring.length+" item(s)";
+  document.getElementById('gapCount').textContent = gaps.length+" item(s)";
+  document.getElementById('expiredList').innerHTML = alertTable(expired, 'expired');
+  document.getElementById('expiringList').innerHTML = alertTable(expiring, 'expiring');
+  document.getElementById('gapList').innerHTML = alertTable(gaps, 'gap');
+}
+function alertTable(list, kind){
+  if(!list.length) return `<div class="empty" style="padding:24px">Nothing here — all clear ✔</div>`;
+  const rows = list.map(({p,c,s})=>{
+    const when = s.date;
+    const dLeft = when ? daysBetween(when, todayISO()) : null;
+    let whenCell = when ? fmtDate(when) : '—';
+    if(kind==='expired' && dLeft!=null) whenCell += ` <span class="tag" style="color:var(--red)">${-dLeft}d ago</span>`;
+    if(kind==='expiring' && dLeft!=null) whenCell += ` <span class="tag" style="color:var(--amber)">in ${dLeft}d</span>`;
+    return `<tr class="clk" data-p="${p.id}" data-c="${c.id}">
+      <td><b>${esc(p.name)}</b><div class="muted" style="font-size:11.5px">${esc(p.role||'')}${p.department?' · '+esc(p.department):''}</div></td>
+      <td>${esc(c.name)} ${c.code?`<span class="tag">${esc(c.code)}</span>`:''}</td>
+      <td>${whenCell}</td>
+      <td><button class="btn ghost sm">Update</button></td></tr>`;
+  }).join('');
+  return `<div class="tbl-scroll"><table><thead><tr><th>Person</th><th>Course</th><th>${kind==='gap'?'Required':'Expiry'}</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+document.getElementById('aWindow').addEventListener('change', renderAlerts);
+document.getElementById('view-alerts').addEventListener('click', e=>{
+  const tr = e.target.closest('tr.clk'); if(!tr) return;
+  openCell(tr.dataset.p, tr.dataset.c);
+});
+
+function renderPeople(){
+  const q = document.getElementById('pSearch').value.trim().toLowerCase();
+  const tbl = document.getElementById('peopleTbl');
+  let ppl = DB.people.filter(p=> !q || (p.name||'').toLowerCase().includes(q) || (p.role||'').toLowerCase().includes(q) || (p.department||'').toLowerCase().includes(q));
+  ppl.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  if(!DB.people.length){ tbl.innerHTML = ''; tbl.closest('.card').querySelector('.tbl-scroll').innerHTML = emptyBlock("No people yet","Add a person or load sample data."); return; }
+  tbl.innerHTML = `<thead><tr><th>Name</th><th>Role</th><th>Department</th><th>Employee ID</th><th>Required</th><th></th></tr></thead><tbody>${
+    ppl.map(p=>{
+      let req=0,ok=0; DB.courses.forEach(c=>{ if(isRequired(p.role,c.id)){req++; const st=cellStatus(p,c).st; if(st==='valid'||st==='expiring') ok++; }});
+      return `<tr><td><b>${esc(p.name)}</b></td><td>${esc(p.role||'—')}</td><td>${esc(p.department||'—')}</td><td class="muted">${esc(p.employeeId||'—')}</td>
+      <td>${req?`${ok}/${req}`:'<span class="muted">—</span>'}</td>
+      <td class="row-actions"><button class="btn ghost sm" data-edit="${p.id}">Edit</button><button class="btn danger sm" data-del="${p.id}">Del</button></td></tr>`;
+    }).join('')
+  }</tbody>`;
+  tbl.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openPerson(b.dataset.edit)));
+  tbl.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>delPerson(b.dataset.del)));
+}
+document.getElementById('pSearch').addEventListener('input', renderPeople);
+document.getElementById('addPerson').addEventListener('click', ()=>openPerson(null));
+let editingPerson = null;
+function openPerson(id){
+  editingPerson = id;
+  const p = id?personById(id):{};
+  document.getElementById('personTitle').textContent = id?'Edit person':'Add person';
+  document.getElementById('pName').value = p.name||'';
+  document.getElementById('pRole').value = p.role||'';
+  document.getElementById('pDept').value = p.department||'';
+  document.getElementById('pEmpId').value = p.employeeId||'';
+  refreshDatalists();
+  document.getElementById('personOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('pName').focus(),50);
+}
+document.getElementById('personSave').addEventListener('click', ()=>{
+  const name = document.getElementById('pName').value.trim();
+  if(!name){ toast("Name is required"); return; }
+  const data = { name, role: document.getElementById('pRole').value.trim(),
+    department: document.getElementById('pDept').value.trim(), employeeId: document.getElementById('pEmpId').value.trim() };
+  if(editingPerson){ Object.assign(personById(editingPerson), data); }
+  else{ DB.people.push({id:uid(), ...data}); }
+  save(); closeModals(); renderPeople(); toast("Person saved");
+});
+function delPerson(id){
+  const p = personById(id); if(!p) return;
+  if(!confirm(`Delete ${p.name} and all their records?`)) return;
+  DB.people = DB.people.filter(x=>x.id!==id);
+  Object.keys(DB.records).forEach(k=>{ if(k.startsWith(id+"::")) delete DB.records[k]; });
+  save(); renderPeople(); toast("Person deleted");
+}
+
+function renderCourses(){
+  const q = document.getElementById('cSearch').value.trim().toLowerCase();
+  const tbl = document.getElementById('coursesTbl');
+  let cs = DB.courses.filter(c=> !q || (c.name||'').toLowerCase().includes(q) || (c.code||'').toLowerCase().includes(q) || (c.category||'').toLowerCase().includes(q));
+  cs.sort((a,b)=>(a.category||'').localeCompare(b.category||'')||(a.name||'').localeCompare(b.name||''));
+  if(!DB.courses.length){ tbl.innerHTML=''; tbl.closest('.card').querySelector('.tbl-scroll').innerHTML = emptyBlock("No courses yet","Add a course or load sample data."); return; }
+  tbl.innerHTML = `<thead><tr><th>Course</th><th>Code</th><th>Category</th><th>Validity</th><th>Window</th><th>Held</th><th></th></tr></thead><tbody>${
+    cs.map(c=>{
+      const held = DB.people.filter(p=>{const st=cellStatus(p,c).st; return st==='valid'||st==='expiring';}).length;
+      return `<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.code||'—')}</td><td>${c.category?`<span class="tag">${esc(c.category)}</span>`:'—'}</td>
+      <td>${c.validityMonths?c.validityMonths+' mo':'<span class="muted">never</span>'}</td><td class="muted">${c.expiringWindowDays||30}d</td>
+      <td>${held}</td>
+      <td class="row-actions"><button class="btn ghost sm" data-edit="${c.id}">Edit</button></td></tr>`;
+    }).join('')
+  }</tbody>`;
+  tbl.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openCourse(b.dataset.edit)));
+}
+document.getElementById('cSearch').addEventListener('input', renderCourses);
+document.getElementById('addCourse').addEventListener('click', ()=>openCourse(null));
+let editingCourse = null;
+function openCourse(id){
+  editingCourse = id;
+  const c = id?courseById(id):{expiringWindowDays:30};
+  document.getElementById('courseTitle').textContent = id?'Edit course':'Add course';
+  document.getElementById('coName').value = c.name||'';
+  document.getElementById('coCode').value = c.code||'';
+  document.getElementById('coCat').value = c.category||'';
+  document.getElementById('coValidity').value = c.validityMonths||'';
+  document.getElementById('coWindow').value = c.expiringWindowDays||30;
+  document.getElementById('courseDelete').classList.toggle('hide', !id);
+  refreshDatalists();
+  document.getElementById('courseOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('coName').focus(),50);
+}
+document.getElementById('courseSave').addEventListener('click', ()=>{
+  const name = document.getElementById('coName').value.trim();
+  if(!name){ toast("Course name is required"); return; }
+  const data = { name, code: document.getElementById('coCode').value.trim(),
+    category: document.getElementById('coCat').value.trim(),
+    validityMonths: Number(document.getElementById('coValidity').value)||0,
+    expiringWindowDays: Number(document.getElementById('coWindow').value)||30 };
+  if(editingCourse){ Object.assign(courseById(editingCourse), data); }
+  else{ DB.courses.push({id:uid(), ...data}); }
+  save(); closeModals(); renderCourses(); toast("Course saved");
+});
+document.getElementById('courseDelete').addEventListener('click', ()=>{
+  const c = courseById(editingCourse); if(!c) return;
+  if(!confirm(`Delete course "${c.name}" and all its records?`)) return;
+  DB.courses = DB.courses.filter(x=>x.id!==editingCourse);
+  Object.keys(DB.records).forEach(k=>{ if(k.endsWith("::"+editingCourse)) delete DB.records[k]; });
+  Object.keys(DB.requirements).forEach(r=>{ DB.requirements[r] = (DB.requirements[r]||[]).filter(id=>id!==editingCourse); });
+  save(); closeModals(); renderCourses(); toast("Course deleted");
+});
+
+function renderRequirements(){
+  const tbl = document.getElementById('reqTbl');
+  const roles = [...new Set(DB.people.map(p=>p.role||'—').filter(r=>r&&r!=='—'))].sort();
+  if(!roles.length || !DB.courses.length){
+    tbl.innerHTML=''; tbl.closest('.matrix-wrap').innerHTML = emptyBlock("Need roles and courses","Add people with roles, and some courses, then set requirements here.");
+    return;
+  }
+  let html = '<thead><tr><th class="person" style="position:sticky;left:0;background:var(--panel2)">Role \\ Course</th>';
+  DB.courses.forEach(c=>html += `<th title="${esc(c.name)}"><div class="rot">${esc(c.name)}</div></th>`);
+  html += '</tr></thead><tbody>';
+  roles.forEach(role=>{
+    html += `<tr><th class="person">${esc(role)}<div class="rl">${DB.people.filter(p=>(p.role||'—')===role).length} people</div></th>`;
+    DB.courses.forEach(c=>{
+      const on = isRequired(role, c.id);
+      html += `<td class="rc" data-role="${esc(role)}" data-c="${c.id}">${on?'<span class="tick">✔</span>':'<span class="dash">·</span>'}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  tbl.innerHTML = html;
+  tbl.querySelectorAll('td.rc').forEach(td=>td.addEventListener('click',()=>{
+    const role = td.dataset.role, cid = td.dataset.c;
+    DB.requirements[role] = DB.requirements[role]||[];
+    const i = DB.requirements[role].indexOf(cid);
+    if(i>=0) DB.requirements[role].splice(i,1); else DB.requirements[role].push(cid);
+    save(); renderRequirements();
+  }));
+}
+
+function refreshDatalists(){
+  const roles = [...new Set(DB.people.map(p=>p.role).filter(Boolean))].sort();
+  const depts = [...new Set(DB.people.map(p=>p.department).filter(Boolean))].sort();
+  const cats = [...new Set(DB.courses.map(c=>c.category).filter(Boolean))].sort();
+  document.getElementById('rolesList').innerHTML = roles.map(r=>`<option>${esc(r)}</option>`).join('');
+  document.getElementById('deptsList').innerHTML = depts.map(r=>`<option>${esc(r)}</option>`).join('');
+  document.getElementById('catsList').innerHTML = cats.map(r=>`<option>${esc(r)}</option>`).join('');
+}
+
+function closeModals(){ document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('show')); }
+document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click', closeModals));
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click', e=>{ if(e.target===o) closeModals(); }));
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModals(); });
+
+function applyTheme(t){ document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t==='dark'?'☀ Theme':'🌙 Theme';
+  localStorage.setItem('tmr_theme', t); }
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');
+});
+applyTheme(localStorage.getItem('tmr_theme') || 'light');
+
+document.getElementById('helpBtn').addEventListener('click', ()=>{
+  alert("DECMIL Training Matrix Register\n\n• People — your workforce (name, role, department).\n• Courses — trainings/tickets with a validity period (months). 0 = never expires. Use 'Apply standard validity' to set sensible defaults.\n• Requirements — tick which courses each role must hold; missing ones show as GAP. Use 'Apply baseline template' to seed the universal site items.\n• Matrix — click any cell to record a completion, booking, exemption, evidence link & notes. Expiry auto-calculates.\n• Dashboard & Alerts — see compliance %, what's expired/expiring, and gaps.\n• Data — export a JSON backup or CSV; import people/records from CSV; one-click DECMIL quick setup.\n\nAll data is saved in THIS browser only. Export a backup regularly.");
+});
+
+/* ---------- STANDARD VALIDITY DEFAULTS ---------- */
+// returns months, or null to leave unchanged
+function defaultValidityFor(name){
+  const l = (name||'').toLowerCase();
+  const has = (...xs)=>xs.some(x=>l.includes(x));
+  // trade qualifications never expire
+  if(has('certificate ii','certificate iii','cert ii','cert iii','trade certificate','diploma','statement of attainment','usi')) return 0;
+  if(has('first aid')) return 36;
+  if(has('cpr')) return 12;
+  // high-risk work licences & plant licences renew every 5 years
+  if(has('high risk work licence','hrwl')) return 60;
+  if(l.includes('licence') && has('crane','rigging','dogman','forklift','ewp','elevated work platform','confined space','working @ heights','working at heights','scaffolding','vehicle mounted crane')) return 60;
+  // VOCs / competency verifications
+  if(has('working @ heights','working at heights','heights voc')) return 24;
+  if(has('ewp','elevated work platform','scissor lift')) return 24;
+  if(has('forklift')) return 24;
+  if(has('crane','rigging','dogman')) return 24;
+  if(has('confined space')) return 24;
+  if(has('atmospheric gas','gas testing')) return 24;
+  if(has('fire fighting','firefighting','fire-fighting')) return 24;
+  // periodic site items
+  if(has('drug','alcohol','d&a')) return 12;
+  if(has('induction')) return 12;
+  if(has('isolation')) return 12;
+  if(has('light vehicle','steep terrain')) return 12;
+  if(has('bus','coaster')) return 24;
+  // generic plant operate / test & move competencies
+  if(has('operate','test & move','test and move',' voc')) return 24;
+  return null; // leave as-is
+}
+function applyStandardValidity(){
+  let n=0;
+  DB.courses.forEach(c=>{
+    if(c.validityMonths && c.validityMonths>0) return; // don't override user-set
+    const m = defaultValidityFor(c.name);
+    if(m!=null && m>0){ c.validityMonths = m;
+      if(m>=60) c.expiringWindowDays = Math.max(c.expiringWindowDays||0,90);
+      else c.expiringWindowDays = Math.max(c.expiringWindowDays||0,60);
+      n++; }
+  });
+  // recompute expiry on existing completed records whose course now expires
+  let rec=0;
+  Object.entries(DB.records).forEach(([k,r])=>{
+    const cid = k.split('::')[1]; const c = courseById(cid);
+    if(c && c.validityMonths>0 && r.status==='completed' && r.completedDate && !r.expiryDate){
+      r.expiryDate = addMonths(r.completedDate, c.validityMonths); rec++;
+    }
+  });
+  return {courses:n, records:rec};
+}
+
+/* ---------- BASELINE REQUIREMENTS TEMPLATE ---------- */
+// universal site competencies required for everyone
+function baselineCourseIds(){
+  const ids=[];
+  DB.courses.forEach(c=>{
+    const l=c.name.toLowerCase();
+    if(l.includes('induction') || l.includes('drug')||l.includes('alcohol') ||
+       l.includes('isolation') || l.includes('light vehicle')) ids.push(c.id);
+  });
+  return [...new Set(ids)];
+}
+function applyBaselineRequirements(){
+  const ids = baselineCourseIds();
+  if(!ids.length) return {roles:0, courses:0};
+  const roles = [...new Set(DB.people.map(p=>p.role).filter(r=>r&&r!=='—'))];
+  roles.forEach(role=>{
+    const set = new Set(DB.requirements[role]||[]);
+    ids.forEach(id=>set.add(id));
+    DB.requirements[role]=[...set];
+  });
+  return {roles:roles.length, courses:ids.length};
+}
+
+function doApplyValidity(){
+  if(!DB.courses.length){ toast("No courses to update"); return; }
+  const r = applyStandardValidity();
+  save(); toast(`Validity set on ${r.courses} course(s); ${r.records} expiry date(s) calculated`);
+  renderView(currentView());
+}
+function doApplyReq(){
+  const ids = baselineCourseIds();
+  if(!ids.length){ toast("No matching universal competencies found (Induction / Drug&Alcohol / Isolation / Light Vehicle)"); return; }
+  const r = applyBaselineRequirements();
+  save(); toast(`Baseline requirements applied to ${r.roles} role(s)`);
+  renderView(currentView());
+}
+document.getElementById('applyValidity').addEventListener('click', ()=>{ if(confirm('Set standard validity periods on courses that have none yet? Courses you have already set are left unchanged.')) doApplyValidity(); });
+document.getElementById('applyValidity2').addEventListener('click', ()=>{ if(confirm('Set standard validity periods on courses that have none yet?')) doApplyValidity(); });
+document.getElementById('applyReqTemplate').addEventListener('click', ()=>{ if(confirm('Mark the universal site competencies (Induction, Drug & Alcohol, Isolation, Light Vehicle) as required for every role?')) doApplyReq(); });
+document.getElementById('applyReqTemplate2').addEventListener('click', ()=>{ if(confirm('Mark the universal site competencies as required for every role?')) doApplyReq(); });
+document.getElementById('applyAll').addEventListener('click', ()=>{
+  if(!DB.courses.length){ toast("Import or add your register first"); return; }
+  if(!confirm('Apply standard validity periods AND baseline role requirements? Existing per-course settings are kept; this only fills in blanks.')) return;
+  const v = applyStandardValidity(); const q = applyBaselineRequirements();
+  save(); toast(`Done — validity on ${v.courses} courses, requirements on ${q.roles} roles`);
+  renderView(currentView());
+});
+
+function csvCell(v){ v = v==null?'':String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+function toCSV(rows){ return rows.map(r=>r.map(csvCell).join(',')).join('\r\n'); }
+function download(name, text, type){
+  const blob = new Blob([text], {type:type||'text/plain'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(a.href);
+}
+function parseCSV(text){
+  const rows=[]; let row=[], cur='', q=false;
+  for(let i=0;i<text.length;i++){ const ch=text[i];
+    if(q){ if(ch==='"'){ if(text[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+    else{ if(ch==='"') q=true; else if(ch===','){ row.push(cur); cur=''; }
+      else if(ch==='\n'){ row.push(cur); rows.push(row); row=[]; cur=''; }
+      else if(ch==='\r'){} else cur+=ch; } }
+  if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+  return rows.filter(r=>r.some(c=>c.trim()!==''));
+}
+function exportRegister(){
+  const rows = [['Name','Role','Department','EmployeeID','Course','Code','Category','Status','Completed','Expiry','DaysLeft','Required','Evidence','Notes']];
+  DB.people.forEach(p=>DB.courses.forEach(c=>{
+    const s = cellStatus(p,c); const rec = s.rec||{};
+    if(s.st==='none' && !s.required) return;
+    const dleft = (s.date && (s.st==='expired'||s.st==='expiring'||s.st==='valid')) ? daysBetween(s.date, todayISO()) : '';
+    rows.push([p.name,p.role,p.department,p.employeeId,c.name,c.code,c.category,STLABEL[s.st]||s.st,
+      rec.completedDate||'', rec.expiryDate||s.date||'', dleft, s.required?'Yes':'No', rec.evidenceUrl||'', rec.notes||'']);
+  }));
+  download('training-register-'+todayISO()+'.csv', toCSV(rows), 'text/csv');
+  toast("Register exported");
+}
+document.getElementById('expRegister').addEventListener('click', exportRegister);
+document.getElementById('mExport').addEventListener('click', exportRegister);
+
+function exportGrid(){
+  const head = ['Name','Role','Department','EmployeeID', ...DB.courses.map(c=>c.name)];
+  const rows = [head];
+  DB.people.forEach(p=>{
+    const row = [p.name, p.role, p.department, p.employeeId];
+    DB.courses.forEach(c=>{
+      const s = cellStatus(p,c); const rec = s.rec||{};
+      let cell = '';
+      if(s.st==='valid'||s.st==='expiring'||s.st==='expired') cell = rec.completedDate || rec.expiryDate || (rec.notes||'✓');
+      else if(s.st==='booked') cell = 'BOOKED '+(rec.bookedDate||'');
+      else if(s.st==='exempt') cell = 'N/A';
+      else if(s.st==='gap') cell = 'REQUIRED';
+      if(!cell && rec && rec.notes) cell = rec.notes;
+      row.push(cell);
+    });
+    rows.push(row);
+  });
+  download('training-matrix-grid-'+todayISO()+'.csv', toCSV(rows), 'text/csv');
+  toast("Grid exported");
+}
+document.getElementById('expGrid').addEventListener('click', exportGrid);
+document.getElementById('mExportWide').addEventListener('click', exportGrid);
+
+document.getElementById('aExport').addEventListener('click', ()=>{
+  const win = Number(document.getElementById('aWindow').value);
+  const {expired, expiring, gaps} = collectAlerts(win);
+  const rows = [['Priority','Name','Role','Department','Course','Detail','Date']];
+  expired.forEach(({p,c,s})=>rows.push(['EXPIRED',p.name,p.role,p.department,c.name, (-daysBetween(s.date,todayISO()))+' days ago', s.date]));
+  expiring.forEach(({p,c,s,d})=>rows.push(['EXPIRING',p.name,p.role,p.department,c.name,'in '+d+' days', s.date]));
+  gaps.forEach(({p,c})=>rows.push(['GAP',p.name,p.role,p.department,c.name,'required, not held','']));
+  download('training-actions-'+todayISO()+'.csv', toCSV(rows), 'text/csv');
+  toast("Action list exported");
+});
+
+document.getElementById('expJson').addEventListener('click', ()=>{
+  download('training-matrix-backup-'+todayISO()+'.json', JSON.stringify(DB,null,2), 'application/json');
+  toast("Backup exported");
+});
+document.getElementById('impJsonBtn').addEventListener('click', ()=>document.getElementById('impJson').click());
+document.getElementById('impJson').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{ try{ const d = normalize(JSON.parse(r.result));
+    if(!confirm('Replace ALL current data with this backup?')) return;
+    DB = d; save(); renderView(currentView()); toast("Backup restored"); }
+    catch(err){ toast("Invalid JSON file"); } };
+  r.readAsText(f); e.target.value='';
+});
+
+function findPersonByRef(ref){
+  ref = (ref||'').trim().toLowerCase();
+  return DB.people.find(p=>(p.employeeId||'').toLowerCase()===ref) || DB.people.find(p=>(p.name||'').toLowerCase()===ref);
+}
+function findCourseByRef(ref){
+  ref = (ref||'').trim().toLowerCase();
+  return DB.courses.find(c=>(c.code||'').toLowerCase()===ref) || DB.courses.find(c=>(c.name||'').toLowerCase()===ref);
+}
+function hdrIndex(header){ const m={}; header.forEach((h,i)=>m[h.trim().toLowerCase().replace(/[^a-z]/g,'')]=i); return m; }
+
+document.getElementById('impPeopleBtn').addEventListener('click', ()=>document.getElementById('impPeople').click());
+document.getElementById('impPeople').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{ const rows = parseCSV(r.result); if(rows.length<2){toast("Empty CSV");return;}
+    const h = hdrIndex(rows[0]); let n=0;
+    for(let i=1;i<rows.length;i++){ const row=rows[i];
+      const name = (row[h.name]||'').trim(); if(!name) continue;
+      const empId = (row[h.employeeid]||'').trim();
+      let ex = empId?findPersonByRef(empId):null; if(!ex) ex = DB.people.find(p=>(p.name||'').toLowerCase()===name.toLowerCase());
+      const data = {name, role:(row[h.role]||'').trim(), department:(row[h.department]||'').trim(), employeeId:empId};
+      if(ex) Object.assign(ex,data); else DB.people.push({id:uid(),...data}); n++;
+    }
+    save(); renderView(currentView()); toast(n+" people imported"); };
+  r.readAsText(f); e.target.value='';
+});
+document.getElementById('impRecordsBtn').addEventListener('click', ()=>document.getElementById('impRecords').click());
+document.getElementById('impRecords').addEventListener('change', e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{ const rows = parseCSV(r.result); if(rows.length<2){toast("Empty CSV");return;}
+    const h = hdrIndex(rows[0]); let n=0, miss=0;
+    for(let i=1;i<rows.length;i++){ const row=rows[i];
+      const p = findPersonByRef(row[h.employeeid]) || findPersonByRef(row[h.name]);
+      const c = findCourseByRef(row[h.coursecode]) || findCourseByRef(row[h.coursename]) || findCourseByRef(row[h.course]);
+      if(!p||!c){ miss++; continue; }
+      const completed = (row[h.completeddate]||row[h.completed]||'').trim();
+      const rec = { status:'completed', completedDate:completed,
+        expiryDate: (row[h.expiry]||row[h.expirydate]||'').trim() || (c.validityMonths&&completed?addMonths(completed,c.validityMonths):''),
+        evidenceUrl:(row[h.evidenceurl]||row[h.evidence]||'').trim(), notes:(row[h.notes]||'').trim() };
+      DB.records[rk(p.id,c.id)] = rec; n++;
+    }
+    save(); renderView(currentView()); toast(n+" records imported"+(miss?`, ${miss} unmatched`:'')); };
+  r.readAsText(f); e.target.value='';
+});
+
+function currentView(){ return document.querySelector('.tab.active').dataset.view; }
+
+document.getElementById('loadSample').addEventListener('click', ()=>{
+  if(DB.people.length && !confirm('Load sample data on top of what you have?')) return;
+  loadSample(); save(); renderView(currentView()); toast("Sample data loaded");
+});
+document.getElementById('resetAll').addEventListener('click', ()=>{
+  if(!confirm('Erase ALL data and start empty? Export a backup first if unsure.')) return;
+  DB = blankDB(); save(); renderView(currentView()); toast("Reset complete");
+});
+function loadSample(){
+  const t = todayISO();
+  const cs = [
+    {id:'c_wa', name:'Working at Heights', code:'WAH', category:'HSE', validityMonths:24, expiringWindowDays:60},
+    {id:'c_cs', name:'Confined Space Entry', code:'CSE', category:'HSE', validityMonths:24, expiringWindowDays:60},
+    {id:'c_wc', name:'White Card (Construction Induction)', code:'WC', category:'HSE', validityMonths:0, expiringWindowDays:30},
+    {id:'c_fa', name:'First Aid', code:'FA', category:'HSE', validityMonths:36, expiringWindowDays:60},
+    {id:'c_ep', name:'EWP (Elevated Work Platform)', code:'EWP', category:'Plant', validityMonths:60, expiringWindowDays:90},
+    {id:'c_fl', name:'Forklift Licence', code:'LF', category:'Plant', validityMonths:0, expiringWindowDays:30},
+    {id:'c_dr', name:'Drug & Alcohol Awareness', code:'D&A', category:'Compliance', validityMonths:12, expiringWindowDays:30},
+    {id:'c_si', name:'Site Induction', code:'SI', category:'Compliance', validityMonths:12, expiringWindowDays:30},
+  ];
+  const ppl = [
+    {id:'p1', name:'James Carter', role:'Supervisor', department:'Civil', employeeId:'DEC001'},
+    {id:'p2', name:'Sophie Nguyen', role:'Site Engineer', department:'Civil', employeeId:'DEC002'},
+    {id:'p3', name:'Liam O’Brien', role:'Labourer', department:'Civil', employeeId:'DEC003'},
+    {id:'p4', name:'Aisha Khan', role:'Plant Operator', department:'Plant', employeeId:'DEC004'},
+    {id:'p5', name:'Marcus Webb', role:'Labourer', department:'Structures', employeeId:'DEC005'},
+    {id:'p6', name:'Chloe Adams', role:'HSE Advisor', department:'HSE', employeeId:'DEC006'},
+  ];
+  const req = {
+    'Supervisor':['c_wc','c_si','c_dr','c_fa','c_wa'],
+    'Site Engineer':['c_wc','c_si','c_dr','c_wa','c_cs'],
+    'Labourer':['c_wc','c_si','c_dr','c_wa'],
+    'Plant Operator':['c_wc','c_si','c_dr','c_ep','c_fl'],
+    'HSE Advisor':['c_wc','c_si','c_dr','c_fa','c_wa','c_cs'],
+  };
+  const recs = {};
+  const set=(pid,cid,completed,extra)=>{ const c=cs.find(x=>x.id===cid);
+    recs[rk(pid,cid)] = Object.assign({status:'completed', completedDate:completed,
+      expiryDate: c.validityMonths?addMonths(completed,c.validityMonths):''}, extra||{}); };
+  set('p1','c_wc','2019-03-11'); set('p1','c_si','2025-08-01'); set('p1','c_dr','2025-09-15');
+  set('p1','c_fa','2023-06-01'); set('p1','c_wa','2024-02-20');
+  set('p2','c_wc','2021-01-05'); set('p2','c_si','2025-07-10'); set('p2','c_dr','2024-06-01');
+  set('p2','c_wa','2023-11-01');
+  set('p3','c_wc','2022-09-01'); set('p3','c_si','2025-06-20',{evidenceUrl:'https://example.com/cert/liam-si.pdf'});
+  set('p3','c_dr','2025-10-01');
+  set('p4','c_wc','2020-05-14'); set('p4','c_si','2025-08-30'); set('p4','c_dr','2025-11-01');
+  set('p4','c_ep','2022-04-01'); set('p4','c_fl','2018-07-22');
+  set('p5','c_wc','2023-02-01'); set('p5','c_dr','2024-05-01');
+  set('p6','c_wc','2017-08-08'); set('p6','c_si','2025-09-01'); set('p6','c_dr','2025-12-01');
+  set('p6','c_fa','2024-01-15'); set('p6','c_wa','2024-08-01'); set('p6','c_cs','2024-09-10');
+  recs[rk('p1','c_fa')].completedDate = addMonths(t,-35); recs[rk('p1','c_fa')].expiryDate = addMonths(t,1);
+  recs[rk('p3','c_wa')] = {status:'booked', bookedDate: addMonths(t,1)};
+
+  DB.courses = DB.courses.concat(cs.filter(c=>!courseById(c.id)));
+  DB.people = DB.people.concat(ppl.filter(p=>!personById(p.id)));
+  Object.assign(DB.requirements, req);
+  Object.assign(DB.records, recs);
+}
+
+flashSave();
+renderDashboard();
+</script>
+</body>
+</html>

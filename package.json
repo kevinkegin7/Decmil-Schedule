@@ -8,7 +8,8 @@
   "scripts": {
     "test": "node src/take5-role-classification.test.js && node src/take5-site-report.test.js && node src/take5-visuals.test.js && node test/run-browser-tests.js",
     "test:unit": "node src/take5-role-classification.test.js && node src/take5-site-report.test.js && node src/take5-visuals.test.js",
-    "report": "node tools/take5-report.js"
+    "report": "node tools/take5-report.js",
+    "build:page": "node tools/build-report-page.js"
   },
   "repository": {
     "type": "git",

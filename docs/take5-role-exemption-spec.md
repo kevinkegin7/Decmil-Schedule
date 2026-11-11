@@ -72,6 +72,15 @@ corrects itself.**
 
 ## 3. Classification rules
 
+> **Superseded for 10265 (Nov 2026).** The team's own rules, transcribed from their
+> register workbook, are now the source of truth: `config/site-10265.json`, applied by
+> `src/take5-site-report.js`. They differ from the role-only patterns below in three ways
+> that matter: anyone whose role *or crew* contains "site office", "corporate" or
+> "office staff" is Not required; surveyors (and two named people) are **Optional** and
+> count only on days they have Take 5s; and "trainer", "coordinator", "planner" are
+> exempt too. The server-side implementation in §4 should read the same JSON rather
+> than hard-code the regex. See `docs/take5-daily-report-findings.md`.
+
 The personnel record exposes **no occupation category and no staff/field
 flag** — only a free-text `Role` string. Confirmed against the live payload:
 

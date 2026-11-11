@@ -1,0 +1,2309 @@
+{
+ "source": "Email Report sheet of 'Decmil Take 5 and KPI register.xlsm' as saved on 8 Nov 2026 (report date 8/11/26). Pasted people (names replaced except the two named optional people) with the sheet's own computed columns, for conformance testing.",
+ "reportDate": "2026-11-08",
+ "minPerDay": 3,
+ "expectedTotals": {
+  "Maintenance": {
+   "crewSize": 16,
+   "take5s": 44,
+   "ratio": "2.75:1",
+   "zeros": 2
+  },
+  "Operations": {
+   "crewSize": 77,
+   "take5s": 29,
+   "ratio": "0.38:1",
+   "zeros": 67
+  },
+  "zeroCount": 69,
+  "otherTake5s": 3
+ },
+ "rows": [
+  {
+   "Name": "ER Person 001",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - B Crew",
+   "Company": "BOYLE CIVIL CONTRACTING PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 002",
+   "Role": "Supervisor - Workshop",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 003",
+   "Role": "Engineer - Project",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 004",
+   "Role": "Labourer",
+   "Crew": "Adhoc",
+   "Company": "FMS GROUP OPERATIONS TPCM PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 005",
+   "Role": "Engineer - Project",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 006",
+   "Role": "Labourer",
+   "Crew": "Adhoc",
+   "Company": "B BROWN & J.E BROWN & R HICKS & J.C WOLFF",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 007",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 008",
+   "Role": "Engineer - Project",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 009",
+   "Role": "Labourer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 010",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 011",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 012",
+   "Role": "Tyre Fitter",
+   "Crew": "Maint - B Crew",
+   "Company": "HIGH GRADE MECHANICAL PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 013",
+   "Role": "Operator - Excavator",
+   "Crew": "Adhoc",
+   "Company": "B BROWN & J.E BROWN & R HICKS & J.C WOLFF",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 014",
+   "Role": "Operator - Final Trim Grader",
+   "Crew": "Ops - B Crew",
+   "Company": "ROAD PAVEMENT SOLUTIONS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 015",
+   "Role": "Operator - Roller",
+   "Crew": "Ops - A Crew",
+   "Company": "SPEC TRIM CIVIL PLANT HIRE PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 016",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 1.0,
+    "minimum": 3.0,
+    "status": "Below min",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 1.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 017",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 018",
+   "Role": "Environmental & Sustainability Advisor",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 019",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - B Crew",
+   "Company": "BOYLE CIVIL CONTRACTING PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 020",
+   "Role": "Supervisor",
+   "Crew": "Site Office - Adhoc",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 021",
+   "Role": "Supervisor - Workshop",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 022",
+   "Role": "Operator - Loader",
+   "Crew": "Ops - B Crew",
+   "Company": "MARINE TECHNOLOGY SERVICES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 023",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - A Crew",
+   "Company": "FITZGERALD CIVIL CONTRACTING WA PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 024",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 025",
+   "Role": "Mechanic - Heavy",
+   "Crew": "Maint - B Crew",
+   "Company": "JMH GROUP WA PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 026",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - A Crew",
+   "Company": "BOYLE CIVIL CONTRACTING PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 027",
+   "Role": "Labourer",
+   "Crew": "Ops - A Crew",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 028",
+   "Role": "Construction Manager",
+   "Crew": "Site Office - Adhoc",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 029",
+   "Role": "Auto Electrician",
+   "Crew": "Maint - B Crew",
+   "Company": "ALL 4 DIESEL PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 030",
+   "Role": "Supervisor",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 031",
+   "Role": "Operator - Final Trim Grader",
+   "Crew": "Ops - B Crew",
+   "Company": "ROAD PAVEMENT SOLUTIONS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 032",
+   "Role": "Surveyor - Senior",
+   "Crew": "Site Office - B Crew",
+   "Company": "SURVEY DYNAMICS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Optional",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 1.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 033",
+   "Role": "Supervisor",
+   "Crew": "Site Office - C Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 034",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 035",
+   "Role": "Operator - Water Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 036",
+   "Role": "Labourer",
+   "Crew": "Ops - B Crew",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 037",
+   "Role": "Engineer - Project",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 038",
+   "Role": "Labourer",
+   "Crew": "Ops - A Crew",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 039",
+   "Role": "Surveyor",
+   "Crew": "Site Office - A Crew",
+   "Company": "SURVEY DYNAMICS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Optional",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 1.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 040",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 041",
+   "Role": "Superintendent",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 042",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 043",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 4.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 4.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 044",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 045",
+   "Role": "Engineer - Project",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 046",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "MARINE TECHNOLOGY SERVICES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 047",
+   "Role": "Labourer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 048",
+   "Role": "Peggy",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 049",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 050",
+   "Role": "Construction Manager",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 051",
+   "Role": "Operator - Excavator",
+   "Crew": "Adhoc",
+   "Company": "KNOCKALLA CIVIL PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 052",
+   "Role": "Engineer - Project",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 053",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 054",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 055",
+   "Role": "Mechanic - Heavy",
+   "Crew": "Maint - B Crew",
+   "Company": "JMH GROUP WA PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 056",
+   "Role": "Surveyor",
+   "Crew": "Site Office - B Crew",
+   "Company": "SURVEY DYNAMICS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Optional",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 1.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 057",
+   "Role": "Operator - Final Trim Grader",
+   "Crew": "Ops - A Crew",
+   "Company": "TOMLINSON GRADER HIRE PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 058",
+   "Role": "Operator - Water Truck",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 059",
+   "Role": "Operator - Final Trim Grader",
+   "Crew": "Ops - B Crew",
+   "Company": "TOMLINSON GRADER HIRE PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 060",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 061",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - A Crew",
+   "Company": "BOYLE CIVIL CONTRACTING PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 062",
+   "Role": "Operator - Excavator",
+   "Crew": "Site Office - Adhoc",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 063",
+   "Role": "Operator - Excavator",
+   "Crew": "Adhoc",
+   "Company": "B BROWN & J.E BROWN & R HICKS & J.C WOLFF",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 064",
+   "Role": "Serviceperson",
+   "Crew": "Maint - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 065",
+   "Role": "Operator - Roller",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 066",
+   "Role": "Area Manager",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 067",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - B Crew",
+   "Company": "MARINE TECHNOLOGY SERVICES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 068",
+   "Role": "Operator - Final Trim Grader",
+   "Crew": "Ops - A Crew",
+   "Company": "SPEC TRIM CIVIL PLANT HIRE PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 069",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - A Crew",
+   "Company": "SOUTH COAST CIVIL (WA) PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 070",
+   "Role": "Supervisor",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 071",
+   "Role": "Labourer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 072",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 073",
+   "Role": "Labourer",
+   "Crew": "Adhoc",
+   "Company": "FMS GROUP OPERATIONS TPCM PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 074",
+   "Role": "HSE Advisor",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 075",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - A Crew",
+   "Company": "KNOCKALLA CIVIL PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 076",
+   "Role": "Soil Technician",
+   "Crew": "Ops - B Crew",
+   "Company": "CONSTRUCTION SCIENCES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 077",
+   "Role": "Maintenance Administrator - Senior",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 078",
+   "Role": "Supervisor - Senior",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 079",
+   "Role": "Supervisor - Workshop",
+   "Crew": "Adhoc",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 080",
+   "Role": "Labourer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 081",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 082",
+   "Role": "Surveyor",
+   "Crew": "Site Office - A Crew",
+   "Company": "SURVEY DYNAMICS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Optional",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 1.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 083",
+   "Role": "Operator - Loader",
+   "Crew": "Ops - A Crew",
+   "Company": "MARINE TECHNOLOGY SERVICES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 084",
+   "Role": "Labourer",
+   "Crew": "Ops - C Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 085",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 086",
+   "Role": "Soil Technician",
+   "Crew": "Ops - B Crew",
+   "Company": "CONSTRUCTION SCIENCES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 087",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - A Crew",
+   "Company": "BOYLE CIVIL CONTRACTING PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 088",
+   "Role": "Labourer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 089",
+   "Role": "Mechanic - Heavy",
+   "Crew": "Maint - A Crew",
+   "Company": "JMH GROUP WA PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 090",
+   "Role": "Mechanic - Heavy",
+   "Crew": "Maint - A Crew",
+   "Company": "ALL 4 DIESEL PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 091",
+   "Role": "Operator - Loader",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 092",
+   "Role": "Fabricator / Boilermaker",
+   "Crew": "Maint - B Crew",
+   "Company": "FORCE EQUIPMENT PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 093",
+   "Role": "Labourer",
+   "Crew": "Adhoc",
+   "Company": "Safe Check Pty Ltd",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 094",
+   "Role": "Trades Assistant",
+   "Crew": "Maint - STW",
+   "Company": "Safe Check Pty Ltd",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 095",
+   "Role": "HSE Advisor - Senior",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 096",
+   "Role": "Auto Electrician",
+   "Crew": "Maint - A Crew",
+   "Company": "JMH GROUP WA PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 097",
+   "Role": "Supervisor",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 098",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - B Crew",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 099",
+   "Role": "Mechanic - Fitter",
+   "Crew": "Maint - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 5.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 5.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 100",
+   "Role": "Labourer",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 101",
+   "Role": "Soil Technician",
+   "Crew": "Ops - B Crew",
+   "Company": "CONSTRUCTION SCIENCES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 102",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "MARINE TECHNOLOGY SERVICES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 103",
+   "Role": "Engineer - Project",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 104",
+   "Role": "Site Administrator",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 105",
+   "Role": "Soil Technician",
+   "Crew": "Ops - A Crew",
+   "Company": "CONSTRUCTION SCIENCES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 106",
+   "Role": "Supervisor",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 107",
+   "Role": "Supervisor",
+   "Crew": "Site Office - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 108",
+   "Role": "Labourer",
+   "Crew": "Ops - A Crew",
+   "Company": "MARINE TECHNOLOGY SERVICES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 109",
+   "Role": "Mechanic - Fitter",
+   "Crew": "Maint - A Crew",
+   "Company": "BURNSIDE CONTRACTING PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 110",
+   "Role": "Operator - Excavator",
+   "Crew": "Ops - B Crew",
+   "Company": "KOOMAL GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 111",
+   "Role": "Operator - Dump Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 112",
+   "Role": "Labourer",
+   "Crew": "Ops - B Crew",
+   "Company": "SURVEY DYNAMICS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 113",
+   "Role": "Mechanic - Heavy",
+   "Crew": "Maint - A Crew",
+   "Company": "MEA RESOURCE GROUP PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 114",
+   "Role": "Operator - Grader",
+   "Crew": "Ops - C Crew",
+   "Company": "SPEC TRIM CIVIL PLANT HIRE PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 115",
+   "Role": "Site Administrator",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 116",
+   "Role": "Serviceperson",
+   "Crew": "Maint - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 117",
+   "Role": "Mechanic - Heavy",
+   "Crew": "Maint - A Crew",
+   "Company": "FORCE EQUIPMENT PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 118",
+   "Role": "Operator - Loader",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 119",
+   "Role": "Soil Technician",
+   "Crew": "Ops - A Crew",
+   "Company": "CONSTRUCTION SCIENCES PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 120",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 121",
+   "Role": "Surveyor",
+   "Crew": "Site Office - B Crew",
+   "Company": "SURVEY DYNAMICS PTY LTD",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 1.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 122",
+   "Role": "HSE Advisor",
+   "Crew": "Site Office - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": null,
+    "minimum": 3.0,
+    "status": "Not required",
+    "include": 0.0,
+    "group": "",
+    "take5s": null,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 123",
+   "Role": "Operator - Dozer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 124",
+   "Role": "Operator - Water Truck",
+   "Crew": "Ops - A Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 125",
+   "Role": "Operator - Roller",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 126",
+   "Role": "Storeperson",
+   "Crew": "Maint - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 3.0,
+    "minimum": 3.0,
+    "status": "In range",
+    "include": 1.0,
+    "group": "Maintenance",
+    "take5s": 3.0,
+    "flag": "",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  },
+  {
+   "Name": "ER Person 127",
+   "Role": "Labourer",
+   "Crew": "Ops - B Crew",
+   "Company": "Decmil",
+   "sheet": {
+    "tagsFromRegister": 0.0,
+    "minimum": 3.0,
+    "status": "No Take 5",
+    "include": 1.0,
+    "group": "Operations",
+    "take5s": 0.0,
+    "flag": "Zero",
+    "notRequiredFlag": 0.0,
+    "optionalFlag": 0.0,
+    "newFlag": null
+   }
+  }
+ ]
+}

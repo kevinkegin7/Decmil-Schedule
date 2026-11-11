@@ -1,0 +1,33 @@
+{
+  "$comment": "Leadership KPI rules for project 10265, transcribed from the Weekly KPI and Platform Import sheets of the Take 5 and KPI register. Edit these lists, not the code. Targets of 0 mean the KPI does not apply to that group.",
+  "weekStartsOn": "Saturday",
+  "metrics": [
+    { "key": "PTHA", "label": "PTHA Reviews", "period": "week" },
+    { "key": "QSI", "label": "QSI", "period": "week" },
+    { "key": "Spotlight", "label": "Spotlight", "period": "week" },
+    { "key": "AreaInsp", "label": "Area Inspection", "period": "week" },
+    { "key": "CCFV", "label": "CCFV", "period": "month" }
+  ],
+  "sources": [
+    {
+      "$comment": "SAI 360 document export. A source is recognised by its column headings. To add another platform (for example INX), add a block here with that export's column names and the values that identify each KPI.",
+      "name": "SAI 360",
+      "columns": { "person": "Created By", "date": "Start Date", "type": "Type", "template": "Template" },
+      "dateOrder": "MDY",
+      "rules": [
+        { "metric": "PTHA", "column": "template", "equals": ["pthaReview"] },
+        { "metric": "QSI", "column": "template", "equals": ["qsiRecord"] },
+        { "metric": "Spotlight", "column": "template", "equals": ["spotlight"] },
+        { "metric": "CCFV", "column": "template", "equals": ["cccReview", "CCFV-Review"] },
+        { "metric": "AreaInsp", "column": "type", "equals": ["AREA_INSP"] }
+      ]
+    }
+  ],
+  "groups": [
+    { "name": "Project Offsite Leaders", "roleKeywords": ["offsite"], "targets": { "PTHA": 0, "QSI": 1, "Spotlight": 0, "AreaInsp": 0, "CCFV": 1 } },
+    { "name": "Superintendents", "roleKeywords": ["superintendent"], "targets": { "PTHA": 1, "QSI": 1, "Spotlight": 0, "AreaInsp": 1, "CCFV": 0 } },
+    { "name": "Construction Manager", "roleKeywords": ["manager"], "targets": { "PTHA": 0, "QSI": 1, "Spotlight": 0, "AreaInsp": 1, "CCFV": 0 } },
+    { "name": "HSE Advisors", "roleKeywords": ["hse"], "targets": { "PTHA": 2, "QSI": 1, "Spotlight": 1, "AreaInsp": 1, "CCFV": 10 } },
+    { "name": "Supervisors", "roleKeywords": ["supervis"], "targets": { "PTHA": 2, "QSI": 1, "Spotlight": 1, "AreaInsp": 7, "CCFV": 10 } }
+  ]
+}

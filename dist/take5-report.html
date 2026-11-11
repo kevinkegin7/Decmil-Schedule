@@ -226,27 +226,29 @@ td.num { font-variant-numeric: tabular-nums; text-align: right; }
         var hitRC = containsAny(person.role + ' ' + person.crew, nr.roleOrCrewKeywords);
         var hitOpt = containsAny(person.name + ' ' + person.role, opt.nameOrRoleKeywords);
 
-        var forced = overrides && Object.prototype.hasOwnProperty.call(overrides, key) ? !!overrides[key] : null;
-        if (forced === false) {
+        // Overrides: 'required' | 'notRequired' | 'optional' (booleans accepted: true/false).
+        var forced = overrides && Object.prototype.hasOwnProperty.call(overrides, key) ? overrides[key] : null;
+        if (forced === true) forced = 'required'; else if (forced === false) forced = 'notRequired';
+        if (forced === 'notRequired') {
             out.required = false; out.included = false; out.status = 'Not required'; out.reason = 'manual override';
             return out;
         }
         // Optional is tested BEFORE Not required, as the workbook does: a surveyor in a
         // "Site Office" crew is Optional (counted when they have Take 5s), not excluded.
-        if (forced !== true && hitOpt) {
+        if (forced === 'optional' || (forced !== 'required' && hitOpt)) {
             out.optional = true;
             if (person.tags <= 0) {
                 out.included = false; out.status = 'Optional';
-                out.reason = 'optional ("' + hitOpt + '") with no Take 5s';
+                out.reason = forced === 'optional' ? 'manual override, no Take 5s' : 'optional ("' + hitOpt + '") with no Take 5s';
                 return out;
             }
-            out.reason = 'optional ("' + hitOpt + '") with Take 5s';
-        } else if (forced !== true && (hitRole || hitRC)) {
+            out.reason = forced === 'optional' ? 'manual override, with Take 5s' : 'optional ("' + hitOpt + '") with Take 5s';
+        } else if (forced !== 'required' && (hitRole || hitRC)) {
             out.required = false; out.included = false; out.status = 'Not required';
             out.reason = hitRole ? ('role contains "' + hitRole + '"') : ('role/crew contains "' + hitRC + '"');
             return out;
         }
-        if (forced === true && !out.reason) out.reason = 'manual override';
+        if (forced === 'required' && !out.reason) out.reason = 'manual override';
         out.included = true;
         // Group: crew prefix (LEFT(crew,5)="Maint" in the workbook) or a role keyword.
         var crewHit = null, prefixes = grp.maintenanceCrewPrefixes || [];
@@ -264,6 +266,14 @@ td.num { font-variant-numeric: tabular-nums; text-align: right; }
         }
         out.status = person.tags >= min ? 'In range' : (person.tags > 0 ? 'Below min' : 'No Take 5');
         return out;
+    }
+
+    /* The rule's own verdict for a person, ignoring overrides: 'required',
+       'notRequired' or 'optional'. Used by the page to show the default and to
+       store an override only when it differs. */
+    function ruleStatus(person, config) {
+        var c = classify({ employeeId: person.employeeId, name: person.name, role: person.role, crew: person.crew, tags: 1, inRegister: true }, config, null);
+        return c.optional ? 'optional' : (c.required ? 'required' : 'notRequired');
     }
 
     // --------------------------------------------------------------- report
@@ -414,6 +424,7 @@ td.num { font-variant-numeric: tabular-nums; text-align: right; }
     return {
         fromCaptureRow: fromCaptureRow,
         classify: classify,
+        ruleStatus: ruleStatus,
         buildReport: buildReport,
         formatEmail: formatEmail,
         formatEmailHtml: formatEmailHtml,

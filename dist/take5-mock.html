@@ -320,27 +320,29 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
         var hitRC = containsAny(person.role + ' ' + person.crew, nr.roleOrCrewKeywords);
         var hitOpt = containsAny(person.name + ' ' + person.role, opt.nameOrRoleKeywords);
 
-        var forced = overrides && Object.prototype.hasOwnProperty.call(overrides, key) ? !!overrides[key] : null;
-        if (forced === false) {
+        // Overrides: 'required' | 'notRequired' | 'optional' (booleans accepted: true/false).
+        var forced = overrides && Object.prototype.hasOwnProperty.call(overrides, key) ? overrides[key] : null;
+        if (forced === true) forced = 'required'; else if (forced === false) forced = 'notRequired';
+        if (forced === 'notRequired') {
             out.required = false; out.included = false; out.status = 'Not required'; out.reason = 'manual override';
             return out;
         }
         // Optional is tested BEFORE Not required, as the workbook does: a surveyor in a
         // "Site Office" crew is Optional (counted when they have Take 5s), not excluded.
-        if (forced !== true && hitOpt) {
+        if (forced === 'optional' || (forced !== 'required' && hitOpt)) {
             out.optional = true;
             if (person.tags <= 0) {
                 out.included = false; out.status = 'Optional';
-                out.reason = 'optional ("' + hitOpt + '") with no Take 5s';
+                out.reason = forced === 'optional' ? 'manual override, no Take 5s' : 'optional ("' + hitOpt + '") with no Take 5s';
                 return out;
             }
-            out.reason = 'optional ("' + hitOpt + '") with Take 5s';
-        } else if (forced !== true && (hitRole || hitRC)) {
+            out.reason = forced === 'optional' ? 'manual override, with Take 5s' : 'optional ("' + hitOpt + '") with Take 5s';
+        } else if (forced !== 'required' && (hitRole || hitRC)) {
             out.required = false; out.included = false; out.status = 'Not required';
             out.reason = hitRole ? ('role contains "' + hitRole + '"') : ('role/crew contains "' + hitRC + '"');
             return out;
         }
-        if (forced === true && !out.reason) out.reason = 'manual override';
+        if (forced === 'required' && !out.reason) out.reason = 'manual override';
         out.included = true;
         // Group: crew prefix (LEFT(crew,5)="Maint" in the workbook) or a role keyword.
         var crewHit = null, prefixes = grp.maintenanceCrewPrefixes || [];
@@ -358,6 +360,14 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
         }
         out.status = person.tags >= min ? 'In range' : (person.tags > 0 ? 'Below min' : 'No Take 5');
         return out;
+    }
+
+    /* The rule's own verdict for a person, ignoring overrides: 'required',
+       'notRequired' or 'optional'. Used by the page to show the default and to
+       store an override only when it differs. */
+    function ruleStatus(person, config) {
+        var c = classify({ employeeId: person.employeeId, name: person.name, role: person.role, crew: person.crew, tags: 1, inRegister: true }, config, null);
+        return c.optional ? 'optional' : (c.required ? 'required' : 'notRequired');
     }
 
     // --------------------------------------------------------------- report
@@ -508,6 +518,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     return {
         fromCaptureRow: fromCaptureRow,
         classify: classify,
+        ruleStatus: ruleStatus,
         buildReport: buildReport,
         formatEmail: formatEmail,
         formatEmailHtml: formatEmailHtml,
@@ -902,8 +913,13 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     // Per-person overrides (this browser only, until the server endpoint exists)
     // ---------------------------------------------------------------------
     var OVERRIDE_KEY = 't5RequiredOverrides';
+    /* Values are 'required' | 'notRequired' | 'optional'. Older saves held
+       booleans (true = required, false = not required) and are migrated. */
     function loadOverrides() {
-        try { return JSON.parse(localStorage.getItem(OVERRIDE_KEY) || '{}') || {}; } catch (e) { return {}; }
+        var o;
+        try { o = JSON.parse(localStorage.getItem(OVERRIDE_KEY) || '{}') || {}; } catch (e) { o = {}; }
+        Object.keys(o).forEach(function (k) { if (o[k] === true) o[k] = 'required'; else if (o[k] === false) o[k] = 'notRequired'; });
+        return o;
     }
     function saveOverrides(o) {
         try { localStorage.setItem(OVERRIDE_KEY, JSON.stringify(o)); } catch (e) { /* private mode etc. */ }
@@ -915,6 +931,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
         min: MIN,
         capture: [], dash: null, search: '', crew: 'All', filter: 'all',
         overrides: loadOverrides(),
+        dayCache: {},            // date -> capture rows for that day (history for the follow-up table, trend and stats)
         // dashboard-only
         indivQuery: '', excludedCrews: [], lbMetric: 'week', tSearch: '', tCrew: 'All',
         showNotify: false, notifySending: false, notifyTo: '', notifyCc: '', notifySubject: '', notifyBody: ''
@@ -929,19 +946,24 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
         if (SITE) {
             return SiteReport.classify({ employeeId: p.employeeId, name: p.name, role: p.role, crew: p.crew, tags: t, inRegister: true }, SITE, state.overrides);
         }
-        var req = Take5Roles.isRequired(p, state.overrides);
+        // Role-pattern fallback has no Optional concept: optional counts as required.
+        var o = state.overrides[p.employeeId];
+        var bool = {}; if (o !== undefined) bool[p.employeeId] = (o !== 'notRequired');
+        var req = Take5Roles.isRequired(p, o !== undefined ? bool : null);
         return { required: req, optional: false, included: req, group: '', status: req ? '' : 'Not required', reason: '' };
     }
     function requiredOf(p, tags) { return clsOf(p, tags).included; }
-    function defaultRequiredOf(p) {
-        if (SITE) return SiteReport.classify({ employeeId: p.employeeId, name: p.name, role: p.role, crew: p.crew, tags: 1, inRegister: true }, SITE, null).required;
-        return Take5Roles.defaultRequired(p.role);
+    /* The rule's own verdict, ignoring overrides: 'required' | 'notRequired' | 'optional'. */
+    function ruleStatusOf(p) {
+        if (SITE) return SiteReport.ruleStatus({ employeeId: p.employeeId, name: p.name, role: p.role, crew: p.crew }, SITE);
+        return Take5Roles.defaultRequired(p.role) ? 'required' : 'notRequired';
     }
+    function statusChoiceOf(p) { return Object.prototype.hasOwnProperty.call(state.overrides, p.employeeId) ? state.overrides[p.employeeId] : ruleStatusOf(p); }
     function hasOverride(p) { return Object.prototype.hasOwnProperty.call(state.overrides, p.employeeId); }
-    /* Store an override only when it differs from the role default, so flipping
-       someone back clears the override rather than pinning the default. */
-    function setRequired(p, val) {
-        if (val === defaultRequiredOf(p)) delete state.overrides[p.employeeId];
+    /* Store an override only when it differs from the rule's verdict, so choosing
+       the default again clears the override rather than pinning it. */
+    function setStatusChoice(p, val) {
+        if (val === ruleStatusOf(p)) delete state.overrides[p.employeeId];
         else state.overrides[p.employeeId] = val;
         saveOverrides(state.overrides);
     }
@@ -1041,16 +1063,17 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     /* The compliance denominator is people who are on site AND required.
        Exempt and off-site people are reported separately, never folded in. */
     function captureSummary() {
-        var counted = [], exempt = 0, off = 0;
+        var counted = [], exempt = 0, off = 0, optional = 0;
         state.capture.forEach(function (p) {
             if (p.onSite === false) { off++; return; }
-            if (!requiredOf(p)) { exempt++; return; }
+            var k = clsOf(p);
+            if (!k.included) { exempt++; if (k.status === 'Optional') optional++; return; }
             counted.push(p);
         });
         var comp = 0;
         counted.forEach(function (p) { if (statusOf(p.count) === 'compliant') comp++; });
         var n = counted.length;
-        return { onsite: n, comp: comp, below: n - comp, exempt: exempt, off: off,
+        return { onsite: n, comp: comp, below: n - comp, exempt: exempt, optional: optional, off: off,
                  total: state.capture.length, pct: n ? Math.round(comp / n * 100) : 0 };
     }
     function visibleRows() {
@@ -1068,28 +1091,29 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
             return true;
         });
     }
-    /* Small text control inside the meta line, so the row's column layout is untouched. */
-    function overrideLink(p, required) {
-        var act = required ? 'exempt' : 'require';
-        var label = required ? 'mark exempt' : 'mark required';
-        return ' · <button type="button" class="t5-ovr" data-act="' + act + '" data-id="' + p.employeeId + '" ' +
-            'style="border:0;background:none;padding:0;font:inherit;font-size:inherit;color:var(--faint);text-decoration:underline;cursor:pointer">' +
-            label + '</button>' + (hasOverride(p) ? ' <span style="color:var(--faint)">(manual)</span>' : '');
+    /* The per-person status control: Required / Not required / Optional, with the
+       rule's own verdict marked. Sits in the meta line so the row grid is untouched. */
+    var STATUS_LABEL = { required: 'Required', notRequired: 'Not required', optional: 'Optional' };
+    function overrideControl(p) {
+        var rule = ruleStatusOf(p), cur = statusChoiceOf(p);
+        var opts = ['required', 'notRequired', 'optional'].map(function (v) {
+            return '<option value="' + v + '"' + (v === cur ? ' selected' : '') + '>' + STATUS_LABEL[v] + (v === rule ? ' (rule)' : '') + '</option>';
+        }).join('');
+        return ' · <select class="t5-ovr" data-id="' + p.employeeId + '" title="Who must do a Take 5: the rule\'s verdict is marked (rule); choose another to override it for this person" ' +
+            'style="font:inherit;font-size:inherit;color:' + (hasOverride(p) ? 'var(--navy)' : 'var(--faint)') + ';border:0;background:transparent;padding:0;cursor:pointer">' + opts + '</select>' +
+            (hasOverride(p) ? ' <span style="color:var(--faint)">(manual)</span>' : '');
     }
     function renderList() {
         var sum = captureSummary(), visible = visibleRows();
         var rows = visible.map(function (p) {
-            var k = clsOf(p), required = k.included, off = p.onSite === false;
-            var meta = esc(p.role || '—') + ' · ' + esc(p.crew || p.company || '—') + overrideLink(p, required);
-            if (!required || off) {
-                // Not in the denominator (not required, optional at zero, or off site): same
-                // elements as a normal row so the grid stays aligned, but muted and with the
-                // stepper hidden.
-                var cls = !required ? 't5-exempt' : 't5-off';
-                var tag = !required ? (k.status === 'Optional' ? 'Optional' : 'Exempt') : 'Off site';
-                var note = !required
-                    ? (k.status === 'Optional' ? 'Optional — counted only when they log a Take 5' : 'Not required — excluded from %')
-                    : 'Off site today — excluded from %';
+            var k = clsOf(p), off = p.onSite === false;
+            var meta = esc(p.role || '—') + ' · ' + esc(p.crew || p.company || '—') + overrideControl(p);
+            if (!k.required || off) {
+                // Not required or off site: same elements as a normal row so the grid stays
+                // aligned, but muted and with the stepper hidden.
+                var cls = !k.required ? 't5-exempt' : 't5-off';
+                var tag = !k.required ? 'Exempt' : 'Off site';
+                var note = !k.required ? 'Not required — excluded from %' : 'Off site today — excluded from %';
                 return '<div class="wrow ' + cls + '" style="opacity:.62">' +
                     '<span class="rail" style="background:' + C.exempt.v + '"></span>' +
                     '<div class="who"><div class="nm">' + esc(p.name) + '</div><div class="meta">' + meta + '</div></div>' +
@@ -1099,12 +1123,19 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
                     '<button class="setmin" style="visibility:hidden">Set ' + state.min + '</button>' +
                 '</div>';
             }
-            var c = C[statusOf(p.count)];
-            return '<div class="wrow">' +
+            // Optional people keep the stepper so their Take 5s can be entered; they
+            // count on the days they have any and are excluded (muted) at zero.
+            var optionalAtZero = k.optional && !k.included;
+            var c = optionalAtZero ? C.exempt : C[statusOf(p.count)];
+            var label = optionalAtZero ? 'Optional' : (k.optional ? c.label + ' · optional' : c.label);
+            var pipsCell = optionalAtZero
+                ? '<div class="pips" style="font-size:12px;color:var(--faint);font-style:italic">Optional — counts once they log a Take 5</div>'
+                : '<div class="pips">' + pipsHtml(p.count, c.v) + '</div>';
+            return '<div class="wrow' + (optionalAtZero ? ' t5-exempt t5-optional' : (k.optional ? ' t5-optional' : '')) + '"' + (optionalAtZero ? ' style="opacity:.75"' : '') + '>' +
                 '<span class="rail" style="background:' + c.v + '"></span>' +
                 '<div class="who"><div class="nm">' + esc(p.name) + '</div><div class="meta">' + meta + '</div></div>' +
-                '<span class="stat-tag" style="color:' + c.d + '">' + c.label + '</span>' +
-                '<div class="pips">' + pipsHtml(p.count, c.v) + '</div>' +
+                '<span class="stat-tag" style="color:' + c.d + '">' + label + '</span>' +
+                pipsCell +
                 '<div class="stepper">' +
                     '<button class="sbtn" data-act="dec" data-id="' + p.employeeId + '">−</button>' +
                     '<span class="sval mono">' + p.count + '</span>' +
@@ -1113,8 +1144,9 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
                 '<button class="setmin" data-act="min" data-id="' + p.employeeId + '">Set ' + state.min + '</button>' +
             '</div>';
         }).join('');
-        $('#t5Showing').text(visible.length + ' of ' + sum.total + ' shown · ' + sum.onsite + ' required · ' + sum.exempt + ' exempt');
+        $('#t5Showing').text(visible.length + ' of ' + sum.total + ' shown · ' + sum.onsite + ' required · ' + (sum.exempt - sum.optional) + ' not required · ' + sum.optional + ' optional at zero');
         $('#t5List').html(rows || '<div class="empty">No on-site workers for this date. Check the prestart for ' + esc(prettyDate(state.date)) + '.</div>');
+        if (SITE) renderEmailPanel();
     }
     function renderCapture() {
         var sum = captureSummary(), crews = [];
@@ -1154,9 +1186,99 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
                 '<div style="padding:7px 20px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint)" class="eyebrow"><span id="t5Showing"></span></div>' +
                 '<div id="t5List"></div>' +
             '</div>' +
+            (SITE ? '<div id="t5EmailPanel"></div>' : '') +
             '<div id="t5CaptureModal"></div>';
         $('#t5Capture').html(html);
         renderList();
+    }
+
+    // ------------------------------------------------ history (per-day captures)
+    /* The follow-up table, the trend and the Stats figures need each day's
+       capture under the site rules. GetCapture already serves any date, so the
+       page fetches the days it needs once and keeps them for the session. Today
+       always comes from the live list so edits show immediately. */
+    function mapCaptureRow(r) {
+        return { employeeId: P(r, 'EmployeeId'), name: P(r, 'Name'), gender: P(r, 'Gender'), role: P(r, 'Role'),
+                 crew: P(r, 'Crew'), company: P(r, 'Company'), count: P(r, 'TagCount') || 0, onSite: P(r, 'OnSite'), status: P(r, 'Status') };
+    }
+    function loadDays(dates, cb) {
+        var pending = dates.filter(function (d) { return d !== state.date && state.dayCache[d] === undefined; });
+        if (!pending.length) { cb(); return; }
+        var left = pending.length;
+        pending.forEach(function (d) {
+            $.getJSON('/Take5/GetCapture', { date: d })
+                .done(function (resp) { state.dayCache[d] = (P(resp, 'Rows') || []).map(mapCaptureRow); })
+                .fail(function () { state.dayCache[d] = null; })
+                .always(function () { if (--left === 0) cb(); });
+        });
+    }
+    function rowsFor(d) { return d === state.date ? state.capture : (state.dayCache[d] || null); }
+    function dayReport(d) {
+        var rows = rowsFor(d);
+        if (!rows) return null;
+        return SiteReport.buildReport(rows.filter(function (p) { return p.onSite !== false; }), SITE, { date: d, overrides: state.overrides });
+    }
+    function dateRange(a, b) { var out = []; for (var d = a; d <= b; d = addDays(d, 1)) out.push(d); return out; }
+    /* Saturday-to-Friday week containing `d` (the register's WEEKDAY(...,16)). */
+    function weekStartOf(d) { var p = d.split('-'); var dow = new Date(+p[0], +p[1] - 1, +p[2]).getDay(); return addDays(d, -((dow + 1) % 7)); }
+    function monthStartOf(d) { return d.slice(0, 8) + '01'; }
+
+    // ------------------------------------------------ Email Report panel
+    /* The register's Email Report sheet, on the page: title, the CHECK FIRST /
+       TODAY banner, the sentence, the Maintenance/Operations table, the Daily Log
+       row and the ranked follow-up table (zeros first, then below minimum) with
+       each person's last Take 5, this week's days at minimum and consistency. */
+    function renderEmailPanel() {
+        var mount = $('#t5EmailPanel'); if (!mount.length) return;
+        var rep = buildDailyReport();
+        var anyTags = state.capture.some(function (p) { return p.count > 0; });
+        var banner = !anyTags
+            ? '<div style="background:var(--warn-bg);color:var(--warn-d);padding:10px 20px;font-weight:600;font-size:13px">CHECK FIRST: no Take 5s are recorded for this date yet. Do not act on this list.</div>'
+            : '<div style="background:' + (rep.totals.zeros ? 'var(--bad-bg)' : 'var(--good-bg)') + ';color:' + (rep.totals.zeros ? 'var(--bad-d)' : 'var(--good-d)') + ';padding:10px 20px;font-weight:600;font-size:13px">TODAY: &nbsp;' + rep.totals.zeros + ' with NO Take 5 &nbsp;|&nbsp; ' + rep.totals.belowMin + ' below minimum</div>';
+        var g0 = rep.groups[rep.groupOrder[0]], g1 = rep.groups[rep.groupOrder[1]];
+        function tr(l, a, b) { return '<tr><td style="padding:6px 14px;border-bottom:1px solid var(--line)">' + l + '</td><td class="cnum mono" style="padding:6px 14px;border-bottom:1px solid var(--line)">' + a + '</td><td class="cnum mono" style="padding:6px 14px;border-bottom:1px solid var(--line)">' + b + '</td></tr>'; }
+        var table = '<table class="tbl" style="max-width:560px"><thead><tr><th></th><th style="text-align:center">' + esc(g0.label) + ' · ' + esc(rep.dateLabel) + '</th><th style="text-align:center">' + esc(g1.label) + ' · ' + esc(rep.dateLabel) + '</th></tr></thead><tbody>' +
+            tr('Crew Size', g0.crewSize, g1.crewSize) + tr('Take 5s', g0.take5s, g1.take5s) + tr('Ratio', g0.ratio, g1.ratio) + tr('Crew members Completing Zero', g0.zeros, g1.zeros) + '</tbody></table>';
+        // follow-up table
+        var followUp = rep.people.filter(function (p) { return p.cls.included && (p.cls.status === 'No Take 5' || p.cls.status === 'Below min'); })
+            .sort(function (a, b) { return (a.cls.status === 'No Take 5' ? 1 : 2) - (b.cls.status === 'No Take 5' ? 1 : 2); });
+        var weekStart = weekStartOf(state.date), histDates = dateRange(addDays(state.date, -13), addDays(state.date, -1));
+        var histReady = histDates.every(function (d) { return state.dayCache[d] !== undefined; });
+        var hist = {};
+        if (histReady) {
+            histDates.concat([state.date]).forEach(function (d) {
+                var rows = rowsFor(d); if (!rows) return;
+                rows.forEach(function (p) { if (p.onSite === false) return; var h = hist[p.employeeId] || (hist[p.employeeId] = []); h.push({ d: d, n: p.count || 0 }); });
+            });
+        }
+        function cellsFor(p) {
+            if (!histReady) return ['…', '…', '…'];
+            var h = hist[p.employeeId] || [];
+            var last = null; h.forEach(function (x) { if (x.n > 0 && (!last || x.d > last)) last = x.d; });
+            var wk = h.filter(function (x) { return x.d >= weekStart && x.d <= state.date; });
+            var atMin = wk.filter(function (x) { return x.n >= state.min; }).length;
+            var cons = wk.length ? Math.round(atMin / wk.length * 100) + '%' : '—';
+            return [last ? shortDate(last) : 'none in 14 days', atMin + ' of ' + wk.length + ' day' + (wk.length === 1 ? '' : 's'), cons];
+        }
+        var fu = followUp.map(function (p) {
+            var zero = p.cls.status === 'No Take 5', cx = cellsFor(p);
+            var today = p.tags + ' of ' + state.min + ' &nbsp; <span style="font-weight:700;color:' + (zero ? 'var(--bad-d)' : 'var(--warn-d)') + '">' + (zero ? 'NO TAKE 5' : 'BELOW MIN') + '</span>';
+            return '<tr><td style="font-weight:600">' + esc(p.name) + '<div class="mt">' + esc(p.role) + ' · ' + esc(p.crew) + '</div></td><td>' + esc(p.cls.group) + '</td><td class="mono">' + today + '</td><td>' + esc(cx[0]) + '</td><td>' + esc(cx[1]) + '</td><td class="mono">' + esc(cx[2]) + '</td></tr>';
+        }).join('');
+        var html =
+            '<div class="panel" style="margin-top:16px">' +
+                '<div class="phead" style="gap:10px;flex-wrap:wrap"><div><h3>Take 5 Report for the ' + esc(rep.dateLabel) + '</h3><p>The daily management email, built from this list under the site rules. Copy it, or open <strong>Daily email</strong> for the graphics.</p></div>' +
+                    '<div class="toolbar" style="margin-left:auto"><button class="xbtn" id="t5PanelCopy">Copy text</button><button class="xbtn" id="t5PanelCopyHtml" title="Copies the figures, bars and table as formatted content for Outlook">Copy with graphics</button></div></div>' +
+                banner +
+                '<div style="padding:14px 20px;font-size:13.5px;line-height:1.5">' + esc(rep.sentence) + '</div>' +
+                '<div style="padding:0 20px 14px">' + table + '</div>' +
+                '<div style="padding:0 20px 14px;font-size:12px;color:var(--faint)">Daily Log row: <span class="mono">' + esc(rep.dailyLogRow.join(' | ')) + '</span></div>' +
+                '<div class="phead" style="border-top:1px solid var(--line)"><div><h3>Follow-up</h3><p>No Take 5 first, then below minimum · last Take 5 in the past 14 days · this week is Sat–Fri · consistency is days at ' + state.min + ' of days on site this week</p></div></div>' +
+                '<div style="overflow:auto;max-height:520px"><table class="tbl"><thead><tr><th>Name</th><th>Group</th><th>Today</th><th>Last Take 5</th><th>This week (days at min)</th><th>Consistency</th></tr></thead><tbody>' +
+                (fu || '<tr><td colspan="6" class="empty">Everyone required on site met the minimum.</td></tr>') + '</tbody></table></div>' +
+            '</div>';
+        mount.html(html);
+        if (!histReady) loadDays(histDates, function () { if (state.view === 'capture') renderEmailPanel(); });
     }
 
     // ------------------------------------------------ daily management email
@@ -1216,7 +1338,6 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     function applyStep(id, act) {
         var p = state.capture.filter(function (x) { return x.employeeId === id; })[0];
         if (!p) return;
-        if (act === 'require' || act === 'exempt') { setRequired(p, act === 'require'); renderCapture(); return; }
         if (act === 'inc') p.count = Math.min(20, p.count + 1);
         else if (act === 'dec') p.count = Math.max(0, p.count - 1);
         else if (act === 'min') p.count = state.min;
@@ -1423,6 +1544,8 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
                     trendSelect +
                 '</div>' +
                 '<div class="trend">' + trendCols + '</div></div>' +
+            // Stats and trend under the site rules (per-day captures)
+            (SITE ? '<div id="t5StatsPanel"></div>' : '') +
             // Running totals
             '<div class="panel t5-web-only">' +
                 '<div class="phead" style="gap:10px;flex-wrap:wrap"><div><h3>Running totals — every worker</h3><p id="t5TotalsSub">' + req.length + ' required on site in range · ' + m.exemptN + ' exempt shown but not counted · in-range / this week / lifetime tags</p></div>' +
@@ -1437,6 +1560,85 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
             '<div id="t5ModalMount"></div>';
 
         $('#t5Dashboard').html(actions + '<div id="t5DashBody">' + body + '</div>');
+        if (SITE) renderStatsPanel();
+    }
+
+    // ------------------------------------------------ Stats + trend (site rules)
+    /* The register's Stats sheet, computed from each day's capture under the
+       site rules (the server dashboard above cannot apply them). Daily rows for
+       every day in the range, then Sat-Fri weeks and calendar months touching
+       it. Target is crew-days x the minimum, as in the sheet. */
+    var STATS_MAX_DAYS = 70;
+    function statsDates() {
+        var a = state.start, b = state.end;
+        var all = dateRange(a, b), capped = false;
+        if (all.length > STATS_MAX_DAYS) { all = all.slice(-STATS_MAX_DAYS); capped = true; }
+        return { dates: all, capped: capped };
+    }
+    function periodStats(dates) {
+        var labels = SITE.labels || {}; var order = null, acc = {}, days = 0;
+        dates.forEach(function (d) {
+            var rep = dayReport(d); if (!rep) return;
+            days++; order = order || rep.groupOrder;
+            rep.groupOrder.forEach(function (k) {
+                var g = rep.groups[k], a = acc[k] || (acc[k] = { label: g.label, crewDays: 0, take5s: 0, zeros: 0, atMin: 0 });
+                a.crewDays += g.crewSize; a.take5s += g.take5s; a.zeros += g.zeros;
+                rep.people.forEach(function (p) { if (p.cls.included && p.cls.group === k && p.tags >= state.min) a.atMin++; });
+            });
+        });
+        var out = { days: days, groups: [] };
+        (order || []).forEach(function (k) {
+            var a = acc[k], target = a.crewDays * state.min;
+            out.groups.push({ label: a.label, crewSize: days ? +(a.crewDays / days).toFixed(1) : 0, crewDays: a.crewDays, take5s: a.take5s, target: target,
+                over: a.take5s - target, pctOfTarget: target ? Math.round(a.take5s / target * 100) : 0,
+                avg: a.crewDays ? +(a.take5s / a.crewDays).toFixed(2) : 0, zeros: a.zeros,
+                compliancePct: a.crewDays ? Math.round(a.atMin / a.crewDays * 100) : 0 });
+        });
+        return out;
+    }
+    function statusWord(pct) { return pct >= 100 ? 'On target' : (pct >= 67 ? 'Close' : 'Below target'); }
+    function statusColor(pct) { return pct >= 100 ? 'var(--good-d)' : (pct >= 67 ? 'var(--warn-d)' : 'var(--bad-d)'); }
+    function renderStatsPanel() {
+        var mount = $('#t5StatsPanel'); if (!mount.length) return;
+        var sd = statsDates(), dates = sd.dates;
+        var ready = dates.every(function (d) { return d === state.date || state.dayCache[d] !== undefined; });
+        if (!ready) {
+            mount.html('<div class="panel" style="margin-bottom:16px"><div class="phead"><div><h3>Take 5 statistics (site rules)</h3><p>Loading ' + dates.length + ' days of captures…</p></div></div></div>');
+            loadDays(dates, function () { if (state.view === 'dashboard') renderStatsPanel(); });
+            return;
+        }
+        var V = window.Take5Visuals;
+        // Daily series for the trend
+        var daily = dates.map(function (d) { var r = dayReport(d); return r ? { label: shortDate(d), pct: r.totals.compliancePct, note: r.totals.included + ' required · avg ' + r.totals.avgPerPerson + '/person · ' + r.totals.zeros + ' zero' } : null; });
+        var have = daily.filter(Boolean).length;
+        var spark = V ? V.sparklineSvg(daily, 720, 90, { title: 'Compliance under site rules', target: 100 }) : '';
+        // Period tables
+        function rowsFor(periods) {
+            return periods.map(function (pr) {
+                var st = periodStats(pr.dates); if (!st.days) return '';
+                return st.groups.map(function (g, i) {
+                    return '<tr>' + (i === 0 ? '<td rowspan="' + st.groups.length + '" style="font-weight:600;vertical-align:top">' + esc(pr.label) + '<div class="mt">' + st.days + ' day' + (st.days === 1 ? '' : 's') + ' logged</div></td>' : '') +
+                        '<td>' + esc(g.label) + '</td><td class="cnum mono">' + g.crewSize + '</td><td class="cnum mono">' + g.take5s + '</td><td class="cnum mono">' + g.target + '</td>' +
+                        '<td class="cnum mono" style="color:' + (g.over < 0 ? 'var(--bad-d)' : 'var(--good-d)') + '">' + (g.over > 0 ? '+' : '') + g.over + '</td><td class="cnum mono">' + g.pctOfTarget + '%</td>' +
+                        '<td style="font-weight:600;color:' + statusColor(g.pctOfTarget) + '">' + statusWord(g.pctOfTarget) + '</td>' +
+                        '<td class="cnum mono">' + g.avg + '</td><td class="cnum mono">' + g.compliancePct + '%</td><td class="cnum mono">' + g.zeros + '</td></tr>';
+                }).join('');
+            }).join('');
+        }
+        var weeks = [], months = [], seen = {};
+        dates.forEach(function (d) {
+            var ws = weekStartOf(d); if (!seen['w' + ws]) { seen['w' + ws] = 1; weeks.push({ label: 'Week ' + shortDate(ws) + ' – ' + shortDate(addDays(ws, 6)), dates: dateRange(ws, addDays(ws, 6)).filter(function (x) { return dates.indexOf(x) >= 0; }) }); }
+            var ms = monthStartOf(d); if (!seen['m' + ms]) { seen['m' + ms] = 1; months.push({ label: prettyDate(ms).replace(/^\w+,?\s*\d+\s*/, ''), dates: dates.filter(function (x) { return monthStartOf(x) === ms; }) }); }
+        });
+        var dayPeriods = dates.map(function (d) { return { label: shortDate(d), dates: [d] }; });
+        var head = '<thead><tr><th>Period</th><th>Group</th><th style="text-align:center">Crew size (avg/day)</th><th style="text-align:center">Take 5s</th><th style="text-align:center">Target</th><th style="text-align:center">Over / under</th><th style="text-align:center">% of target</th><th>Status</th><th style="text-align:center">Avg per person</th><th style="text-align:center">At minimum</th><th style="text-align:center">Zeros</th></tr></thead>';
+        function section(title, rows) { return '<div class="phead" style="border-top:1px solid var(--line)"><div><h3 style="font-size:13px">' + title + '</h3></div></div><div style="overflow:auto;max-height:420px"><table class="tbl">' + head + '<tbody>' + (rows || '<tr><td colspan="11" class="empty">No captures in this period.</td></tr>') + '</tbody></table></div>'; }
+        var note = (sd.capped ? 'Range capped to the last ' + STATS_MAX_DAYS + ' days. ' : '') + have + ' of ' + dates.length + ' days have a capture. Target = crew-days × ' + state.min + '. Weeks run Saturday to Friday, as in the register.';
+        mount.html('<div class="panel" style="margin-bottom:16px">' +
+            '<div class="phead"><div><h3>Take 5 statistics (site rules)</h3><p>The register\'s Stats sheet, computed from each day\'s capture with not-required and optional-at-zero people excluded · ' + esc(note) + '</p></div></div>' +
+            '<div style="padding:12px 20px"><div class="eyebrow" style="font-size:11.5px;color:var(--faint);margin-bottom:6px">Trend · % of required people at the minimum each day (hover a point for the day\'s figures)</div>' + spark + '</div>' +
+            section('By day', rowsFor(dayPeriods)) + section('By week (Sat–Fri)', rowsFor(weeks)) + section('By month', rowsFor(months)) +
+            '</div>');
     }
 
     // -------- dashboard sub-renders (targeted updates avoid losing input focus) --------
@@ -1951,6 +2153,13 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     });
     $(document).on('change', '#t5TrendMode', function () { state.trendMode = this.value; loadDashboard(); });
     $(document).on('click', '#t5Capture [data-act]', function () { applyStep(parseInt($(this).data('id'), 10), $(this).data('act')); });
+    $(document).on('change', '#t5Capture .t5-ovr', function () {
+        var id = parseInt($(this).data('id'), 10), p = state.capture.filter(function (x) { return x.employeeId === id; })[0];
+        if (!p) return;
+        setStatusChoice(p, this.value); renderCapture();
+    });
+    $(document).on('click', '#t5PanelCopy', function () { var rep = buildDailyReport(); copyToClipboard(SiteReport.formatEmail(rep, SITE), null); });
+    $(document).on('click', '#t5PanelCopyHtml', function () { var rep = buildDailyReport(); var V = window.Take5Visuals; copyToClipboard(SiteReport.formatEmail(rep, SITE), V ? V.emailHtml(rep, SITE) : SiteReport.formatEmailHtml(rep, SITE)); });
     $(document).on('input', '#t5Search', function () { state.search = this.value; renderList(); });
     $(document).on('change', '#t5Crew', function () { state.crew = this.value; renderCapture(); });
     $(document).on('click', '#t5Capture .seg button[data-filter]', function () { state.filter = $(this).data('filter'); renderCapture(); });

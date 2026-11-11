@@ -64,7 +64,8 @@ var toAction = counted.filter(function (p) { return p.TagCount < MIN; });
 var pct = Math.round(compliant.length / counted.length * 100);
 var exemptNames = exempt.map(function (p) { return p.Name; });
 // a Not-required (not merely optional-at-zero) person, for the override test
-var firstExempt = exempt.filter(function (p) { return Report.classify(Report.fromCaptureRow(p), siteCfg, null).status === 'Not required'; })[0];
+// (on site with no Take 5s, so the Optional step of the test starts outside the denominator)
+var firstExempt = exempt.filter(function (p) { return p.OnSite && !p.TagCount && Report.classify(Report.fromCaptureRow(p), siteCfg, null).status === 'Not required'; })[0];
 
 // Uncorrected figures the server sends — the page must NOT show these.
 var serverDash = fixture.getDashboard();
@@ -117,9 +118,13 @@ function assert(desc, cond, detail) {
     check('rows rendered', await page.locator('#t5List .wrow').count(), people.length);
     check('exempt rows marked', await page.locator('#t5List .wrow.t5-exempt').count(), exempt.length);
     check('off-site required rows marked', await page.locator('#t5List .wrow.t5-off').count(), required.length - counted.length);
-    check('exempt rows have no active stepper', await page.locator('#t5List .wrow.t5-exempt [data-act="inc"]').count(), 0);
-    check('required on-site rows have a stepper', await page.locator('#t5List .wrow [data-act="inc"]').count(), counted.length);
+    var optionalOnSite = people.filter(function (p) { return p.OnSite && Report.classify(Report.fromCaptureRow(p), siteCfg, null).optional; });
+    var optionalZeroOnSite = optionalOnSite.filter(function (p) { return !p.TagCount; });
+    check('not-required rows have no active stepper', await page.locator('#t5List .wrow.t5-exempt:not(.t5-optional) [data-act="inc"]').count(), 0);
+    check('optional-at-zero rows keep a stepper (so their Take 5s can be entered)', await page.locator('#t5List .wrow.t5-exempt.t5-optional [data-act="inc"]').count(), optionalZeroOnSite.length);
+    check('required on-site rows have a stepper', await page.locator('#t5List .wrow [data-act="inc"]').count(), counted.length + optionalZeroOnSite.length);
     check('off-site rows have no active stepper', await page.locator('#t5List .wrow.t5-off [data-act="inc"]').count(), 0);
+    check('every row has the Required / Not required / Optional control', await page.locator('#t5List select.t5-ovr').count(), people.length);
 
     await page.click('#t5Capture .seg button[data-filter="exempt"]');
     check('Exempt filter shows only exempt rows', await page.locator('#t5List .wrow').count(), exempt.length);
@@ -128,17 +133,34 @@ function assert(desc, cond, detail) {
     check('Below-min filter count', await page.locator('#t5List .wrow').count(), toAction.length);
     await page.click('#t5Capture .seg button[data-filter="all"]');
 
-    // Override: flip a Not-required person to required, reload, confirm it stuck, flip back.
-    await page.click('#t5List [data-act="require"][data-id="' + firstExempt.EmployeeId + '"]');
+    // Override: set a Not-required person to Required, reload, confirm it stuck, then Optional, then back.
+    var ovrSel = '#t5List select.t5-ovr[data-id="' + firstExempt.EmployeeId + '"]';
+    assert('control marks the rule verdict', (await page.locator(ovrSel + ' option[value="notRequired"]').textContent()).indexOf('(rule)') >= 0);
+    await page.selectOption(ovrSel, 'required');
     check('override → required count +1', await cellNum('Required on site'), String(counted.length + 1));
     check('override → exempt count −1', await cellNum('Exempt (not counted)'), String(exempt.length - 1));
     await page.reload();
     await page.waitForSelector('#t5List .wrow');
     check('override survives reload', await cellNum('Exempt (not counted)'), String(exempt.length - 1));
     assert('override row is labelled (manual)', (await page.locator('#t5List .wrow:has([data-id="' + firstExempt.EmployeeId + '"]) .meta').textContent()).indexOf('(manual)') >= 0);
-    await page.click('#t5List [data-act="exempt"][data-id="' + firstExempt.EmployeeId + '"]');
+    await page.selectOption(ovrSel, 'optional');
+    check('optional at zero → back out of the denominator', await cellNum('Required on site'), String(counted.length));
+    assert('optional row keeps its stepper', await page.locator('#t5List .wrow:has(' + ovrSel.replace('#t5List ', '') + ') [data-act="inc"]').count() === 1);
+    await page.click('#t5List [data-act="inc"][data-id="' + firstExempt.EmployeeId + '"]');
+    check('optional person with a Take 5 counts', await cellNum('Required on site'), String(counted.length + 1));
+    await page.click('#t5List [data-act="dec"][data-id="' + firstExempt.EmployeeId + '"]');
+    check('optional person back at zero is excluded again', await cellNum('Required on site'), String(counted.length));
+    check('stored override is the string state', await page.evaluate(function (id) { return JSON.parse(localStorage.getItem('t5RequiredOverrides'))[id]; }, String(firstExempt.EmployeeId)), 'optional');
+    await page.selectOption(ovrSel, 'notRequired');
     check('flip back → exempt count restored', await cellNum('Exempt (not counted)'), String(exempt.length));
     check('flip back clears the stored override', await page.evaluate(function () { return localStorage.getItem('t5RequiredOverrides'); }), '{}');
+    // Legacy boolean saves are migrated.
+    await page.evaluate(function (id) { var o = {}; o[id] = true; localStorage.setItem('t5RequiredOverrides', JSON.stringify(o)); }, String(firstExempt.EmployeeId));
+    await page.reload();
+    await page.waitForSelector('#t5List .wrow');
+    check('legacy boolean override migrates to Required', await cellNum('Required on site'), String(counted.length + 1));
+    await page.selectOption(ovrSel, 'notRequired');
+    check('migrated override clears', await cellNum('Required on site'), String(counted.length));
 
     // Stepper still saves for a required person.
     var firstReq = counted[0];
@@ -160,6 +182,25 @@ function assert(desc, cond, detail) {
     check('site minimum replaces the server minimum', await page.locator('#t5MinCopy').textContent(), String(MIN));
     var optionalAtZero = people.filter(function (p) { return Report.classify(Report.fromCaptureRow(p), siteCfg, null).status === 'Optional'; }).length;
     check('optional-at-zero rows are labelled Optional', await page.locator('#t5List .wrow.t5-exempt .stat-tag:has-text("Optional")').count(), optionalAtZero);
+
+    // Email Report panel (the register's Email Report sheet, on the page).
+    await page.waitForSelector('#t5EmailPanel .panel');
+    await page.waitForFunction(function () { return document.querySelector('#t5EmailPanel') && document.querySelector('#t5EmailPanel').textContent.indexOf('…') < 0; });
+    var panelText = await page.locator('#t5EmailPanel').textContent();
+    var panelRows = people.filter(function (p) { return p.OnSite; }).map(function (p) {
+        return p.EmployeeId === firstReq.EmployeeId ? Object.assign({}, p, { TagCount: p.TagCount + 1 }) : p;
+    });
+    var panelRep = Report.buildReport(panelRows, siteCfg, { date: await page.evaluate(function () { return document.getElementById('t5Date').value; }) });
+    assert('email panel title carries the sheet date', panelText.indexOf('Take 5 Report for the ' + panelRep.dateLabel) >= 0);
+    assert('email panel banner shows TODAY zeros', panelText.indexOf('TODAY:') >= 0 && panelText.indexOf(panelRep.totals.zeros + ' with NO Take 5') >= 0);
+    assert('email panel carries the sentence', panelText.indexOf(panelRep.sentence) >= 0);
+    assert('email panel carries the Daily Log row', panelText.indexOf(panelRep.dailyLogRow.join(' | ')) >= 0);
+    var fuTable = page.locator('#t5EmailPanel table').nth(1);
+    var fuRows = await fuTable.locator('tbody tr').count();
+    check('follow-up table lists zeros + below-min', fuRows, panelRep.totals.zeros + panelRep.totals.belowMin);
+    var firstFu = await fuTable.locator('tbody tr').first().textContent();
+    assert('follow-up ranks NO TAKE 5 first', panelRep.totals.zeros === 0 || firstFu.indexOf('NO TAKE 5') >= 0);
+    assert('follow-up shows last Take 5 and consistency', /\d+ of \d+ day/.test(firstFu) && /%|—/.test(firstFu));
     await page.click('#t5EmailOpen');
     await page.waitForSelector('#t5EmailBody');
     // The stepper test above added one tag to firstReq, so expect the page's current counts.
@@ -243,6 +284,17 @@ function assert(desc, cond, detail) {
 
     // Trend is labelled as uncorrected server data.
     assert('trend carries the server-figures caveat', (await page.locator('#t5Dashboard').textContent()).indexOf('still include ' + exempt.length + ' exempt roles') >= 0);
+
+    // Stats + trend under the site rules (per-day captures; the mock serves the same roster every day).
+    await page.waitForFunction(function () { var el = document.querySelector('#t5StatsPanel'); return el && el.textContent.indexOf('Loading') < 0 && el.textContent.indexOf('By day') >= 0; });
+    var statsText = await page.locator('#t5StatsPanel').textContent();
+    assert('stats panel has day / week / month sections', statsText.indexOf('By day') >= 0 && statsText.indexOf('By week (Sat–Fri)') >= 0 && statsText.indexOf('By month') >= 0);
+    assert('stats panel draws the trend', await page.locator('#t5StatsPanel svg.t5v-spark').count() === 1);
+    var dayRows = await page.locator('#t5StatsPanel table').first().locator('tbody tr').count();
+    var rangeDays = await page.evaluate(function () { var a = new Date(document.getElementById('t5Start').value), b = new Date(document.getElementById('t5End').value); return Math.round((b - a) / 86400000) + 1; });
+    check('one row per group per day', dayRows, rangeDays * 2);
+    var firstStats = await page.locator('#t5StatsPanel table').first().locator('tbody tr').first().textContent();
+    assert('stats rows carry target status', /On target|Close|Below target/.test(firstStats), firstStats);
 
     // Notify supervisors: body built from the filtered list.
     await page.click('#t5NotifyOpen');

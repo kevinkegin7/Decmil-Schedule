@@ -19,19 +19,25 @@ management email:
 
 | Area | Before | After |
 |---|---|---|
-| Who counts | everyone the roster sends | Not required (role/crew keywords) and Optional-at-zero people shown muted, no stepper, out of every figure |
+| Who counts | everyone the roster sends | Not required (role/crew keywords) people shown muted with no stepper; Optional people keep the stepper and count only on days they log a Take 5 |
 | Minimum per day | the server's setting (currently 1) | the site rule (3), with the server value shown when it differs |
 | Daily Capture summary | On site = row count | Required on site · Exempt (not counted) separately; Excel gets a `Required` column |
 | Dashboard hero, action list, **Notify supervisors**, crew rollup, leaderboards, running totals, exports | over everyone | over required people, exempt count shown |
 | **Daily email** (new button on Daily Capture) | — | the report card, the email text, the Daily Log row, *Copy text* and *Copy with graphics* |
-| Per-person override | none | "mark exempt / mark required" on each capture row |
+| Per-person override | none | a **Required / Not required / Optional** control on each capture row, the rule's verdict marked "(rule)", manual choices marked "(manual)" |
+| **Email Report panel** (Daily Capture) | — | the register's Email Report sheet on the page: title, CHECK FIRST / TODAY banner, sentence, Maintenance/Operations table, Daily Log row, and the follow-up table (today, last Take 5, this week's days at minimum, consistency) |
+| **Take 5 statistics** (Dashboard) | — | the register's Stats sheet under the site rules, from each day's capture: trend, and by day / Sat–Fri week / month per group: crew size, Take 5s, target, over/under, % of target, status, avg per person, at minimum, zeros |
 
 Without the config files the page falls back to the role patterns alone, as before.
 
 ## What it does not do
 
-- **The trend chart still includes exempt roles.** Its per-period percentages come from
-  `GetDashboard` pre-computed; the chart is labelled accordingly until the server change.
+- **The server trend chart still includes exempt roles.** Its per-period percentages come from
+  `GetDashboard` pre-computed; the chart is labelled accordingly until the server change. The
+  **Take 5 statistics** panel below it is the corrected trend: it re-reads each day's `GetCapture`
+  (one request per day in the range, capped at 70 days) and applies the site rules.
+- **The Email Report panel's history columns** (last Take 5, this week, consistency) use the same
+  per-day captures for the previous 14 days, so they show "…" for a moment while those load.
 - **Overrides are per browser** (`localStorage`). The spec's `SetRequired` endpoint replaces this.
 - **Email counts are Site Diary's tag counts.** If the team's record is the paper register,
   use `tools/take5-report.js` with `--register` instead (see the findings doc, §5).
@@ -64,8 +70,10 @@ On `/Take5` for 10265, with the date set to a full-roster weekday:
 
 - [ ] Capture strip shows **Required on site** ≈ 97 and **Exempt (not counted)** ≈ 34 for a 131-person day
 - [ ] Header reads "site minimum **3**/day (server setting is 1)" until the server setting is changed
-- [ ] A Project Engineer / HSE Advisor row is muted, tagged "Exempt", with no −/+ stepper; a surveyor at zero is tagged "Optional"
-- [ ] "mark required" on an exempt row moves it into the count; "mark exempt" moves it back
+- [ ] A Project Engineer / HSE Advisor row is muted, tagged "Exempt", with no −/+ stepper; a surveyor at zero is tagged "Optional" and still has a stepper
+- [ ] Setting a row to **Required** moves it into the count; **Not required** moves it out; **Optional** counts it only once a Take 5 is entered; choosing the "(rule)" option clears the override
+- [ ] The **Take 5 Report for the d/m/yy** panel under the list shows the banner, sentence, table, Daily Log row and follow-up table, matching the register's Email Report for the same counts
+- [ ] Dashboard **Take 5 statistics (site rules)** loads the range's days and shows the trend plus day / week / month tables
 - [ ] **Daily email** opens the card; the sentence and the Maintenance/Operations table match the register's Email Report for the same counts
 - [ ] *Copy text* pastes the email body; *Copy with graphics* pastes the figures, bars and table into Outlook (needs HTTPS, which the site has)
 - [ ] Action list contains no Site Office personnel; "Notify supervisors" body starts "… N required on-site personnel below minimum"

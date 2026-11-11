@@ -93,6 +93,18 @@ check('override forces a supervisor to required',
     cls({ EmployeeId: 7, Name: 'A', Role: 'Supervisor', Crew: 'Ops - A Crew', TagCount: 0 }, { 7: true }).status, 'No Take 5');
 check('override forces an operator to not required',
     cls({ EmployeeId: 8, Name: 'A', Role: 'Operator - Dozer', Crew: 'Ops - A Crew', TagCount: 3 }, { 8: false }).status, 'Not required');
+check('string overrides: required / notRequired / optional',
+    [cls({ EmployeeId: 1, Name: 'A', Role: 'Engineer - Site', Crew: 'Ops - A Crew', TagCount: 0 }, { 1: 'required' }).status,
+     cls({ EmployeeId: 2, Name: 'A', Role: 'Labourer', Crew: 'Ops - A Crew', TagCount: 3 }, { 2: 'notRequired' }).status,
+     cls({ EmployeeId: 3, Name: 'A', Role: 'Labourer', Crew: 'Ops - A Crew', TagCount: 0 }, { 3: 'optional' }).status,
+     cls({ EmployeeId: 3, Name: 'A', Role: 'Labourer', Crew: 'Ops - A Crew', TagCount: 2 }, { 3: 'optional' }).status],
+    ['No Take 5', 'Not required', 'Optional', 'Below min']);
+check('override "required" beats the optional keyword (surveyor at zero becomes a zero)',
+    cls({ EmployeeId: 4, Name: 'A', Role: 'Surveyor', Crew: 'Ops - A Crew', TagCount: 0 }, { 4: 'required' }).status, 'No Take 5');
+check('ruleStatus reports the rule verdict without overrides',
+    [R.ruleStatus(R.fromCaptureRow({ Name: 'A', Role: 'Surveyor', Crew: 'Ops - A Crew' }), cfg),
+     R.ruleStatus(R.fromCaptureRow({ Name: 'A', Role: 'Project Manager', Crew: 'Site Office - A Crew' }), cfg),
+     R.ruleStatus(R.fromCaptureRow({ Name: 'A', Role: 'Labourer', Crew: 'Ops - A Crew' }), cfg)], ['optional', 'notRequired', 'required']);
 check('typo roles still classify (trailing space, missing space)',
     [cls({ Name: 'A', Role: 'Contracts Administrator- Senior', Crew: 'Site Office - B Crew' }).status,
      cls({ Name: 'A', Role: 'Technician ', Crew: 'Ops - STW', TagCount: 0 }).status], ['Not required', 'No Take 5']);

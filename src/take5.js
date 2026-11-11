@@ -119,6 +119,7 @@
         dayCache: {},            // date -> capture rows for that day (history for the follow-up table, trend and stats)
         // dashboard-only
         indivQuery: '', excludedCrews: [], lbMetric: 'week', tSearch: '', tCrew: 'All',
+        emailSending: false, emailTo: null, emailCc: null, emailSubject: '',
         showNotify: false, notifySending: false, notifyTo: '', notifyCc: '', notifySubject: '', notifyBody: ''
     };
 
@@ -482,6 +483,7 @@
         var text = SiteReport.formatEmail(rep, SITE);
         var Visuals = window.Take5Visuals || null;
         state.emailText = text;
+        var noTags = !state.capture.some(function (p) { return p.count > 0; });
         state.emailHtml = Visuals ? Visuals.emailHtml(rep, SITE) : SiteReport.formatEmailHtml(rep, SITE);
         var facts = 'Counts are Site Diary tags for ' + esc(prettyDate(state.date)) + ' · minimum ' + rep.minPerDay + '/day · ' +
             rep.totals.included + ' included (' + rep.groupOrder.map(function (g) { return esc(g) + ' ' + rep.groups[g].crewSize; }).join(', ') + ') · ' +
@@ -493,18 +495,56 @@
                     '<div class="t5-modal-h">Daily Take 5 email — ' + esc(rep.dateLabel) + '</div>' +
                     '<div class="t5-modal-sub">' + facts + '</div>' +
                     card +
-                    '<label class="t5-modal-lbl">Email body (copy into Outlook)</label>' +
+                    '<label class="t5-modal-lbl">To (remembered on this browser)</label>' +
+                    '<input id="t5EmailTo" class="t5-modal-in" placeholder="name@company.com; another@company.com" value="' + esc(state.emailTo == null ? loadRecipients().to : state.emailTo) + '">' +
+                    '<label class="t5-modal-lbl">Cc (optional)</label>' +
+                    '<input id="t5EmailCc" class="t5-modal-in" placeholder="cc@company.com" value="' + esc(state.emailCc == null ? loadRecipients().cc : state.emailCc) + '">' +
+                    '<label class="t5-modal-lbl">Subject</label>' +
+                    '<input id="t5EmailSubject" class="t5-modal-in" value="' + esc(state.emailSubject || ('Take 5 Report for the ' + rep.dateLabel)) + '">' +
+                    (noTags ? '<div id="t5EmailCheckFirst" style="background:var(--warn-bg);color:var(--warn-d);padding:8px 12px;border-radius:6px;font-weight:600;font-size:13px;margin-top:10px">CHECK FIRST: no Take 5s are recorded for this date yet. Sending is blocked until counts are entered.</div>' : '') +
+                    '<label class="t5-modal-lbl">Email body (sent as text; use Copy with graphics for the Outlook version)</label>' +
                     '<textarea id="t5EmailBody" class="t5-modal-ta" style="min-height:200px;font-family:Consolas,Menlo,monospace;font-size:12.5px" readonly>' + esc(text) + '</textarea>' +
                     '<label class="t5-modal-lbl">Daily Log row</label>' +
                     '<input class="t5-modal-in" readonly value="' + esc(rep.dailyLogRow.join(' | ')) + '">' +
                     '<div class="t5-modal-actions">' +
                         '<button class="t5-btn-ghost" id="t5EmailClose">Close</button>' +
                         '<button class="t5-btn-ghost" id="t5EmailCopyHtml" title="Copies the figures, bars and table as formatted content for Outlook">Copy with graphics</button>' +
-                        '<button class="t5-btn-primary" id="t5EmailCopy">Copy text</button>' +
+                        '<button class="t5-btn-ghost" id="t5EmailCopy">Copy text</button>' +
+                        '<button class="t5-btn-primary" id="t5EmailSend"' + (state.emailSending || noTags ? ' disabled' : '') + '>' + (state.emailSending ? 'Sending…' : 'Send from Site Diary') + '</button>' +
                     '</div>' +
                 '</div>' +
             '</div>';
         $('#t5CaptureModal').html(html);
+    }
+    /* Daily email recipients are remembered per browser so the report is one
+       click each day. Sent through the same /Take5/Notify endpoint as
+       "Notify supervisors" (To, Cc, Subject, Body as text). */
+    var RECIP_KEY = 'take5.dailyEmail.recipients';
+    function loadRecipients() {
+        var o; try { o = JSON.parse(localStorage.getItem(RECIP_KEY) || '{}') || {}; } catch (e) { o = {}; }
+        return { to: o.to || '', cc: o.cc || '' };
+    }
+    function saveRecipients(to, cc) { try { localStorage.setItem(RECIP_KEY, JSON.stringify({ to: to, cc: cc })); } catch (e) { /* private mode etc. */ } }
+    function sendDailyEmail() {
+        if (state.emailSending) return;
+        var to = ($('#t5EmailTo').val() || '').trim();
+        if (!to) { if (window.toastr) toastr.warning('Add at least one recipient.', 'Daily email'); return; }
+        var payload = { To: to, Cc: ($('#t5EmailCc').val() || '').trim(), Subject: ($('#t5EmailSubject').val() || '').trim(), Body: state.emailText || '' };
+        state.emailTo = payload.To; state.emailCc = payload.Cc; state.emailSubject = payload.Subject;
+        state.emailSending = true; renderEmailModal();
+        var failed = function (msg) {
+            state.emailSending = false; renderEmailModal();
+            if (window.toastr) toastr.error(msg || 'Could not send the daily email.', 'Failed');
+        };
+        $.ajax({ url: '/Take5/Notify', type: 'POST', data: payload })
+            .done(function (res) {
+                if (!(res && (res.Sent > 0 || res.sent > 0))) return failed(res && (res.Message || res.message));
+                saveRecipients(payload.To, payload.Cc);
+                state.emailSending = false; state.showEmail = false; state.emailTo = null; state.emailCc = null; state.emailSubject = '';
+                renderEmailModal();
+                if (window.toastr) toastr.success('Daily Take 5 report sent.', 'Take 5');
+            })
+            .fail(function () { failed(); });
     }
     function copyToClipboard(text, html) {
         var done = function () { if (window.toastr) toastr.success('Copied.', 'Daily email'); };
@@ -1352,6 +1392,7 @@
     $(document).on('click', '#t5EmailOpen', function () { state.showEmail = true; renderEmailModal(); });
     $(document).on('click', '#t5EmailClose', function () { state.showEmail = false; renderEmailModal(); });
     $(document).on('mousedown', '#t5EmailBg', function (e) { if (e.target === this) { state.showEmail = false; renderEmailModal(); } });
+    $(document).on('click', '#t5EmailSend', sendDailyEmail);
     $(document).on('click', '#t5EmailCopy', function () { copyToClipboard(state.emailText || '', null); });
     $(document).on('click', '#t5EmailCopyHtml', function () { copyToClipboard(state.emailText || '', state.emailHtml || ''); });
     $(document).on('click', '#t5DashExcel', exportDashboardExcel);

@@ -218,6 +218,22 @@ function assert(desc, cond, detail) {
     assert('copy buttons present', (await page.locator('#t5EmailCopy').count()) === 1 && (await page.locator('#t5EmailCopyHtml').count()) === 1);
     await page.click('#t5EmailClose');
     check('email modal closes', await page.locator('#t5EmailBg').count(), 0);
+    // Send from Site Diary: posts the email text to the page's mail endpoint and remembers the recipients.
+    await page.click('#t5EmailOpen');
+    check('daily email subject defaults to the report title', await page.inputValue('#t5EmailSubject'), 'Take 5 Report for the ' + expected.dateLabel);
+    await page.click('#t5EmailSend');
+    assert('daily email is not sent without a recipient', !(await page.evaluate(function () { return window.__ajax.some(function (a) { return a.url === '/Take5/Notify'; }); })));
+    await page.fill('#t5EmailTo', 'management@example.com');
+    await page.click('#t5EmailSend');
+    await page.waitForFunction(function () { return window.__ajax.some(function (a) { return a.url === '/Take5/Notify'; }); });
+    var dailySent = await page.evaluate(function () { return window.__ajax.filter(function (a) { return a.url === '/Take5/Notify'; })[0].data; });
+    assert('daily email posts the report text', dailySent.Body === body && dailySent.To === 'management@example.com' && dailySent.Subject === 'Take 5 Report for the ' + expected.dateLabel);
+    await page.waitForSelector('#t5EmailBg', { state: 'detached', timeout: 5000 }).catch(function () {});
+    check('daily email modal closes after sending', await page.locator('#t5EmailBg').count(), 0);
+    await page.click('#t5EmailOpen');
+    check('daily email recipients are remembered', await page.inputValue('#t5EmailTo'), 'management@example.com');
+    await page.click('#t5EmailClose');
+    await page.evaluate(function () { window.__ajax = window.__ajax.filter(function (a) { return a.url !== '/Take5/Notify'; }); });
 
     // ---------------------------------------------------------- dashboard
     console.log('\nDashboard');

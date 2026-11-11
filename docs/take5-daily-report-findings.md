@@ -48,9 +48,23 @@ Below min (1–2). Crew Size counts included people; Take 5s sums their counts;
 Ratio is Take 5s ÷ Crew Size; "Crew members Completing Zero" counts the
 included people at zero, who are also the names in the sentence.
 
-The hidden `Platform Import` sheet is **not** Site Diary data: it is an export
-from an inspection platform (Spotlights, Journeys, Area Inspections for
-"PRJ: Rio Tinto Projects", team `WASPDECMIL`) feeding the KPI sheets.
+The hidden `Platform Import` sheet is **not** Site Diary data: it is a pasted
+export of 181 documents (1–17 Oct 2026) from a field-safety platform the
+workbook itself labels "SAI 360" (Spotlights, Journeys, Area Inspections,
+permits for "PRJ: Rio Tinto Projects", team `WASPDECMIL`). It holds no Take 5
+documents of any kind, so it cannot be a count source. Its only consumer is
+the hidden `Weekly KPI` tracker of leadership indicators for 23 named leaders,
+which nothing visible reads, whose as-at date is a typed 23 Oct 2026, and
+whose name matching silently drops three of the 23. It is stale, not live.
+
+The `Stats` sheet's Daily column mirrors the Email Report. Its Weekly and
+Monthly columns switch between two sources: the pasted `Daily Log` rows when
+every recorded day in the period has one, otherwise a "register estimate"
+whose crew size counts only people who did at least one Take 5 that day. The
+estimate path is the one in use, and it flatters the result by construction
+(101–104% "Above target (est.)" on the saved file). Its helper ranges also
+stop at register rows 353 and 341, so the last person in the register, and
+anyone below row 341 in the per-date totals, is silently left out.
 
 **These rules are now in `config/site-10265.json`**, and the module
 `src/take5-site-report.js` reproduces the sheet's own Include / Group / Status
@@ -110,6 +124,20 @@ Also found while reconciling:
   do not match Site Diary's strings, text codes such as "Sick" that the
   Email Report counts as 0, lookups hard-wired to rows 4–354, and a missing
   formula at `Email Report!E22`.
+- The `Daily Log` rows are snapshots taken when they were pasted, not of the
+  finished day. On 15 Oct the log holds 197 Take 5s against 319 in the
+  register for the same date, so some days were logged before typing was
+  complete. Any trend drawn from the Daily Log inherits that, and the Stats
+  sheet's weekly and monthly figures depend on it being complete (§1).
+- The report date is typed by hand in `Email Report!H1` and the day's
+  register column is found by matching it; if the date is missing from row 3
+  every count silently becomes 0.
+
+**How sure is this.** The claims above were produced by independent reviews
+of each sheet and then challenged by two further passes per key finding, one
+working only from the formulas and one only from the values. Twenty-four key
+findings survived both; none was refuted. The seven findings about the
+Platform Import sheet were still being re-checked when this was written.
 
 ---
 
@@ -123,7 +151,12 @@ Also found while reconciling:
   person's last Take 5 date, days at minimum this week, and a consistency
   ratio.
 - Daily Log history and the Stats sheet's daily / weekly / monthly figures
-  against target.
+  against target, with the caveat in §1 that the weekly and monthly figures
+  are only exact when every day has been logged.
+- A separate, now stale, leadership-indicator tracker (PTHA reviews, QSI,
+  Spotlights, Area Inspections per week; CCFV and CCVS per month), which is
+  not about Take 5s and is out of scope here. Whether the team still wants it
+  is its own question.
 
 ---
 

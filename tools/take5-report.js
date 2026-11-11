@@ -260,7 +260,7 @@ if (opts.html) {
             trend = logged.map(function (d) { return { label: dayLabel(d), pct: logDays[d].pct, note: logDays[d].note }; });
             var inc = report.totals.included;
             trend.push({ label: dayLabel(captureDate), pct: inc ? Math.round(report.totals.take5s / (inc * cfg.minPerDay) * 100) : null, note: report.totals.take5s + ' Take 5s, ' + inc + ' crew (this report)' });
-            trendNote = 'Take 5s as a share of target (crew × ' + cfg.minPerDay + ') from the Daily Log, today from this report';
+            trendNote = 'Take 5s as a share of target (crew × ' + cfg.minPerDay + ') from the Daily Log as pasted each day, today from this report';
         } else {
             trend = [];
             var base = new Date(captureDate + 'T00:00:00Z');

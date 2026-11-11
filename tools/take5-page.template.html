@@ -1,4 +1,4 @@
-<title>Take 5 Page Mock</title>
+<title>Take 5 Compliance</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
 <style>
@@ -16,7 +16,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 .main { flex:1; min-width:0; padding-block:18px 48px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); }
 .topbar { display:flex; justify-content:flex-end; align-items:center; gap:12px; font-size:12px; color:var(--grey); margin-bottom:12px; }
 .topbar .btn { background:var(--navy2); color:#fff; border:0; border-radius:8px; padding:7px 12px; font:inherit; font-size:12px; }
-@media (max-width:700px){ .side{display:none;} }
+@media (max-width:700px){ .side{display:none;} .topbar > span{display:none;} .viewseg button{padding:7px 9px;} }
 
 /* ---- take5.css approximation (the live page ships its own) ---- */
 #t5 .hdr { background:var(--navy); color:#fff; border-radius:14px; padding:22px 26px 0; }
@@ -113,16 +113,62 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 .t5-btn-primary { border:0; background:var(--navy); color:#fff; font:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:8px; cursor:pointer; }
 #toastMock { position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); background:#1c2230; color:#fff; padding:8px 14px; border-radius:8px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
 #toastMock.show { opacity:1; }
+
+/* ---- report-from-exports view (scoped under #rpt) ---- */
+#rpt { max-width: 900px; font-size: 14px; line-height: 1.45; --r-muted: var(--faint); --r-warn-bg: #fff7e0; --r-warn-line: #f0d58a; }
+#rpt .r-head { margin-bottom: 14px; }
+#rpt .r-head h1 { font-size: 22px; margin: 2px 0 4px; font-weight: 800; letter-spacing: -0.01em; color: var(--navy); }
+#rpt .r-proj { font-size: 11px; color: var(--grey); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+#rpt .r-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+#rpt .r-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; align-items: start; }
+@media (max-width: 640px) { #rpt .r-controls { grid-template-columns: minmax(0, 1fr); } }
+#rpt .r-field { min-width: 0; }
+#rpt .r-field label { display: block; font-size: 12px; color: var(--grey); margin-bottom: 4px; }
+#rpt .r-drop { border: 1px dashed var(--line); border-radius: 10px; padding: 12px; background: transparent; cursor: pointer; min-width: 0; }
+#rpt .r-drop.over { border-color: var(--navy2); background: #e8f0fb; }
+#rpt .r-drop input { display: block; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; font-size: 12.5px; color: var(--ink); }
+#rpt .r-drop .r-name { font-size: 12px; color: var(--faint); margin-top: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#rpt .r-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+#rpt .r-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+#rpt .r-seg button { border: 0; background: #fff; color: var(--grey); padding: 7px 12px; font: inherit; font-size: 12.5px; cursor: pointer; }
+#rpt .r-seg button.on { background: var(--navy); color: #fff; }
+#rpt .r-seg button:disabled { opacity: .5; cursor: default; }
+#rpt .r-seg button:focus-visible, #rpt .r-btn:focus-visible, #rpt .r-drop input:focus-visible { outline: 2px solid var(--navy2); outline-offset: 2px; }
+#rpt input[type=date] { font: inherit; font-size: 12.5px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); }
+#rpt .r-btn { border: 1px solid var(--navy); background: #fff; color: var(--navy); padding: 8px 14px; border-radius: 8px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+#rpt .r-btn.r-primary { background: var(--navy); color: #fff; }
+#rpt .r-hint { font-size: 12px; color: var(--faint); }
+#rpt .r-example { display: inline-block; font-size: 11px; color: var(--grey); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; }
+#rpt .r-warn { background: var(--r-warn-bg); border: 1px solid var(--r-warn-line); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--ink); margin: 16px 0; }
+#rpt .r-warn ul { margin: 6px 0 0; padding-left: 18px; }
+#rpt h2 { font-size: 14px; margin: 24px 0 8px; font-weight: 700; }
+#rpt .r-cardwrap { overflow-x: auto; }
+#rpt textarea { width: 100%; min-height: 180px; box-sizing: border-box; font: 12.5px/1.5 Consolas, Menlo, monospace; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; resize: vertical; }
+#rpt .r-tablewrap { overflow-x: auto; }
+#rpt table { border-collapse: collapse; font-size: 12.5px; width: 100%; }
+#rpt th, #rpt td { border: 1px solid var(--line); padding: 4px 8px; text-align: left; vertical-align: top; }
+#rpt th { background: #f3f4f7; font-weight: 600; }
+#rpt td.num { font-variant-numeric: tabular-nums; text-align: right; }
+#rpt .r-err { color: var(--bad); font-size: 13px; margin-top: 8px; }
+.r-toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.r-toast.show { opacity: 1; }
+/* ---- view switcher (sidebar on wide screens, segmented control in the top bar everywhere) ---- */
+.viewseg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-right: auto; }
+.viewseg button { border: 0; background: #fff; color: var(--grey); font: inherit; font-size: 12px; font-weight: 600; padding: 7px 12px; cursor: pointer; }
+.viewseg button.on { background: var(--navy); color: #fff; }
+.side .nav a { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .r-toast, #toastMock { transition: none; } }
 </style>
 
-<div class="mock-note"><b>Test environment.</b> This is the Site Diary Take 5 page running the proposed files against a fake server. The roster is the real 9 Nov 2026 crews and roles with synthetic names. Counts you change here are kept in this tab only. Date: Mon 9 Nov 2026 (the Dashboard range is 3 to 9 Nov).</div>
+<div class="mock-note"><b>Test environment.</b> Two things in one place: the Site Diary <b>Take 5 Compliance</b> page running the proposed files against a fake server (the real 9 Nov 2026 crews and roles with synthetic names; the date is pinned to Mon 9 Nov and counts you change stay in this tab), and the <b>report from your exports</b> that builds the same daily report from the real Site Diary export and the register workbook until the page goes live. Switch with the menu on the left or the buttons at the top.</div>
 <div class="shell">
   <aside class="side">
     <div><div class="brand">Site Diary R5</div><div class="proj">WASP WH Bulk Earthworks (10265)</div></div>
-    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on">Take 5 Compliance</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
+    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on" data-view="page">Take 5 Compliance</a><a data-view="exports">Take 5 report from exports</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
   </aside>
   <div class="main">
-    <div class="topbar"><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
+    <div class="topbar"><div class="viewseg" role="tablist"><button type="button" class="on" data-view="page" role="tab" aria-selected="true">Site Diary page</button><button type="button" data-view="exports" role="tab" aria-selected="false">Report from exports</button></div><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
+    <div id="viewPage">
     <div id="t5" class="mt-2 mb-4">
       <div class="hdr">
         <div class="hdr-top">
@@ -147,11 +193,75 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
       <div id="t5Capture" style="margin-top:18px"></div>
       <div id="t5Dashboard" style="margin-top:18px;display:none"></div>
     </div>
+    </div>
+<div id="viewExports" hidden>
+<div id="rpt">
+  <header class="r-head">
+    <div>
+      <div class="r-proj" id="proj"></div>
+      <h1>Take 5 report from your exports</h1>
+      <div class="r-hint">For the days before the page goes live: drop the Site Diary export (and the register workbook) here and get the same report, email and reconciliation. Your files stay in this browser tab. Nothing is uploaded.</div>
+    </div>
+  </header>
+
+  <div class="r-panel">
+    <div class="r-controls">
+      <div class="r-field">
+        <label for="capFile">Site Diary export (Take5_Capture_….xlsx), required</label>
+        <div class="r-drop" id="capDrop"><input type="file" id="capFile" accept=".xlsx,.xls"><div class="r-name" id="capName">Drop the file here or choose it.</div></div>
+      </div>
+      <div class="r-field">
+        <label for="regFile">Register workbook (Decmil Take 5 and KPI register.xlsm), optional</label>
+        <div class="r-drop" id="regDrop"><input type="file" id="regFile" accept=".xlsm,.xlsx"><div class="r-name" id="regName">Adds the paper counts, the trend and the reconciliation.</div></div>
+      </div>
+      <div class="r-field">
+        <label>Counts from</label>
+        <div class="r-seg" id="countSeg"><button type="button" data-v="sitediary" class="on" id="segSD">Site Diary tags</button><button type="button" data-v="register" id="segReg">Paper register</button></div>
+      </div>
+      <div class="r-field">
+        <label for="dateInput">Report date</label>
+        <div class="r-row"><input type="date" id="dateInput"><span class="r-hint" id="dateHint">read from the export</span></div>
+      </div>
+    </div>
+    <div class="r-row" style="margin-top:14px">
+      <button type="button" class="r-btn r-primary" id="buildBtn">Build report</button>
+      <span id="status" class="r-hint"></span>
+      <span id="exampleTag" class="r-example" hidden>Example data: 9 Nov 2026 roster with synthetic names</span>
+    </div>
+    <div class="r-err" id="err" hidden></div>
+  </div>
+
+  <div id="warnBox" class="r-warn" hidden><b>Check first</b><ul id="warnList"></ul></div>
+
+  <h2>Report</h2>
+  <div class="r-cardwrap" id="card"></div>
+
+  <h2>Email</h2>
+  <div class="r-row" style="margin-bottom:8px">
+    <button type="button" class="r-btn r-primary" id="copyText">Copy text</button>
+    <button type="button" class="r-btn" id="copyHtml">Copy with graphics</button>
+    <span class="r-hint">Paste into a new Outlook message.</span>
+  </div>
+  <textarea id="emailText" readonly aria-label="Email body"></textarea>
+  <div class="r-hint" style="margin-top:6px">Daily Log row: <span id="logRow" style="font-family:var(--mono)"></span></div>
+
+  <div id="reconSection" hidden>
+    <h2>Site Diary vs register, <span id="reconDate"></span></h2>
+    <div class="r-hint" id="reconSummary"></div>
+    <div class="r-tablewrap" style="margin-top:8px"><table id="reconTable"></table></div>
+  </div>
+
+  <h2>Everyone on the list</h2>
+  <div class="r-tablewrap"><table id="peopleTable"></table></div>
+</div>
+<div class="r-toast" id="toast" role="status"></div>
+</div>
   </div>
 </div>
 <div id="toastMock" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ---- fake server: the two endpoints take5.js calls, built from the example roster ---- */
 (function () {
@@ -221,3 +331,137 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 <script>/*@@VISUALS@@*/</script>
 <script>window.Take5SiteConfig = /*@@CONFIG@@*/;</script>
 <script>/*@@TAKE5@@*/</script>
+<script>/*@@WORKBOOKS@@*/</script>
+<script>
+/* ---- report-from-exports tool (the former standalone report page) ---- */
+(function () {
+  'use strict';
+  var CFG = window.Take5SiteConfig;
+  var SAMPLE = /*@@REPORT_SAMPLE@@*/;
+  var R = window.Take5SiteReport, V = window.Take5Visuals, W = window.Take5Workbooks;
+  var state = { capture: null, reg: null, countSource: 'sitediary', date: '', isExample: false, text: '', html: '' };
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 1800); }
+  $('proj').textContent = CFG.projectName + ' (' + CFG.project + ') · minimum ' + CFG.minPerDay + ' per person per day';
+
+  function readFile(file, cb) {
+    var fr = new FileReader();
+    fr.onload = function () { try { cb(null, XLSX.read(new Uint8Array(fr.result), { type: 'array', raw: true, bookVBA: false })); } catch (e) { cb(e); } };
+    fr.onerror = function () { cb(new Error('Could not read ' + file.name)); };
+    fr.readAsArrayBuffer(file);
+  }
+  function setErr(msg) { var e = $('err'); e.textContent = msg || ''; e.hidden = !msg; }
+
+  function loadCapture(file) {
+    if (!file) return;
+    readFile(file, function (err, wb) {
+      if (err) return setErr(err.message);
+      try { state.capture = W.parseCapture(XLSX, wb, file.name); } catch (e) { return setErr(e.message); }
+      state.isExample = false; $('exampleTag').hidden = true;
+      $('capName').textContent = file.name + ' · ' + state.capture.rows.length + ' people' + (state.capture.date ? ' · ' + state.capture.date : '');
+      if (state.capture.date) { $('dateInput').value = state.capture.date; $('dateHint').textContent = 'read from the export'; }
+      setErr(''); build();
+    });
+  }
+  function loadRegister(file) {
+    if (!file) return;
+    readFile(file, function (err, wb) {
+      if (err) return setErr(err.message);
+      try { state.reg = W.parseRegister(XLSX, wb); } catch (e) { return setErr(e.message); }
+      $('regName').textContent = file.name + ' · ' + state.reg.people.length + ' people · ' + state.reg.firstDate + ' to ' + state.reg.lastDate;
+      state.countSource = 'register'; syncSeg();
+      setErr(''); build();
+    });
+  }
+  function syncSeg() {
+    $('segSD').classList.toggle('on', state.countSource === 'sitediary');
+    $('segReg').classList.toggle('on', state.countSource === 'register');
+    $('segReg').disabled = !state.reg; $('segReg').title = state.reg ? '' : 'Load the register first';
+  }
+
+  function build() {
+    if (!state.capture) return;
+    var date = $('dateInput').value || state.capture.date;
+    var A;
+    try { A = W.analyse(state.capture, state.reg, CFG, { date: date, countSource: state.countSource }); } catch (e) { return setErr(e.message); }
+    var rep = A.report;
+    $('status').textContent = rep.totals.included + ' required (' + rep.groupOrder.map(function (g) { return g + ' ' + rep.groups[g].crewSize; }).join(', ') + ') · ' + rep.totals.notRequired + ' not required · ' + rep.totals.optionalExcluded + ' optional at zero · counts from ' + (A.countSource === 'register' ? 'the paper register' : 'Site Diary tags');
+    $('warnBox').hidden = !A.warnings.length;
+    $('warnList').innerHTML = A.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('');
+    $('card').innerHTML = V.renderCard(rep, CFG, { width: 820, sourceNote: 'Counts: ' + (A.countSource === 'register' ? 'paper register' : 'Site Diary tags') + ' · ' + A.date, trend: A.trend, trendNote: A.trendNote });
+    state.text = R.formatEmail(rep, CFG); state.html = V.emailHtml(rep, CFG);
+    $('emailText').value = state.text;
+    $('logRow').textContent = rep.dailyLogRow.join(' | ');
+    // reconciliation
+    var rs = $('reconSection');
+    if (state.reg) {
+      rs.hidden = false; $('reconDate').textContent = A.date;
+      var d = A.registerDay;
+      $('reconSummary').textContent = (d.hasColumn ? 'Register: ' + d.entries + ' entries, total ' + d.total + (d.text ? ', ' + d.text + ' text' : '') : 'Register has no column for this date') +
+        ' · Site Diary: ' + A.siteDiary.withTags + ' people with tags, total ' + A.siteDiary.total + ' · ' + A.discrepancies.length + ' differ · ' + A.notInRegister.length + ' not in register · ' + A.otherRegister.length + ' register entries from people not on the list';
+      var rows = '<tr><th>Name</th><th>Role</th><th>Crew</th><th>Site Diary</th><th>Register</th><th>Note</th></tr>';
+      rows += A.discrepancies.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.role) + '</td><td>' + esc(x.crew) + '</td><td class="num">' + x.siteDiary + '</td><td class="num">' + esc(x.register) + '</td><td>' + esc((x.included ? '' : x.status) + (x.match !== 'exact' ? ' match: ' + x.match : '')) + '</td></tr>'; }).join('');
+      rows += A.notInRegister.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.role) + '</td><td>' + esc(x.crew) + '</td><td class="num">' + x.sd + '</td><td class="num">—</td><td>not in register · ' + esc(x.status) + '</td></tr>'; }).join('');
+      rows += A.otherRegister.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.role) + '</td><td>' + esc(x.crew) + '</td><td class="num">—</td><td class="num">' + x.count + '</td><td>in the register for this date but not on the Site Diary list</td></tr>'; }).join('');
+      $('reconTable').innerHTML = rows;
+    } else rs.hidden = true;
+    $('peopleTable').innerHTML = '<tr><th>Name</th><th>Role</th><th>Crew</th><th>Count</th><th>Group</th><th>Status</th><th>Reason</th></tr>' +
+      rep.people.map(function (p) { return '<tr><td>' + esc(p.name) + '</td><td>' + esc(p.role) + '</td><td>' + esc(p.crew) + '</td><td class="num">' + p.tags + '</td><td>' + esc(p.cls.group) + '</td><td>' + esc(p.cls.status) + '</td><td>' + esc(p.cls.reason) + '</td></tr>'; }).join('');
+  }
+
+  function copy(text, html) {
+    var done = function () { toast('Copied'); };
+    var fallback = function () { try { var ta = $('emailText'); ta.focus(); ta.select(); document.execCommand('copy'); done(); } catch (e) { toast('Copy failed. Select the text and copy it.'); } };
+    try {
+      if (html && navigator.clipboard && window.ClipboardItem) {
+        navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) })]).then(done, fallback);
+      } else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+
+  // wiring
+  $('capFile').addEventListener('change', function () { loadCapture(this.files[0]); });
+  $('regFile').addEventListener('change', function () { loadRegister(this.files[0]); });
+  [['capDrop', loadCapture], ['regDrop', loadRegister]].forEach(function (pair) {
+    var el = $(pair[0]);
+    el.addEventListener('dragover', function (e) { e.preventDefault(); el.classList.add('over'); });
+    el.addEventListener('dragleave', function () { el.classList.remove('over'); });
+    el.addEventListener('drop', function (e) { e.preventDefault(); el.classList.remove('over'); var f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) pair[1](f); });
+  });
+  $('countSeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || b.disabled) return; state.countSource = b.getAttribute('data-v'); syncSeg(); build(); });
+  $('dateInput').addEventListener('change', function () { $('dateHint').textContent = 'set by you'; build(); });
+  $('buildBtn').addEventListener('click', build);
+  $('copyText').addEventListener('click', function () { copy(state.text, null); });
+  $('copyHtml').addEventListener('click', function () { copy(state.text, state.html); });
+
+  // at rest: the example roster, clearly marked, so the page shows what it does
+  state.capture = SAMPLE; state.isExample = true; $('exampleTag').hidden = false;
+  $('dateInput').value = SAMPLE.date; $('capName').textContent = 'Example: Take5_Capture_2026-11-09.xlsx (synthetic names)';
+  syncSeg(); build();
+}());
+</script>
+<script>
+/* ---- view switcher: the Site Diary page or the report-from-exports tool ---- */
+(function () {
+  'use strict';
+  function show(view) {
+    document.getElementById('viewPage').hidden = view !== 'page';
+    document.getElementById('viewExports').hidden = view !== 'exports';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-view]'), function (el) {
+      var on = el.getAttribute('data-view') === view;
+      el.classList.toggle('on', on);
+      if (el.getAttribute('role') === 'tab') el.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    try { if (view === 'exports') history.replaceState(null, '', '#exports'); else history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* sandboxed */ }
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-view]'); if (!el) return;
+    e.preventDefault(); show(el.getAttribute('data-view'));
+  });
+  window.__showView = show;
+  if (location.hash === '#exports') show('exports');
+}());
+</script>

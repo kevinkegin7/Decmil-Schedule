@@ -210,12 +210,14 @@ every register entry for the date from someone not on the list (the Stats
 sheet's "Other / unassigned"). `--html` writes the card, the Outlook version,
 a trend from the register's Daily Log, and a table view of every person.
 
-**`dist/take5-report.standalone.html`** — the same thing with nothing to
-install: open the file in Edge or Chrome, drop the Site Diary export and the
-register onto it, and the card, the email and the reconciliation appear.
-Files are read inside the browser tab and never uploaded. Built from
-`tools/report-page.template.html` by `node tools/build-report-page.js`; the
-reading and analysis code is shared with the CLI (`src/take5-workbooks.js`).
+**`dist/take5.standalone.html`** — the same thing with nothing to
+install: open the file in Edge or Chrome, switch to *Report from exports*,
+drop the Site Diary export and the register onto it, and the card, the email
+and the reconciliation appear. Files are read inside the browser tab and never
+uploaded. The same page carries the Site Diary Take 5 Compliance page mock
+(the proposed files against a fake server). Built from
+`tools/take5-page.template.html` by `npm run build:page`; the reading and
+analysis code is shared with the CLI (`src/take5-workbooks.js`).
 
 **Tests.** `npm test` runs the classifier suite (40 roles), the report
 conformance suite (the workbook's 127 rows and totals), the visuals suite,

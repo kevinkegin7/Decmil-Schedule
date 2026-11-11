@@ -13,7 +13,7 @@ management report.
 | `src/take5-role-classification.js` | Role-pattern fallback used when no site config is loaded |
 | `config/site-10265.json` | **The site's rules** — keyword lists, optional people, groups, minimum per day. Edit this, not the code |
 | `tools/take5-report.js` | CLI: the same report from a Site Diary export, optionally reconciled against the register workbook |
-| `tools/report-page.template.html`, `tools/build-report-page.js` | The browser version: `node tools/build-report-page.js` writes `dist/take5-report.standalone.html`, a single file to open in Edge or Chrome and drop the two workbooks onto (needs internet for one script) |
+| `tools/take5-page.template.html`, `tools/build-page.js` | The browser page (`npm run build:page` → `dist/take5.standalone.html`): the Site Diary Take 5 Compliance page running the proposed files against a fake server, and in the same page the report-from-exports tool to drop the two workbooks onto (needs internet for jQuery and SheetJS) |
 | `docs/take5-daily-report-findings.md` | What the two spreadsheets do, what is wrong with the capture data, what was built, open decisions |
 | `docs/deploying-take5-js.md` | How IT deploys the page files |
 | `docs/take5-role-exemption-spec.md` | The server-side change that makes the trend chart and overrides correct |

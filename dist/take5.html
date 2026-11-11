@@ -1,4 +1,4 @@
-<title>Take 5 Page Mock</title>
+<title>Take 5 Compliance</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
 <style>
@@ -16,7 +16,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 .main { flex:1; min-width:0; padding-block:18px 48px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); }
 .topbar { display:flex; justify-content:flex-end; align-items:center; gap:12px; font-size:12px; color:var(--grey); margin-bottom:12px; }
 .topbar .btn { background:var(--navy2); color:#fff; border:0; border-radius:8px; padding:7px 12px; font:inherit; font-size:12px; }
-@media (max-width:700px){ .side{display:none;} }
+@media (max-width:700px){ .side{display:none;} .topbar > span{display:none;} .viewseg button{padding:7px 9px;} }
 
 /* ---- take5.css approximation (the live page ships its own) ---- */
 #t5 .hdr { background:var(--navy); color:#fff; border-radius:14px; padding:22px 26px 0; }
@@ -113,16 +113,62 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 .t5-btn-primary { border:0; background:var(--navy); color:#fff; font:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:8px; cursor:pointer; }
 #toastMock { position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); background:#1c2230; color:#fff; padding:8px 14px; border-radius:8px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
 #toastMock.show { opacity:1; }
+
+/* ---- report-from-exports view (scoped under #rpt) ---- */
+#rpt { max-width: 900px; font-size: 14px; line-height: 1.45; --r-muted: var(--faint); --r-warn-bg: #fff7e0; --r-warn-line: #f0d58a; }
+#rpt .r-head { margin-bottom: 14px; }
+#rpt .r-head h1 { font-size: 22px; margin: 2px 0 4px; font-weight: 800; letter-spacing: -0.01em; color: var(--navy); }
+#rpt .r-proj { font-size: 11px; color: var(--grey); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+#rpt .r-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+#rpt .r-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; align-items: start; }
+@media (max-width: 640px) { #rpt .r-controls { grid-template-columns: minmax(0, 1fr); } }
+#rpt .r-field { min-width: 0; }
+#rpt .r-field label { display: block; font-size: 12px; color: var(--grey); margin-bottom: 4px; }
+#rpt .r-drop { border: 1px dashed var(--line); border-radius: 10px; padding: 12px; background: transparent; cursor: pointer; min-width: 0; }
+#rpt .r-drop.over { border-color: var(--navy2); background: #e8f0fb; }
+#rpt .r-drop input { display: block; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; font-size: 12.5px; color: var(--ink); }
+#rpt .r-drop .r-name { font-size: 12px; color: var(--faint); margin-top: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#rpt .r-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+#rpt .r-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+#rpt .r-seg button { border: 0; background: #fff; color: var(--grey); padding: 7px 12px; font: inherit; font-size: 12.5px; cursor: pointer; }
+#rpt .r-seg button.on { background: var(--navy); color: #fff; }
+#rpt .r-seg button:disabled { opacity: .5; cursor: default; }
+#rpt .r-seg button:focus-visible, #rpt .r-btn:focus-visible, #rpt .r-drop input:focus-visible { outline: 2px solid var(--navy2); outline-offset: 2px; }
+#rpt input[type=date] { font: inherit; font-size: 12.5px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 8px; background: #fff; color: var(--ink); }
+#rpt .r-btn { border: 1px solid var(--navy); background: #fff; color: var(--navy); padding: 8px 14px; border-radius: 8px; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+#rpt .r-btn.r-primary { background: var(--navy); color: #fff; }
+#rpt .r-hint { font-size: 12px; color: var(--faint); }
+#rpt .r-example { display: inline-block; font-size: 11px; color: var(--grey); border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; }
+#rpt .r-warn { background: var(--r-warn-bg); border: 1px solid var(--r-warn-line); border-radius: 10px; padding: 10px 14px; font-size: 13px; color: var(--ink); margin: 16px 0; }
+#rpt .r-warn ul { margin: 6px 0 0; padding-left: 18px; }
+#rpt h2 { font-size: 14px; margin: 24px 0 8px; font-weight: 700; }
+#rpt .r-cardwrap { overflow-x: auto; }
+#rpt textarea { width: 100%; min-height: 180px; box-sizing: border-box; font: 12.5px/1.5 Consolas, Menlo, monospace; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; resize: vertical; }
+#rpt .r-tablewrap { overflow-x: auto; }
+#rpt table { border-collapse: collapse; font-size: 12.5px; width: 100%; }
+#rpt th, #rpt td { border: 1px solid var(--line); padding: 4px 8px; text-align: left; vertical-align: top; }
+#rpt th { background: #f3f4f7; font-weight: 600; }
+#rpt td.num { font-variant-numeric: tabular-nums; text-align: right; }
+#rpt .r-err { color: var(--bad); font-size: 13px; margin-top: 8px; }
+.r-toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+.r-toast.show { opacity: 1; }
+/* ---- view switcher (sidebar on wide screens, segmented control in the top bar everywhere) ---- */
+.viewseg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-right: auto; }
+.viewseg button { border: 0; background: #fff; color: var(--grey); font: inherit; font-size: 12px; font-weight: 600; padding: 7px 12px; cursor: pointer; }
+.viewseg button.on { background: var(--navy); color: #fff; }
+.side .nav a { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .r-toast, #toastMock { transition: none; } }
 </style>
 
-<div class="mock-note"><b>Test environment.</b> This is the Site Diary Take 5 page running the proposed files against a fake server. The roster is the real 9 Nov 2026 crews and roles with synthetic names. Counts you change here are kept in this tab only. Date: Mon 9 Nov 2026 (the Dashboard range is 3 to 9 Nov).</div>
+<div class="mock-note"><b>Test environment.</b> Two things in one place: the Site Diary <b>Take 5 Compliance</b> page running the proposed files against a fake server (the real 9 Nov 2026 crews and roles with synthetic names; the date is pinned to Mon 9 Nov and counts you change stay in this tab), and the <b>report from your exports</b> that builds the same daily report from the real Site Diary export and the register workbook until the page goes live. Switch with the menu on the left or the buttons at the top.</div>
 <div class="shell">
   <aside class="side">
     <div><div class="brand">Site Diary R5</div><div class="proj">WASP WH Bulk Earthworks (10265)</div></div>
-    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on">Take 5 Compliance</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
+    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on" data-view="page">Take 5 Compliance</a><a data-view="exports">Take 5 report from exports</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
   </aside>
   <div class="main">
-    <div class="topbar"><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
+    <div class="topbar"><div class="viewseg" role="tablist"><button type="button" class="on" data-view="page" role="tab" aria-selected="true">Site Diary page</button><button type="button" data-view="exports" role="tab" aria-selected="false">Report from exports</button></div><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
+    <div id="viewPage">
     <div id="t5" class="mt-2 mb-4">
       <div class="hdr">
         <div class="hdr-top">
@@ -147,11 +193,75 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
       <div id="t5Capture" style="margin-top:18px"></div>
       <div id="t5Dashboard" style="margin-top:18px;display:none"></div>
     </div>
+    </div>
+<div id="viewExports" hidden>
+<div id="rpt">
+  <header class="r-head">
+    <div>
+      <div class="r-proj" id="proj"></div>
+      <h1>Take 5 report from your exports</h1>
+      <div class="r-hint">For the days before the page goes live: drop the Site Diary export (and the register workbook) here and get the same report, email and reconciliation. Your files stay in this browser tab. Nothing is uploaded.</div>
+    </div>
+  </header>
+
+  <div class="r-panel">
+    <div class="r-controls">
+      <div class="r-field">
+        <label for="capFile">Site Diary export (Take5_Capture_….xlsx), required</label>
+        <div class="r-drop" id="capDrop"><input type="file" id="capFile" accept=".xlsx,.xls"><div class="r-name" id="capName">Drop the file here or choose it.</div></div>
+      </div>
+      <div class="r-field">
+        <label for="regFile">Register workbook (Decmil Take 5 and KPI register.xlsm), optional</label>
+        <div class="r-drop" id="regDrop"><input type="file" id="regFile" accept=".xlsm,.xlsx"><div class="r-name" id="regName">Adds the paper counts, the trend and the reconciliation.</div></div>
+      </div>
+      <div class="r-field">
+        <label>Counts from</label>
+        <div class="r-seg" id="countSeg"><button type="button" data-v="sitediary" class="on" id="segSD">Site Diary tags</button><button type="button" data-v="register" id="segReg">Paper register</button></div>
+      </div>
+      <div class="r-field">
+        <label for="dateInput">Report date</label>
+        <div class="r-row"><input type="date" id="dateInput"><span class="r-hint" id="dateHint">read from the export</span></div>
+      </div>
+    </div>
+    <div class="r-row" style="margin-top:14px">
+      <button type="button" class="r-btn r-primary" id="buildBtn">Build report</button>
+      <span id="status" class="r-hint"></span>
+      <span id="exampleTag" class="r-example" hidden>Example data: 9 Nov 2026 roster with synthetic names</span>
+    </div>
+    <div class="r-err" id="err" hidden></div>
+  </div>
+
+  <div id="warnBox" class="r-warn" hidden><b>Check first</b><ul id="warnList"></ul></div>
+
+  <h2>Report</h2>
+  <div class="r-cardwrap" id="card"></div>
+
+  <h2>Email</h2>
+  <div class="r-row" style="margin-bottom:8px">
+    <button type="button" class="r-btn r-primary" id="copyText">Copy text</button>
+    <button type="button" class="r-btn" id="copyHtml">Copy with graphics</button>
+    <span class="r-hint">Paste into a new Outlook message.</span>
+  </div>
+  <textarea id="emailText" readonly aria-label="Email body"></textarea>
+  <div class="r-hint" style="margin-top:6px">Daily Log row: <span id="logRow" style="font-family:var(--mono)"></span></div>
+
+  <div id="reconSection" hidden>
+    <h2>Site Diary vs register, <span id="reconDate"></span></h2>
+    <div class="r-hint" id="reconSummary"></div>
+    <div class="r-tablewrap" style="margin-top:8px"><table id="reconTable"></table></div>
+  </div>
+
+  <h2>Everyone on the list</h2>
+  <div class="r-tablewrap"><table id="peopleTable"></table></div>
+</div>
+<div class="r-toast" id="toast" role="status"></div>
+</div>
   </div>
 </div>
 <div id="toastMock" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ---- fake server: the two endpoints take5.js calls, built from the example roster ---- */
 (function () {
@@ -2245,4 +2355,344 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
         setTab('capture');
     });
 })();
+</script>
+<script>/*
+ * Take 5 Compliance — reading the two workbooks
+ * ---------------------------------------------
+ * Shared by tools/take5-report.js (Node) and the browser report page. Takes
+ * SheetJS workbooks already opened by the caller (so this file never touches
+ * the file system) and turns them into what the report module needs:
+ *
+ *   parseCapture(wb)             the Site Diary Daily Capture export
+ *   parseRegister(wb)            the register's "TAKE 5's" grid and Daily Log
+ *   analyse(capture, reg, cfg,   the report, warnings, per-person
+ *           opts)                reconciliation and the trend series
+ *
+ * Name lookup into the register follows Email Report!Q5: exact trimmed match,
+ * then first word + last word, then a nickname/initial-stripped fallback the
+ * sheet does not have. Plain ES5, UMD, depends on take5-site-report.js.
+ */
+(function (root, factory) {
+    if (typeof module === 'object' && module.exports) module.exports = factory(require('./take5-site-report'));
+    else root.Take5Workbooks = factory(root.Take5SiteReport);
+}(typeof self !== 'undefined' ? self : this, function (R) {
+    'use strict';
+
+    var MONTHS = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
+    var DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    function pad(n) { return ('0' + n).slice(-2); }
+    function serialToIso(XLSX, serial) {
+        var d = XLSX.SSF.parse_date_code(serial);
+        return d ? d.y + '-' + pad(d.m) + '-' + pad(d.d) : null;
+    }
+    function parseLongDate(s) {            // "Monday, 9 Nov 2026" -> 2026-11-09
+        var m = /(\d{1,2})\s+([A-Za-z]{3})[a-z]*\s+(\d{4})/.exec(String(s || ''));
+        if (!m) return null;
+        var mon = MONTHS[m[2].toLowerCase().slice(0, 3)];
+        return mon ? m[3] + '-' + pad(mon) + '-' + pad(+m[1]) : null;
+    }
+    function norm(s) { return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+    function firstLast(s) { var t = norm(s).split(' '); return t.length >= 2 ? t[0] + ' ' + t[t.length - 1] : norm(s); }
+    function stripNick(s) { return norm(String(s || '').replace(/\([^)]*\)/g, ' ').replace(/\b[a-z]\.\s*/gi, ' ')); }
+    function dayLabel(iso) { var d = new Date(iso + 'T00:00:00Z'); return DOW[d.getUTCDay()] + ' ' + d.getUTCDate(); }
+    function addDays(iso, n) { var d = new Date(iso + 'T00:00:00Z'); return new Date(d.getTime() + n * 86400000).toISOString().slice(0, 10); }
+
+    // ------------------------------------------------------------- capture
+    function parseCapture(XLSX, wb, fileName) {
+        var ws = wb.Sheets[wb.SheetNames[0]];
+        var rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null, raw: true });
+        var hdrIdx = -1;
+        for (var r = 0; r < Math.min(rows.length, 20); r++) if (rows[r] && String(rows[r][0]).trim() === 'Name') { hdrIdx = r; break; }
+        if (hdrIdx < 0) throw new Error('This does not look like a Take 5 Capture export: no header row starting with "Name".');
+        var hdr = rows[hdrIdx].map(function (h) { return String(h || '').trim(); });
+        function col(name) { return hdr.indexOf(name); }
+        var i = { name: col('Name'), gender: col('Gender'), role: col('Role'), crew: col('Crew'), company: col('Company'), tags: col('Tags'), min: col('Minimum'), status: col('Status') };
+        var people = [];
+        for (r = hdrIdx + 1; r < rows.length; r++) {
+            var row = rows[r];
+            if (!row || row[i.name] == null || String(row[i.name]).trim() === '') continue;
+            people.push({ Name: String(row[i.name]).trim(), Gender: row[i.gender], Role: String(row[i.role] || '').trim(), Crew: String(row[i.crew] || '').trim(),
+                          Company: String(row[i.company] || '').trim(), TagCount: Number(row[i.tags] || 0), Minimum: row[i.min], Status: row[i.status] });
+        }
+        var date = parseLongDate(rows[1] && rows[1][0]);
+        if (!date && fileName) { var m = /(\d{4}-\d{2}-\d{2})/.exec(fileName); if (m) date = m[1]; }
+        return { rows: people, date: date, summaryLine: String(rows[2] && rows[2][0] || ''), serverMin: people.length ? Number(people[0].Minimum) : null };
+    }
+
+    // ------------------------------------------------------------ register
+    function parseRegister(XLSX, wb) {
+        var rname = wb.SheetNames.filter(function (n) { return /take ?5/i.test(n) && !/capture/i.test(n); })[0];
+        if (!rname) throw new Error('No "TAKE 5\'s" sheet found (sheets: ' + wb.SheetNames.join(', ') + ').');
+        var rows = XLSX.utils.sheet_to_json(wb.Sheets[rname], { header: 1, defval: null, raw: true });
+        var dateRow = rows[2] || [], dateCols = {};
+        for (var c = 6; c < dateRow.length; c++) {
+            var v = dateRow[c];
+            var iso = typeof v === 'number' ? serialToIso(XLSX, v) : (v instanceof Date ? v.toISOString().slice(0, 10) : null);
+            if (iso && dateCols[iso] === undefined) dateCols[iso] = c;   // first hit wins, as MATCH does
+        }
+        var people = [];
+        for (var r = 3; r < rows.length; r++) {
+            var rr = rows[r]; if (!rr) continue;
+            var full = String(rr[0] || '').trim();
+            if (!full) full = (String(rr[1] || '') + ' ' + String(rr[2] || '')).trim();
+            if (!full) continue;
+            people.push({ row: r + 1, name: full, role: rr[3], company: rr[4], crew: rr[5], cells: rr });
+        }
+        var byExact = {}, byFirstLast = {}, byStripped = {};
+        people.forEach(function (p) {
+            var k = norm(p.name); if (!byExact[k]) byExact[k] = p;
+            var fl = firstLast(p.name); (byFirstLast[fl] = byFirstLast[fl] || []).push(p);
+            var st = stripNick(p.name); if (!byStripped[st]) byStripped[st] = p;
+        });
+        function findPerson(name) {
+            var k = norm(name);
+            if (byExact[k]) return { p: byExact[k], how: 'exact' };
+            var fl = byFirstLast[firstLast(name)];
+            if (fl && fl.length === 1) return { p: fl[0], how: 'first+last' };
+            if (fl && fl.length > 1) return { p: fl[0], how: 'first+last (ambiguous: ' + fl.map(function (x) { return x.name; }).join(' | ') + ')' };
+            var st = byStripped[stripNick(name)];
+            if (st) return { p: st, how: 'normalised' };
+            return null;
+        }
+        function dayStats(iso) {
+            var c = dateCols[iso], out = { col: c, entries: 0, total: 0, text: 0, atMin: function (min) { var n = 0; if (c === undefined) return 0; people.forEach(function (p) { var v = p.cells[c]; if (typeof v === 'number' && v >= min) n++; }); return n; } };
+            if (c !== undefined) people.forEach(function (p) {
+                var v = p.cells[c];
+                if (v === null || v === undefined || v === '') return;
+                if (typeof v === 'number') { out.entries++; out.total += v; } else out.text++;
+            });
+            return out;
+        }
+        // Daily Log: what management already received each day
+        var logName = wb.SheetNames.filter(function (n) { return /daily log/i.test(n); })[0], logDays = {};
+        if (logName) {
+            XLSX.utils.sheet_to_json(wb.Sheets[logName], { header: 1, defval: null, raw: true }).forEach(function (row, idx) {
+                if (idx < 4 || typeof row[0] !== 'number') return;
+                var iso = serialToIso(XLSX, row[0]), crew = Number(row[1] || 0) + Number(row[4] || 0), t5 = Number(row[2] || 0) + Number(row[5] || 0);
+                if (iso && crew > 0) logDays[iso] = { crew: crew, take5s: t5 };
+            });
+        }
+        var dates = Object.keys(dateCols).sort();
+        return { sheet: rname, people: people, dateCols: dateCols, findPerson: findPerson, dayStats: dayStats, logDays: logDays,
+                 firstDate: dates[0], lastDate: dates[dates.length - 1] };
+    }
+
+    // ------------------------------------------------------------- analyse
+    /* opts: { date, countSource: 'register'|'sitediary', fileName } */
+    function analyse(capture, reg, cfg, opts) {
+        opts = opts || {};
+        var date = opts.date || capture.date;
+        if (!date) throw new Error('Could not determine the report date; set it explicitly.');
+        var countSource = opts.countSource || (reg ? 'register' : 'sitediary');
+        if (countSource === 'register' && !reg) countSource = 'sitediary';
+        var day = reg ? reg.dayStats(date) : null;
+        var lookups = {};
+        function registerCount(p) {
+            var f = reg.findPerson(p.name);
+            lookups[p.name] = f ? { row: f.p.row, name: f.p.name, how: f.how } : null;
+            if (!f) return null;
+            if (day.col === undefined) return 0;
+            var v = f.p.cells[day.col];
+            if (v === null || v === undefined || v === '') return 0;
+            if (typeof v === 'number') return v;
+            lookups[p.name].text = String(v);
+            return 0;                                   // the sheet's IFERROR(...+0, 0) turns text into 0
+        }
+        var report = R.buildReport(capture.rows, cfg, { date: date, tagsFor: countSource === 'register' ? registerCount : undefined });
+        if (countSource !== 'register' && reg) capture.rows.forEach(function (c) { registerCount({ name: c.Name }); });
+
+        var warnings = [];
+        var withTags = capture.rows.filter(function (c) { return c.TagCount > 0; }).length;
+        var exactMin = capture.rows.filter(function (c) { return c.TagCount === cfg.minPerDay; }).length;
+        if (capture.serverMin !== null && capture.serverMin !== cfg.minPerDay)
+            warnings.push('Site Diary exported Minimum/day = ' + capture.serverMin + ' but the site rule is ' + cfg.minPerDay + '/day; its own "On track" and "Compliance" figures (' + capture.summaryLine.replace(/\s+/g, ' ') + ') are not comparable with this report.');
+        if (withTags && exactMin / withTags > 0.85)
+            warnings.push(exactMin + ' of the ' + withTags + ' people with Site Diary tags have exactly ' + cfg.minPerDay + ', consistent with the "Set ' + cfg.minPerDay + '" button being used as a submitted tick rather than a count.');
+        if (reg) {
+            if (day.col === undefined) warnings.push('The register has no column for ' + date + ' (it covers ' + reg.firstDate + ' to ' + reg.lastDate + ').');
+            else if (day.entries === 0) warnings.push('CHECK FIRST: the register column for ' + date + ' is empty. Nothing has been typed for this date yet, so a register-based report shows everyone at zero.');
+            else if (day.entries < report.totals.included * 0.6) warnings.push('The register column for ' + date + ' has only ' + day.entries + ' entries for ' + report.totals.included + ' included people; data entry looks incomplete.');
+            if (day.text) warnings.push(day.text + ' register cell(s) for this date hold text (e.g. "Sick"), which the Email Report counts as 0.');
+        }
+        var nrTags = report.notRequired.filter(function (p) { return p.tags > 0; }).length;
+        if (nrTags) warnings.push(nrTags + ' Not-required people have Site Diary tags; they are excluded from the figures.');
+
+        var discrepancies = [], notInRegister = [], otherRegister = [];
+        if (reg) {
+            var sdByName = {}; capture.rows.forEach(function (c) { sdByName[c.Name] = Number(c.TagCount || 0); });
+            report.people.forEach(function (p) {
+                var lk = lookups[p.name], sd = sdByName[p.name] || 0;
+                if (!lk) { notInRegister.push({ name: p.name, role: p.role, crew: p.crew, status: p.cls.status, sd: sd }); return; }
+                if (day.col === undefined) return;
+                var v = reg.people.filter(function (x) { return x.row === lk.row; })[0].cells[day.col];
+                var regn = (typeof v === 'number') ? v : (v === null || v === undefined || v === '' ? null : 'text:' + v);
+                var regNum = regn === null ? 0 : (typeof regn === 'number' ? regn : 0);
+                if (regNum !== sd || typeof regn === 'string')
+                    discrepancies.push({ name: p.name, role: p.role, crew: p.crew, status: p.cls.status, included: p.cls.included, siteDiary: sd, register: regn === null ? '(blank)' : regn, match: lk.how });
+            });
+            if (day.col !== undefined) {
+                var onList = {}; Object.keys(lookups).forEach(function (n) { if (lookups[n]) onList[lookups[n].row] = true; });
+                reg.people.forEach(function (p) { var v = p.cells[day.col]; if (typeof v === 'number' && v > 0 && !onList[p.row]) otherRegister.push({ name: p.name, role: p.role, crew: p.crew, count: v }); });
+            }
+        }
+
+        // trend: Daily Log as pasted (what management received), today from this report
+        var trend = null, trendNote = '';
+        if (reg) {
+            var logged = Object.keys(reg.logDays).filter(function (d) { return d < date; }).sort().slice(-13);
+            if (logged.length >= 2) {
+                trend = logged.map(function (d) { var L = reg.logDays[d]; return { label: dayLabel(d), pct: Math.round(L.take5s / (L.crew * cfg.minPerDay) * 100), note: L.take5s + ' Take 5s, ' + L.crew + ' crew' }; });
+                var inc = report.totals.included;
+                trend.push({ label: dayLabel(date), pct: inc ? Math.round(report.totals.take5s / (inc * cfg.minPerDay) * 100) : null, note: report.totals.take5s + ' Take 5s, ' + inc + ' crew (this report)' });
+                trendNote = 'Take 5s as a share of target (crew × ' + cfg.minPerDay + ') from the Daily Log as pasted each day, today from this report';
+            } else {
+                trend = [];
+                for (var k = 13; k >= 0; k--) {
+                    var iso = addDays(date, -k), s = reg.dayStats(iso);
+                    trend.push({ label: dayLabel(iso), pct: s.entries >= 5 ? Math.round(s.atMin(cfg.minPerDay) / s.entries * 100) : null, note: s.entries ? s.entries + ' recorded' : 'no entries' });
+                }
+                trendNote = 'people with a register entry that day, share at ' + cfg.minPerDay + '+';
+            }
+        }
+        return { date: date, countSource: countSource, report: report, warnings: warnings, discrepancies: discrepancies,
+                 notInRegister: notInRegister, otherRegister: otherRegister, trend: trend, trendNote: trendNote,
+                 registerDay: day ? { entries: day.entries, total: day.total, text: day.text, hasColumn: day.col !== undefined } : null,
+                 siteDiary: { withTags: withTags, total: capture.rows.reduce(function (a, c) { return a + c.TagCount; }, 0) } };
+    }
+
+    return { parseCapture: parseCapture, parseRegister: parseRegister, analyse: analyse, parseLongDate: parseLongDate, dayLabel: dayLabel };
+}));
+</script>
+<script>
+/* ---- report-from-exports tool (the former standalone report page) ---- */
+(function () {
+  'use strict';
+  var CFG = window.Take5SiteConfig;
+  var SAMPLE = {"rows":[{"Name":"Person 001","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - B Crew","Company":"BOYLE CIVIL CONTRACTING PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 002","Gender":"Male","Role":"Supervisor - Workshop","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 003","Gender":"Male","Role":"Engineer - Project","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 004","Gender":"Male","Role":"Labourer","Crew":"Adhoc","Company":"FMS GROUP OPERATIONS TPCM PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 005","Gender":"Male","Role":"Engineer - Project","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 006","Gender":"Male","Role":"Labourer","Crew":"Adhoc","Company":"B BROWN & J.E BROWN & R HICKS & J.C WOLFF","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 007","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 008","Gender":"Male","Role":"Engineer - Project","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 009","Gender":"Male","Role":"Labourer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 010","Gender":"Female","Role":"Operator - Dump Truck","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 011","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 012","Gender":"Male","Role":"Operator - Excavator","Crew":"Adhoc","Company":"B BROWN & J.E BROWN & R HICKS & J.C WOLFF","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 013","Gender":"Male","Role":"Operator - Final Trim Grader","Crew":"Ops - B Crew","Company":"ROAD PAVEMENT SOLUTIONS PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 014","Gender":"Male","Role":"Operator - Roller","Crew":"Ops - A Crew","Company":"SPEC TRIM CIVIL PLANT HIRE PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 015","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 016","Gender":"Male","Role":"Operator - Dump Truck","Crew":"Ops - B Crew","Company":"Decmil","TagCount":4,"Minimum":1,"Status":"On track"},{"Name":"Person 017","Gender":"Male","Role":"Environmental & Sustainability Advisor","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 018","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - B Crew","Company":"BOYLE CIVIL CONTRACTING PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 019","Gender":"Male","Role":"Supervisor","Crew":"Site Office - Adhoc","Company":"KOOMAL GROUP PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 020","Gender":"Male","Role":"Supervisor - Workshop","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 021","Gender":"Female","Role":"Operator - Loader","Crew":"Ops - B Crew","Company":"MARINE TECHNOLOGY SERVICES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 022","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - A Crew","Company":"FITZGERALD CIVIL CONTRACTING WA PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 023","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 024","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Maint - B Crew","Company":"JMH GROUP WA PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 025","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - A Crew","Company":"BOYLE CIVIL CONTRACTING PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 026","Gender":"Male","Role":"Labourer","Crew":"Ops - A Crew","Company":"KOOMAL GROUP PTY LTD","TagCount":1,"Minimum":1,"Status":"On track"},{"Name":"Person 027","Gender":"Male","Role":"Construction Manager","Crew":"Site Office - Adhoc","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 028","Gender":"Male","Role":"Auto Electrician","Crew":"Maint - B Crew","Company":"ALL 4 DIESEL PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 029","Gender":"Male","Role":"Supervisor","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 030","Gender":"Male","Role":"Operator - Final Trim Grader","Crew":"Ops - B Crew","Company":"ROAD PAVEMENT SOLUTIONS PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 031","Gender":"Male","Role":"Surveyor - Senior","Crew":"Site Office - B Crew","Company":"SURVEY DYNAMICS PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 032","Gender":"Male","Role":"Supervisor","Crew":"Site Office - C Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 033","Gender":"Male","Role":"Operator - Dump Truck","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 034","Gender":"Male","Role":"Operator - Water Truck","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 035","Gender":"Male","Role":"Labourer","Crew":"Ops - B Crew","Company":"KOOMAL GROUP PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 036","Gender":"Male","Role":"Engineer - Project","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 037","Gender":"Male","Role":"Labourer","Crew":"Ops - A Crew","Company":"KOOMAL GROUP PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 038","Gender":"Male","Role":"Surveyor","Crew":"Site Office - A Crew","Company":"SURVEY DYNAMICS PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 039","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 040","Gender":"Male","Role":"Superintendent","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 041","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 042","Gender":"Male","Role":"Operator - Dump Truck","Crew":"Ops - A Crew","Company":"KOOMAL GROUP PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 043","Gender":"Male","Role":"Operator - Dump Truck","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 044","Gender":"Male","Role":"Engineer - Project","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 045","Gender":"Male","Role":"Technician ","Crew":"Ops - STW","Company":"KENVIRO PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 046","Gender":"Female","Role":"Operator - Dump Truck","Crew":"Ops - A Crew","Company":"MARINE TECHNOLOGY SERVICES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 047","Gender":"Female","Role":"Labourer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":7,"Minimum":1,"Status":"On track"},{"Name":"Person 048","Gender":"Female","Role":"Peggy","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 049","Gender":"Female","Role":"Operator - Dump Truck","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 050","Gender":"Male","Role":"Construction Manager","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 051","Gender":"<Undefined>","Role":"Operator - Excavator","Crew":"Ops - B Crew","Company":"KNOCKALLA CIVIL PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 052","Gender":"Male","Role":"Engineer - Project","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 053","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 054","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 055","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Maint - B Crew","Company":"JMH GROUP WA PTY LTD","TagCount":4,"Minimum":1,"Status":"On track"},{"Name":"Person 056","Gender":"Male","Role":"Surveyor","Crew":"Site Office - B Crew","Company":"SURVEY DYNAMICS PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 057","Gender":"Male","Role":"Operator - Final Trim Grader","Crew":"Ops - A Crew","Company":"TOMLINSON GRADER HIRE PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 058","Gender":"Female","Role":"Operator - Water Truck","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 059","Gender":"Male","Role":"Operator - Final Trim Grader","Crew":"Ops - B Crew","Company":"TOMLINSON GRADER HIRE PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 060","Gender":"Male","Role":"Operator - Dump Truck","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 061","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - A Crew","Company":"BOYLE CIVIL CONTRACTING PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 062","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Adhoc","Company":"FORCE EQUIPMENT PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 063","Gender":"Male","Role":"Operator - Excavator","Crew":"Site Office - Adhoc","Company":"KOOMAL GROUP PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 064","Gender":"Male","Role":"Operator - Excavator","Crew":"Adhoc","Company":"B BROWN & J.E BROWN & R HICKS & J.C WOLFF","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 065","Gender":"Male","Role":"Serviceperson","Crew":"Maint - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 066","Gender":"Male","Role":"Operator - Roller","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 067","Gender":"Male","Role":"Area Manager","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 068","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - B Crew","Company":"MARINE TECHNOLOGY SERVICES PTY LTD","TagCount":2,"Minimum":1,"Status":"On track"},{"Name":"Person 069","Gender":"Male","Role":"HSE Advisor - Senior","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 070","Gender":"Male","Role":"Operator - Final Trim Grader","Crew":"Ops - A Crew","Company":"SPEC TRIM CIVIL PLANT HIRE PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 071","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - A Crew","Company":"SOUTH COAST CIVIL (WA) PTY LTD","TagCount":2,"Minimum":1,"Status":"On track"},{"Name":"Person 072","Gender":"Male","Role":"Supervisor","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 073","Gender":"Male","Role":"Labourer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 074","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Adhoc","Company":"FORCE EQUIPMENT PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 075","Gender":"Female","Role":"Operator - Dump Truck","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 076","Gender":"Male","Role":"Labourer","Crew":"Adhoc","Company":"FMS GROUP OPERATIONS TPCM PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 077","Gender":"Male","Role":"HSE Advisor","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 078","Gender":"Female","Role":"Operator - Excavator","Crew":"Ops - A Crew","Company":"KNOCKALLA CIVIL PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 079","Gender":"Male","Role":"Soil Technician","Crew":"Ops - B Crew","Company":"CONSTRUCTION SCIENCES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 080","Gender":"Female","Role":"Maintenance Administrator - Senior","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 081","Gender":"Male","Role":"Supervisor - Senior","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 082","Gender":"Prefer not to respond","Role":"Supervisor - Workshop","Crew":"Adhoc","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 083","Gender":"Male","Role":"Contracts Administrator- Senior","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 084","Gender":"Male","Role":"Labourer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 085","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 086","Gender":"Male","Role":"Surveyor","Crew":"Site Office - A Crew","Company":"SURVEY DYNAMICS PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 087","Gender":"Male","Role":"Operator - Loader","Crew":"Ops - A Crew","Company":"MARINE TECHNOLOGY SERVICES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 088","Gender":"Female","Role":"Labourer","Crew":"Ops - C Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 089","Gender":"","Role":"Operator - Excavator","Crew":"Ops - A Crew","Company":"BOYLE CIVIL CONTRACTING PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 090","Gender":"Male","Role":"Labourer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 091","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Maint - A Crew","Company":"JMH GROUP WA PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 092","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Maint - A Crew","Company":"ALL 4 DIESEL PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 093","Gender":"Male","Role":"Operator - Loader","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 094","Gender":"Male","Role":"Fabricator / Boilermaker","Crew":"Maint - B Crew","Company":"FORCE EQUIPMENT PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 095","Gender":"Male","Role":"Trades Assistant","Crew":"Maint - STW","Company":"Safe Check Pty Ltd","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 096","Gender":"Male","Role":"HSE Advisor - Senior","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 097","Gender":"Male","Role":"Auto Electrician","Crew":"Maint - A Crew","Company":"JMH GROUP WA PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 098","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - B Crew","Company":"KOOMAL GROUP PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 099","Gender":"Male","Role":"Mechanic - Fitter","Crew":"Maint - B Crew","Company":"Decmil","TagCount":4,"Minimum":1,"Status":"On track"},{"Name":"Person 100","Gender":"Male","Role":"Labourer","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 101","Gender":"Male","Role":"Soil Technician","Crew":"Ops - B Crew","Company":"CONSTRUCTION SCIENCES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 102","Gender":"Female","Role":"Operator - Dump Truck","Crew":"Ops - A Crew","Company":"MARINE TECHNOLOGY SERVICES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 103","Gender":"Male","Role":"Engineer - Project","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 104","Gender":"Female","Role":"Site Administrator","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 105","Gender":"Male","Role":"Soil Technician","Crew":"Ops - A Crew","Company":"CONSTRUCTION SCIENCES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 106","Gender":"Male","Role":"Surveyor","Crew":"Perth Office ","Company":"SURVEY DYNAMICS PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 107","Gender":"Male","Role":"Supervisor","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 108","Gender":"Male","Role":"Surveyor - Senior","Crew":"Site Office - Adhoc","Company":"SURVEY DYNAMICS PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 109","Gender":"Male","Role":"Supervisor","Crew":"Site Office - A Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 110","Gender":"Male","Role":"Labourer","Crew":"Ops - A Crew","Company":"MARINE TECHNOLOGY SERVICES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 111","Gender":"Male","Role":"Mechanic - Fitter","Crew":"Maint - A Crew","Company":"BURNSIDE CONTRACTING PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 112","Gender":"Male","Role":"Operator - Excavator","Crew":"Ops - B Crew","Company":"KOOMAL GROUP PTY LTD","TagCount":1,"Minimum":1,"Status":"On track"},{"Name":"Person 113","Gender":"Male","Role":"Operator - Dump Truck","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 114","Gender":"Female","Role":"Labourer","Crew":"Ops - B Crew","Company":"SURVEY DYNAMICS PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 115","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Maint - A Crew","Company":"MEA RESOURCE GROUP PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 116","Gender":"<Undefined>","Role":"Operator - Grader","Crew":"Ops - C Crew","Company":"SPEC TRIM CIVIL PLANT HIRE PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 117","Gender":"Female","Role":"Site Administrator","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 118","Gender":"Male","Role":"Serviceperson","Crew":"Maint - A Crew","Company":"Decmil","TagCount":2,"Minimum":1,"Status":"On track"},{"Name":"Person 119","Gender":"Male","Role":"Mechanic - Heavy","Crew":"Maint - A Crew","Company":"FORCE EQUIPMENT PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 120","Gender":"Male","Role":"Operator - Loader","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 121","Gender":"Male","Role":"Soil Technician","Crew":"Ops - A Crew","Company":"CONSTRUCTION SCIENCES PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 122","Gender":"Male","Role":"Labourer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 123","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":6,"Minimum":1,"Status":"On track"},{"Name":"Person 124","Gender":"Male","Role":"Surveyor","Crew":"Site Office - B Crew","Company":"SURVEY DYNAMICS PTY LTD","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 125","Gender":"Male","Role":"HSE Advisor","Crew":"Site Office - B Crew","Company":"Decmil","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 126","Gender":"Male","Role":"Operator - Dozer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 127","Gender":"Male","Role":"Technician ","Crew":"Ops - STW","Company":"KENVIRO PTY LTD","TagCount":0,"Minimum":1,"Status":"No Take 5"},{"Name":"Person 128","Gender":"Male","Role":"Operator - Water Truck","Crew":"Ops - A Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 129","Gender":"Male","Role":"Operator - Roller","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 130","Gender":"Female","Role":"Storeperson","Crew":"Maint - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"},{"Name":"Person 131","Gender":"Male","Role":"Labourer","Crew":"Ops - B Crew","Company":"Decmil","TagCount":3,"Minimum":1,"Status":"On track"}],"date":"2026-11-09","summaryLine":"On site: 131   On track: 90   Below min: 41   Compliance: 69%   Minimum/day: 1","serverMin":1};
+  var R = window.Take5SiteReport, V = window.Take5Visuals, W = window.Take5Workbooks;
+  var state = { capture: null, reg: null, countSource: 'sitediary', date: '', isExample: false, text: '', html: '' };
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 1800); }
+  $('proj').textContent = CFG.projectName + ' (' + CFG.project + ') · minimum ' + CFG.minPerDay + ' per person per day';
+
+  function readFile(file, cb) {
+    var fr = new FileReader();
+    fr.onload = function () { try { cb(null, XLSX.read(new Uint8Array(fr.result), { type: 'array', raw: true, bookVBA: false })); } catch (e) { cb(e); } };
+    fr.onerror = function () { cb(new Error('Could not read ' + file.name)); };
+    fr.readAsArrayBuffer(file);
+  }
+  function setErr(msg) { var e = $('err'); e.textContent = msg || ''; e.hidden = !msg; }
+
+  function loadCapture(file) {
+    if (!file) return;
+    readFile(file, function (err, wb) {
+      if (err) return setErr(err.message);
+      try { state.capture = W.parseCapture(XLSX, wb, file.name); } catch (e) { return setErr(e.message); }
+      state.isExample = false; $('exampleTag').hidden = true;
+      $('capName').textContent = file.name + ' · ' + state.capture.rows.length + ' people' + (state.capture.date ? ' · ' + state.capture.date : '');
+      if (state.capture.date) { $('dateInput').value = state.capture.date; $('dateHint').textContent = 'read from the export'; }
+      setErr(''); build();
+    });
+  }
+  function loadRegister(file) {
+    if (!file) return;
+    readFile(file, function (err, wb) {
+      if (err) return setErr(err.message);
+      try { state.reg = W.parseRegister(XLSX, wb); } catch (e) { return setErr(e.message); }
+      $('regName').textContent = file.name + ' · ' + state.reg.people.length + ' people · ' + state.reg.firstDate + ' to ' + state.reg.lastDate;
+      state.countSource = 'register'; syncSeg();
+      setErr(''); build();
+    });
+  }
+  function syncSeg() {
+    $('segSD').classList.toggle('on', state.countSource === 'sitediary');
+    $('segReg').classList.toggle('on', state.countSource === 'register');
+    $('segReg').disabled = !state.reg; $('segReg').title = state.reg ? '' : 'Load the register first';
+  }
+
+  function build() {
+    if (!state.capture) return;
+    var date = $('dateInput').value || state.capture.date;
+    var A;
+    try { A = W.analyse(state.capture, state.reg, CFG, { date: date, countSource: state.countSource }); } catch (e) { return setErr(e.message); }
+    var rep = A.report;
+    $('status').textContent = rep.totals.included + ' required (' + rep.groupOrder.map(function (g) { return g + ' ' + rep.groups[g].crewSize; }).join(', ') + ') · ' + rep.totals.notRequired + ' not required · ' + rep.totals.optionalExcluded + ' optional at zero · counts from ' + (A.countSource === 'register' ? 'the paper register' : 'Site Diary tags');
+    $('warnBox').hidden = !A.warnings.length;
+    $('warnList').innerHTML = A.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('');
+    $('card').innerHTML = V.renderCard(rep, CFG, { width: 820, sourceNote: 'Counts: ' + (A.countSource === 'register' ? 'paper register' : 'Site Diary tags') + ' · ' + A.date, trend: A.trend, trendNote: A.trendNote });
+    state.text = R.formatEmail(rep, CFG); state.html = V.emailHtml(rep, CFG);
+    $('emailText').value = state.text;
+    $('logRow').textContent = rep.dailyLogRow.join(' | ');
+    // reconciliation
+    var rs = $('reconSection');
+    if (state.reg) {
+      rs.hidden = false; $('reconDate').textContent = A.date;
+      var d = A.registerDay;
+      $('reconSummary').textContent = (d.hasColumn ? 'Register: ' + d.entries + ' entries, total ' + d.total + (d.text ? ', ' + d.text + ' text' : '') : 'Register has no column for this date') +
+        ' · Site Diary: ' + A.siteDiary.withTags + ' people with tags, total ' + A.siteDiary.total + ' · ' + A.discrepancies.length + ' differ · ' + A.notInRegister.length + ' not in register · ' + A.otherRegister.length + ' register entries from people not on the list';
+      var rows = '<tr><th>Name</th><th>Role</th><th>Crew</th><th>Site Diary</th><th>Register</th><th>Note</th></tr>';
+      rows += A.discrepancies.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.role) + '</td><td>' + esc(x.crew) + '</td><td class="num">' + x.siteDiary + '</td><td class="num">' + esc(x.register) + '</td><td>' + esc((x.included ? '' : x.status) + (x.match !== 'exact' ? ' match: ' + x.match : '')) + '</td></tr>'; }).join('');
+      rows += A.notInRegister.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.role) + '</td><td>' + esc(x.crew) + '</td><td class="num">' + x.sd + '</td><td class="num">—</td><td>not in register · ' + esc(x.status) + '</td></tr>'; }).join('');
+      rows += A.otherRegister.map(function (x) { return '<tr><td>' + esc(x.name) + '</td><td>' + esc(x.role) + '</td><td>' + esc(x.crew) + '</td><td class="num">—</td><td class="num">' + x.count + '</td><td>in the register for this date but not on the Site Diary list</td></tr>'; }).join('');
+      $('reconTable').innerHTML = rows;
+    } else rs.hidden = true;
+    $('peopleTable').innerHTML = '<tr><th>Name</th><th>Role</th><th>Crew</th><th>Count</th><th>Group</th><th>Status</th><th>Reason</th></tr>' +
+      rep.people.map(function (p) { return '<tr><td>' + esc(p.name) + '</td><td>' + esc(p.role) + '</td><td>' + esc(p.crew) + '</td><td class="num">' + p.tags + '</td><td>' + esc(p.cls.group) + '</td><td>' + esc(p.cls.status) + '</td><td>' + esc(p.cls.reason) + '</td></tr>'; }).join('');
+  }
+
+  function copy(text, html) {
+    var done = function () { toast('Copied'); };
+    var fallback = function () { try { var ta = $('emailText'); ta.focus(); ta.select(); document.execCommand('copy'); done(); } catch (e) { toast('Copy failed. Select the text and copy it.'); } };
+    try {
+      if (html && navigator.clipboard && window.ClipboardItem) {
+        navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) })]).then(done, fallback);
+      } else if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    } catch (e) { fallback(); }
+  }
+
+  // wiring
+  $('capFile').addEventListener('change', function () { loadCapture(this.files[0]); });
+  $('regFile').addEventListener('change', function () { loadRegister(this.files[0]); });
+  [['capDrop', loadCapture], ['regDrop', loadRegister]].forEach(function (pair) {
+    var el = $(pair[0]);
+    el.addEventListener('dragover', function (e) { e.preventDefault(); el.classList.add('over'); });
+    el.addEventListener('dragleave', function () { el.classList.remove('over'); });
+    el.addEventListener('drop', function (e) { e.preventDefault(); el.classList.remove('over'); var f = e.dataTransfer.files && e.dataTransfer.files[0]; if (f) pair[1](f); });
+  });
+  $('countSeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || b.disabled) return; state.countSource = b.getAttribute('data-v'); syncSeg(); build(); });
+  $('dateInput').addEventListener('change', function () { $('dateHint').textContent = 'set by you'; build(); });
+  $('buildBtn').addEventListener('click', build);
+  $('copyText').addEventListener('click', function () { copy(state.text, null); });
+  $('copyHtml').addEventListener('click', function () { copy(state.text, state.html); });
+
+  // at rest: the example roster, clearly marked, so the page shows what it does
+  state.capture = SAMPLE; state.isExample = true; $('exampleTag').hidden = false;
+  $('dateInput').value = SAMPLE.date; $('capName').textContent = 'Example: Take5_Capture_2026-11-09.xlsx (synthetic names)';
+  syncSeg(); build();
+}());
+</script>
+<script>
+/* ---- view switcher: the Site Diary page or the report-from-exports tool ---- */
+(function () {
+  'use strict';
+  function show(view) {
+    document.getElementById('viewPage').hidden = view !== 'page';
+    document.getElementById('viewExports').hidden = view !== 'exports';
+    Array.prototype.forEach.call(document.querySelectorAll('[data-view]'), function (el) {
+      var on = el.getAttribute('data-view') === view;
+      el.classList.toggle('on', on);
+      if (el.getAttribute('role') === 'tab') el.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    try { if (view === 'exports') history.replaceState(null, '', '#exports'); else history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* sandboxed */ }
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-view]'); if (!el) return;
+    e.preventDefault(); show(el.getAttribute('data-view'));
+  });
+  window.__showView = show;
+  if (location.hash === '#exports') show('exports');
+}());
 </script>

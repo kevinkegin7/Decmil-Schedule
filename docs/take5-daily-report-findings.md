@@ -55,7 +55,8 @@ permits for "PRJ: Rio Tinto Projects", team `WASPDECMIL`). It holds no Take 5
 documents of any kind, so it cannot be a count source. Its only consumer is
 the hidden `Weekly KPI` tracker of leadership indicators for 23 named leaders,
 which nothing visible reads, whose as-at date is a typed 23 Oct 2026, and
-whose name matching silently drops three of the 23. It is stale, not live.
+whose name matching silently drops two or three of the 23. It is stale, not
+live.
 
 The `Stats` sheet's Daily column mirrors the Email Report. Its Weekly and
 Monthly columns switch between two sources: the pasted `Daily Log` rows when
@@ -135,9 +136,10 @@ Also found while reconciling:
 
 **How sure is this.** The claims above were produced by independent reviews
 of each sheet and then challenged by two further passes per key finding, one
-working only from the formulas and one only from the values. Twenty-four key
-findings survived both; none was refuted. The seven findings about the
-Platform Import sheet were still being re-checked when this was written.
+working only from the formulas and one only from the values. All thirty key
+findings survived both passes; none was refuted, and the only disagreement
+between verifiers was whether the KPI tracker's name matching drops two or
+three of its 23 leaders.
 
 ---
 

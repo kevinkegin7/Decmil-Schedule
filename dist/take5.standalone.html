@@ -4,7 +4,7 @@
 <style>
 /* A single committed look: the Site Diary R5 page chrome, light only, painted explicitly. */
 :root { --navy:#1f396c; --navy2:#0054a6; --teal:#3f96b4; --good:#1F8A4C; --good-d:#1C7D45; --good-bg:#E6F3EC; --warn:#E08B00; --warn-d:#B26A00; --warn-bg:#FBF0DC;
-        --bad:#C0392B; --bad-d:#C0392B; --bad-bg:#FBE6E9; --faint:#8A909C; --grey:#5B6270; --line:#DDE0E5; --bg:#f0f2f5; --panel:#ffffff; --ink:#1c2230; color-scheme: light; }
+        --bad:#C0392B; --bad-d:#C0392B; --bad-bg:#FBE6E9; --faint:#8A909C; --grey:#5B6270; --line:#DDE0E5; --bg:#f0f2f5; --panel:#ffffff; --ink:#1c2230; --mono:Consolas, Menlo, monospace; color-scheme: light; }
 body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",system-ui,sans-serif; font-size:14px; }
 .mock-note { background:#fff3cd; color:#5c4400; font-size:12.5px; padding:8px 16px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); border-bottom:1px solid #f0d58a; }
 .mock-note b { font-weight:600; }
@@ -37,7 +37,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 .strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
 .cell { background:var(--panel); padding:16px 20px; } .cell.dark { background:var(--navy); color:#fff; }
 .cell .eyebrow { color:var(--faint); } .cell.dark .eyebrow { color:#fff; opacity:.8; }
-.num { font-size:30px; font-weight:700; margin-top:4px; }
+#t5 .num { font-size:30px; font-weight:700; margin-top:4px; }
 .mono { font-variant-numeric:tabular-nums; }
 .panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin-bottom:16px; }
 .panel.empty, .empty { padding:22px; color:var(--faint); text-align:center; font-size:13px; }
@@ -54,7 +54,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 .wrow .rail { width:4px; height:40px; border-radius:0 3px 3px 0; }
 .wrow .nm { font-weight:600; font-size:14px; } .wrow .meta { font-size:12px; color:var(--faint); }
 .stat-tag { font-size:12.5px; font-weight:600; }
-.pips { display:flex; gap:4px; align-items:center; } .pip { width:22px; height:7px; border-radius:4px; display:inline-block; } .over { font-size:11px; color:var(--faint); font-weight:600; }
+.pips { display:flex; gap:4px; align-items:center; } .pip { width:22px; height:7px; border-radius:4px; display:inline-block; } .pips .over { font-size:11px; color:var(--faint); font-weight:600; }
 .stepper { display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
 .sbtn { width:36px; height:36px; border:0; background:#fff; font-size:18px; cursor:pointer; color:var(--navy); } .sbtn.plus { background:var(--navy); color:#fff; }
 .sval { width:36px; text-align:center; line-height:36px; font-weight:700; }
@@ -143,13 +143,14 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 #rpt .r-warn ul { margin: 6px 0 0; padding-left: 18px; }
 #rpt h2 { font-size: 14px; margin: 24px 0 8px; font-weight: 700; }
 #rpt .r-cardwrap { overflow-x: auto; }
-#rpt textarea { width: 100%; min-height: 180px; box-sizing: border-box; font: 12.5px/1.5 Consolas, Menlo, monospace; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; resize: vertical; }
+#rpt textarea { width: 100%; min-height: 180px; box-sizing: border-box; font: 12.5px/1.5 var(--mono); color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; resize: vertical; }
 #rpt .r-tablewrap { overflow-x: auto; }
 #rpt table { border-collapse: collapse; font-size: 12.5px; width: 100%; }
 #rpt th, #rpt td { border: 1px solid var(--line); padding: 4px 8px; text-align: left; vertical-align: top; }
 #rpt th { background: #f3f4f7; font-weight: 600; }
 #rpt td.num { font-variant-numeric: tabular-nums; text-align: right; }
 #rpt .r-err { color: var(--bad); font-size: 13px; margin-top: 8px; }
+#rpt [hidden] { display: none !important; }
 .r-toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
 .r-toast.show { opacity: 1; }
 /* ---- view switcher (sidebar on wide screens, segmented control in the top bar everywhere) ---- */
@@ -164,7 +165,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 <div class="shell">
   <aside class="side">
     <div><div class="brand">Site Diary R5</div><div class="proj">WASP WH Bulk Earthworks (10265)</div></div>
-    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on" data-view="page">Take 5 Compliance</a><a data-view="exports">Take 5 report from exports</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
+    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on" data-view="page" href="#">Take 5 Compliance</a><a data-view="exports" href="#exports">Take 5 report from exports</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
   </aside>
   <div class="main">
     <div class="topbar"><div class="viewseg" role="tablist"><button type="button" class="on" data-view="page" role="tab" aria-selected="true">Site Diary page</button><button type="button" data-view="exports" role="tab" aria-selected="false">Report from exports</button></div><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
@@ -2577,6 +2578,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
   $('proj').textContent = CFG.projectName + ' (' + CFG.project + ') · minimum ' + CFG.minPerDay + ' per person per day';
 
   function readFile(file, cb) {
+    if (typeof XLSX === 'undefined') { cb(new Error('The spreadsheet reader (SheetJS) did not load. Check the internet connection and reload the page.')); return; }
     var fr = new FileReader();
     fr.onload = function () { try { cb(null, XLSX.read(new Uint8Array(fr.result), { type: 'array', raw: true, bookVBA: false })); } catch (e) { cb(e); } };
     fr.onerror = function () { cb(new Error('Could not read ' + file.name)); };

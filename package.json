@@ -6,7 +6,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "node src/take5-role-classification.test.js && node test/run-browser-tests.js"
+    "test": "node src/take5-role-classification.test.js && node src/take5-site-report.test.js && node src/take5-visuals.test.js && node test/run-browser-tests.js",
+    "test:unit": "node src/take5-role-classification.test.js && node src/take5-site-report.test.js && node src/take5-visuals.test.js",
+    "report": "node tools/take5-report.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +24,11 @@
   "devDependencies": {
     "jquery": "^3.7.0"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  },
+  "bin": {
+    "take5-report": "tools/take5-report.js"
+  }
 }

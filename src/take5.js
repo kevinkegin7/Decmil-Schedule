@@ -82,6 +82,19 @@
     if (typeof window !== 'undefined') window.Take5Roles = Take5Roles;
 
     // ---------------------------------------------------------------------
+    // Site-specific rules. When the page also loads /js/take5-site-report.js
+    // (src/take5-site-report.js) and /js/take5-site-config.js (which sets
+    // window.Take5SiteConfig from the project's config/site-<project>.json),
+    // classification follows the project's own lists — Not-required keywords on
+    // role or crew, Optional people counted only when they log Take 5s, the
+    // Maintenance/Operations split and the site minimum per day — and the page
+    // can build the daily management email. Without them it falls back to the
+    // role patterns above.
+    // ---------------------------------------------------------------------
+    var SiteReport = (typeof window !== 'undefined' && window.Take5SiteReport) || null;
+    var SITE = (SiteReport && typeof window !== 'undefined' && window.Take5SiteConfig) || null;
+
+    // ---------------------------------------------------------------------
     // Per-person overrides (this browser only, until the server endpoint exists)
     // ---------------------------------------------------------------------
     var OVERRIDE_KEY = 't5RequiredOverrides';
@@ -103,14 +116,35 @@
         showNotify: false, notifySending: false, notifyTo: '', notifyCc: '', notifySubject: '', notifyBody: ''
     };
 
-    function requiredOf(p) { return Take5Roles.isRequired(p, state.overrides); }
+    /* Daily classification of one row. With a site config this applies the
+       project's rules via the shared module; `tags` defaults to the row's count
+       (capture) and can be passed explicitly (dashboard rows use their range
+       total). Overrides win in both modes. */
+    function clsOf(p, tags) {
+        var t = tags !== undefined ? tags : (p.count || 0);
+        if (SITE) {
+            return SiteReport.classify({ employeeId: p.employeeId, name: p.name, role: p.role, crew: p.crew, tags: t, inRegister: true }, SITE, state.overrides);
+        }
+        var req = Take5Roles.isRequired(p, state.overrides);
+        return { required: req, optional: false, included: req, group: '', status: req ? '' : 'Not required', reason: '' };
+    }
+    function requiredOf(p, tags) { return clsOf(p, tags).included; }
+    function defaultRequiredOf(p) {
+        if (SITE) return SiteReport.classify({ employeeId: p.employeeId, name: p.name, role: p.role, crew: p.crew, tags: 1, inRegister: true }, SITE, null).required;
+        return Take5Roles.defaultRequired(p.role);
+    }
     function hasOverride(p) { return Object.prototype.hasOwnProperty.call(state.overrides, p.employeeId); }
     /* Store an override only when it differs from the role default, so flipping
        someone back clears the override rather than pinning the default. */
     function setRequired(p, val) {
-        if (val === Take5Roles.defaultRequired(p.role)) delete state.overrides[p.employeeId];
+        if (val === defaultRequiredOf(p)) delete state.overrides[p.employeeId];
         else state.overrides[p.employeeId] = val;
         saveOverrides(state.overrides);
+    }
+    /* The minimum per day: the site rule when configured, else the server's. */
+    function applyMin(serverMin) {
+        if (serverMin) state.serverMin = serverMin;
+        state.min = (SITE && SITE.minPerDay) ? SITE.minPerDay : (serverMin || state.min);
     }
     function normKey(s) { return Take5Roles.normRole(s); }
 
@@ -175,7 +209,7 @@
         $.getJSON('/Take5/GetCapture', { date: state.date })
             .done(function (resp) {
                 var m = P(resp, 'MinPerDay');
-                if (m) state.min = m;
+                applyMin(m);
                 var rows = P(resp, 'Rows') || [];
                 state.capture = rows.map(function (r) {
                     return { employeeId: P(r, 'EmployeeId'), name: P(r, 'Name'), gender: P(r, 'Gender'), role: P(r, 'Role'),
@@ -191,7 +225,7 @@
     function loadDashboard() {
         $('#t5Dashboard').html('<div class="panel empty">Building dashboard…</div>');
         $.getJSON('/Take5/GetDashboard', { startDate: state.start, endDate: state.end, trendMode: state.trendMode })
-            .done(function (d) { state.dash = d; var m = P(d, 'MinPerDay'); if (m) state.min = m; syncMinCopy(); renderDashboard(); })
+            .done(function (d) { state.dash = d; applyMin(P(d, 'MinPerDay')); syncMinCopy(); renderDashboard(); })
             .fail(function () { $('#t5Dashboard').html('<div class="panel empty" style="color:var(--bad)">Could not load data. Please try again.</div>'); });
     }
     function saveCount(employeeId, count) {
@@ -241,14 +275,17 @@
     function renderList() {
         var sum = captureSummary(), visible = visibleRows();
         var rows = visible.map(function (p) {
-            var required = requiredOf(p), off = p.onSite === false;
+            var k = clsOf(p), required = k.included, off = p.onSite === false;
             var meta = esc(p.role || '—') + ' · ' + esc(p.crew || p.company || '—') + overrideLink(p, required);
             if (!required || off) {
-                // Not in the denominator (exempt, or off site): same elements as a normal
-                // row so the grid stays aligned, but muted and with the stepper hidden.
+                // Not in the denominator (not required, optional at zero, or off site): same
+                // elements as a normal row so the grid stays aligned, but muted and with the
+                // stepper hidden.
                 var cls = !required ? 't5-exempt' : 't5-off';
-                var tag = !required ? 'Exempt' : 'Off site';
-                var note = !required ? 'Not required — excluded from %' : 'Off site today — excluded from %';
+                var tag = !required ? (k.status === 'Optional' ? 'Optional' : 'Exempt') : 'Off site';
+                var note = !required
+                    ? (k.status === 'Optional' ? 'Optional — counted only when they log a Take 5' : 'Not required — excluded from %')
+                    : 'Off site today — excluded from %';
                 return '<div class="wrow ' + cls + '" style="opacity:.62">' +
                     '<span class="rail" style="background:' + C.exempt.v + '"></span>' +
                     '<div class="who"><div class="nm">' + esc(p.name) + '</div><div class="meta">' + meta + '</div></div>' +
@@ -282,6 +319,9 @@
         var opts = ['<option value="All"' + (state.crew === 'All' ? ' selected' : '') + '>All crews</option>'];
         crews.forEach(function (c) { opts.push('<option value="' + esc(c) + '"' + (state.crew === c ? ' selected' : '') + '>' + esc(c) + '</option>'); });
 
+        var minNote = (SITE && SITE.minPerDay)
+            ? ' · site minimum <strong>' + state.min + '</strong>/day' + (state.serverMin && state.serverMin !== state.min ? ' <span style="color:var(--warn-d,#B26A00)">(server setting is ' + state.serverMin + ')</span>' : '')
+            : '';
         var html =
             '<div class="strip" style="margin-bottom:16px">' +
                 cell('Compliant', sum.pct + '%', false) +
@@ -292,7 +332,7 @@
             '</div>' +
             '<div class="panel">' +
                 '<div class="phead" style="gap:10px;flex-wrap:wrap">' +
-                    '<div><h3>Daily capture</h3><p>' + esc(prettyDate(state.date)) + ' · tap −/+ to log each worker\'s tags · office and management roles show as <strong>Exempt</strong> and are excluded from the %</p></div>' +
+                    '<div><h3>Daily capture</h3><p>' + esc(prettyDate(state.date)) + ' · tap −/+ to log each worker\'s tags · office and management roles show as <strong>Exempt</strong> and are excluded from the %' + minNote + '</p></div>' +
                     '<div class="toolbar" style="margin-left:auto">' +
                         '<input id="t5Search" class="field" style="min-width:190px" placeholder="Search name, role, crew" value="' + esc(state.search) + '">' +
                         '<select id="t5Crew" class="field" style="min-width:150px">' + opts.join('') + '</select>' +
@@ -304,13 +344,67 @@
                             '<button data-filter="exempt" class="' + (state.filter === 'exempt' ? 'on' : '') + '">Exempt</button>' +
                         '</div>' +
                         '<button class="xbtn" id="t5Excel" title="Export the on-site list to Excel"><i class="fa-solid fa-file-excel"></i> Export Excel</button>' +
+                        (SITE ? '<button class="xbtn" id="t5EmailOpen" title="Build the daily management email from today\'s capture"><i class="fa-solid fa-envelope"></i> Daily email</button>' : '') +
                     '</div>' +
                 '</div>' +
                 '<div style="padding:7px 20px;border-bottom:1px solid var(--line);font-size:11.5px;color:var(--faint)" class="eyebrow"><span id="t5Showing"></span></div>' +
                 '<div id="t5List"></div>' +
-            '</div>';
+            '</div>' +
+            '<div id="t5CaptureModal"></div>';
         $('#t5Capture').html(html);
         renderList();
+    }
+
+    // ------------------------------------------------ daily management email
+    /* Builds the report the register's Email Report sheet produces by hand —
+       the "didn't do take 5s" sentence and the Maintenance/Operations table —
+       from today's capture, using the site rules and Site Diary's own counts. */
+    function buildDailyReport() {
+        var rows = state.capture.filter(function (p) { return p.onSite !== false; }).map(function (p) {
+            return { EmployeeId: p.employeeId, Name: p.name, Gender: p.gender, Role: p.role, Crew: p.crew, Company: p.company, TagCount: p.count, OnSite: true };
+        });
+        return SiteReport.buildReport(rows, SITE, { date: state.date, overrides: state.overrides });
+    }
+    function renderEmailModal() {
+        if (!state.showEmail || !SITE) { $('#t5CaptureModal').html(''); return; }
+        var rep = buildDailyReport();
+        var text = SiteReport.formatEmail(rep, SITE);
+        var Visuals = window.Take5Visuals || null;
+        state.emailText = text;
+        state.emailHtml = Visuals ? Visuals.emailHtml(rep, SITE) : SiteReport.formatEmailHtml(rep, SITE);
+        var facts = 'Counts are Site Diary tags for ' + esc(prettyDate(state.date)) + ' · minimum ' + rep.minPerDay + '/day · ' +
+            rep.totals.included + ' included (' + rep.groupOrder.map(function (g) { return esc(g) + ' ' + rep.groups[g].crewSize; }).join(', ') + ') · ' +
+            rep.totals.notRequired + ' not required · ' + rep.totals.optionalExcluded + ' optional at zero · ' + rep.totals.belowMin + ' below minimum';
+        var card = Visuals ? '<div id="t5EmailCard" style="margin:10px 0 14px">' + Visuals.renderCard(rep, SITE, { width: 800, sourceNote: 'Counts: Site Diary tags · ' + prettyDate(state.date) }) + '</div>' : '';
+        var html =
+            '<div class="t5-modal-bg" id="t5EmailBg">' +
+                '<div class="t5-modal" style="max-width:900px;max-height:92vh;overflow:auto">' +
+                    '<div class="t5-modal-h">Daily Take 5 email — ' + esc(rep.dateLabel) + '</div>' +
+                    '<div class="t5-modal-sub">' + facts + '</div>' +
+                    card +
+                    '<label class="t5-modal-lbl">Email body (copy into Outlook)</label>' +
+                    '<textarea id="t5EmailBody" class="t5-modal-ta" style="min-height:200px;font-family:Consolas,Menlo,monospace;font-size:12.5px" readonly>' + esc(text) + '</textarea>' +
+                    '<label class="t5-modal-lbl">Daily Log row</label>' +
+                    '<input class="t5-modal-in" readonly value="' + esc(rep.dailyLogRow.join(' | ')) + '">' +
+                    '<div class="t5-modal-actions">' +
+                        '<button class="t5-btn-ghost" id="t5EmailClose">Close</button>' +
+                        '<button class="t5-btn-ghost" id="t5EmailCopyHtml" title="Copies the figures, bars and table as formatted content for Outlook">Copy with graphics</button>' +
+                        '<button class="t5-btn-primary" id="t5EmailCopy">Copy text</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+        $('#t5CaptureModal').html(html);
+    }
+    function copyToClipboard(text, html) {
+        var done = function () { if (window.toastr) toastr.success('Copied.', 'Daily email'); };
+        var fail = function () { try { document.getElementById('t5EmailBody').select(); document.execCommand('copy'); done(); } catch (e) { if (window.toastr) toastr.error('Copy failed — select the text and copy it manually.', 'Daily email'); } };
+        try {
+            if (html && navigator.clipboard && window.ClipboardItem) {
+                var item = new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) });
+                navigator.clipboard.write([item]).then(done, fail);
+            } else if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, fail);
+            else fail();
+        } catch (e) { fail(); }
     }
     function cell(label, val, dark) {
         return '<div class="cell' + (dark ? ' dark' : '') + '"><div class="eyebrow">' + esc(label) + '</div><div class="num mono">' + val + '</div></div>';
@@ -344,7 +438,7 @@
                 status: P(r, 'Status') || 'off',
                 spark: P(r, 'Spark') || []
             };
-            p.required = requiredOf(p);
+            p.required = requiredOf(p, p.rangeTotal);
             return p;
         });
     }
@@ -756,8 +850,8 @@
 
         state.capture.slice().sort(function (a, b) { return (a.name || '').localeCompare(b.name || ''); })
             .forEach(function (p) {
-                var required = requiredOf(p);
-                var label = required ? C[statusOf(p.count)].label : 'Exempt';
+                var k = clsOf(p), required = k.included;
+                var label = required ? C[statusOf(p.count)].label : (k.status || 'Exempt');
                 rows.push({ cells: [
                     { value: p.name || '' },
                     { value: p.gender || '' },
@@ -1057,6 +1151,11 @@
     $(document).on('change', '#t5Crew', function () { state.crew = this.value; renderCapture(); });
     $(document).on('click', '#t5Capture .seg button[data-filter]', function () { state.filter = $(this).data('filter'); renderCapture(); });
     $(document).on('click', '#t5Excel', exportCaptureExcel);
+    $(document).on('click', '#t5EmailOpen', function () { state.showEmail = true; renderEmailModal(); });
+    $(document).on('click', '#t5EmailClose', function () { state.showEmail = false; renderEmailModal(); });
+    $(document).on('mousedown', '#t5EmailBg', function (e) { if (e.target === this) { state.showEmail = false; renderEmailModal(); } });
+    $(document).on('click', '#t5EmailCopy', function () { copyToClipboard(state.emailText || '', null); });
+    $(document).on('click', '#t5EmailCopyHtml', function () { copyToClipboard(state.emailText || '', state.emailHtml || ''); });
     $(document).on('click', '#t5DashExcel', exportDashboardExcel);
     $(document).on('click', '#t5Pdf', exportDashboardPdf);
 

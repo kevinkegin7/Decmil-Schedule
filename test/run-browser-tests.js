@@ -14,6 +14,8 @@
 var http = require('http'), fs = require('fs'), path = require('path');
 var fixture = require('./fixture');
 var Roles = require('../src/take5-role-classification');
+var Report = require('../src/take5-site-report');
+var siteCfg = require('../config/site-10265.json');
 
 var playwright;
 try { playwright = require('playwright'); }
@@ -26,6 +28,14 @@ function serve() {
     return new Promise(function (resolve) {
         var srv = http.createServer(function (req, res) {
             var url = req.url.split('?')[0];
+            if (url === '/test/site-config.js') {
+                // The production page gets this from /js/take5-site-config.js; here it is
+                // generated from the project's config so the tests exercise the real rules.
+                var cfgText = fs.readFileSync(path.join(ROOT, 'config', 'site-10265.json'), 'utf8');
+                res.writeHead(200, { 'Content-Type': 'application/javascript' });
+                res.end('window.Take5SiteConfig = ' + cfgText + ';');
+                return;
+            }
             var file = url === '/vendor/jquery.min.js'
                 ? path.join(ROOT, 'node_modules/jquery/dist/jquery.min.js')
                 : path.join(ROOT, url);
@@ -40,15 +50,21 @@ function serve() {
 }
 
 // ---------------------------------------------------------------- expectations
-var MIN = fixture.MIN;
+// The harness loads the site config, so the page applies the project's rules:
+// Not-required keywords on role or crew, Optional people counted only when
+// they have Take 5s, and the site minimum. Expectations use the same module.
+var MIN = siteCfg.minPerDay;
 var people = fixture.people;
-var required = people.filter(function (p) { return Roles.defaultRequired(p.Role); });
-var exempt = people.filter(function (p) { return !Roles.defaultRequired(p.Role); });
+function included(p) { return Report.classify(Report.fromCaptureRow(p), siteCfg, null).included; }
+var required = people.filter(included);
+var exempt = people.filter(function (p) { return !included(p); });
 var counted = required.filter(function (p) { return p.OnSite; });
 var compliant = counted.filter(function (p) { return p.TagCount >= MIN; });
 var toAction = counted.filter(function (p) { return p.TagCount < MIN; });
 var pct = Math.round(compliant.length / counted.length * 100);
 var exemptNames = exempt.map(function (p) { return p.Name; });
+// a Not-required (not merely optional-at-zero) person, for the override test
+var firstExempt = exempt.filter(function (p) { return Report.classify(Report.fromCaptureRow(p), siteCfg, null).status === 'Not required'; })[0];
 
 // Uncorrected figures the server sends — the page must NOT show these.
 var serverDash = fixture.getDashboard();
@@ -112,8 +128,7 @@ function assert(desc, cond, detail) {
     check('Below-min filter count', await page.locator('#t5List .wrow').count(), toAction.length);
     await page.click('#t5Capture .seg button[data-filter="all"]');
 
-    // Override: flip the first exempt person to required, reload, confirm it stuck, flip back.
-    var firstExempt = exempt[0];
+    // Override: flip a Not-required person to required, reload, confirm it stuck, flip back.
     await page.click('#t5List [data-act="require"][data-id="' + firstExempt.EmployeeId + '"]');
     check('override → required count +1', await cellNum('Required on site'), String(counted.length + 1));
     check('override → exempt count −1', await cellNum('Exempt (not counted)'), String(exempt.length - 1));
@@ -139,6 +154,29 @@ function assert(desc, cond, detail) {
     check('capture Excel exports every person', wb.sheets[0].rows.length - 5, people.length);
     var exportedExempt = wb.sheets[0].rows.slice(5).filter(function (r) { return r.cells[5].value === 'No'; }).length;
     check('capture Excel marks exempt as Required=No', exportedExempt, exempt.length);
+
+    // Site-specific extras: minimum from the config, Optional rows labelled, daily email modal.
+    console.log('\nSite rules');
+    check('site minimum replaces the server minimum', await page.locator('#t5MinCopy').textContent(), String(MIN));
+    var optionalAtZero = people.filter(function (p) { return Report.classify(Report.fromCaptureRow(p), siteCfg, null).status === 'Optional'; }).length;
+    check('optional-at-zero rows are labelled Optional', await page.locator('#t5List .wrow.t5-exempt .stat-tag:has-text("Optional")').count(), optionalAtZero);
+    await page.click('#t5EmailOpen');
+    await page.waitForSelector('#t5EmailBody');
+    // The stepper test above added one tag to firstReq, so expect the page's current counts.
+    var pageRows = people.filter(function (p) { return p.OnSite; }).map(function (p) {
+        return p.EmployeeId === firstReq.EmployeeId ? Object.assign({}, p, { TagCount: p.TagCount + 1 }) : p;
+    });
+    var expected = Report.buildReport(pageRows, siteCfg, { date: await page.evaluate(function () { return document.getElementById('t5Date').value; }) });
+    var body = await page.inputValue('#t5EmailBody');
+    assert('email body starts with the report header', body.indexOf('Take 5 Report for the ' + expected.dateLabel) === 0, body.split('\n')[0]);
+    assert('email body has the sentence', body.indexOf(expected.sentence) > 0, expected.sentence.slice(0, 60));
+    assert('email body table matches the module', new RegExp('Crew Size\\s+' + expected.groups.Maintenance.crewSize + '\\s+Crew Size\\s+' + expected.groups.Operations.crewSize).test(body));
+    check('email card rendered with hero %', await page.locator('#t5EmailCard .t5v-hero').count(), 1);
+    assert('email card hero shows the module compliance %', (await page.locator('#t5EmailCard .t5v-hero').textContent()).indexOf(expected.totals.compliancePct + '%') >= 0);
+    check('email card has crew meters and the segmented bar', [await page.locator('#t5EmailCard .t5v-seg').count(), await page.locator('#t5EmailCard .t5v-crews').count()], [1, 1]);
+    assert('copy buttons present', (await page.locator('#t5EmailCopy').count()) === 1 && (await page.locator('#t5EmailCopyHtml').count()) === 1);
+    await page.click('#t5EmailClose');
+    check('email modal closes', await page.locator('#t5EmailBg').count(), 0);
 
     // ---------------------------------------------------------- dashboard
     console.log('\nDashboard');

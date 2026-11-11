@@ -1,0 +1,29 @@
+{
+  "$comment": "Site-specific Take 5 reporting rules for project 10265 (WASP WH Bulk Earthworks). Transcribed from the Email Report sheet of 'Decmil Take 5 and KPI register.xlsm' (columns U, V, W, X and Stats!B3) on 10 Nov 2026. Matching is case-insensitive substring, as in the workbook. Edit these lists, not the code.",
+  "project": "10265",
+  "projectName": "WASP WH Bulk Earthworks",
+  "minPerDay": 3,
+  "notRequired": {
+    "$comment": "A person is NOT REQUIRED to complete a Take 5 if their role contains any roleKeywords entry, or their role or crew contains any roleOrCrewKeywords entry. They stay on the list, marked Not required, and are excluded from every count.",
+    "roleKeywords": ["supervisor", "manager", "admin", "senior", "trainer", "superintendent", "advisor", "engineer", "coordinator", "planner"],
+    "roleOrCrewKeywords": ["site office", "corporate", "office staff"]
+  },
+  "optional": {
+    "$comment": "Optional (manual-entry) people are counted only on days they have Take 5s; at zero they are excluded with status Optional and never appear in the 'did not do' list. Matched on name or role. This rule is applied BEFORE notRequired, so a surveyor in a Site Office crew is Optional rather than Not required.",
+    "nameOrRoleKeywords": ["John Brady", "Mark Hitchens", "surveyor"]
+  },
+  "groups": {
+    "$comment": "Required people are split into two reporting groups for the management email (Email Report P5). A person is Maintenance if their crew starts with any maintenanceCrewPrefixes entry (the workbook tests LEFT(crew,5)=\"Maint\") or their role contains any maintenanceRoleKeywords entry; everyone else required is Operations.",
+    "maintenanceCrewPrefixes": ["Maint"],
+    "maintenanceRoleKeywords": ["mechanic", "fitter", "serviceperson", "boilermaker", "electrician", "storeperson"],
+    "maintenanceLabel": "Maintenance",
+    "operationsLabel": "Operations"
+  },
+  "email": {
+    "$comment": "Shape of the daily management email, as produced by Email Report!A1, A3 and A4:D8.",
+    "sentence": "The {zeroCount} people who didn't do take 5s are {zeroNames}",
+    "noZerosSentence": "All crew members completed Take 5s",
+    "tableRows": ["Crew Size", "Take 5s", "Ratio", "Crew members Completing Zero"],
+    "dateFormat": "d/M/yy"
+  }
+}

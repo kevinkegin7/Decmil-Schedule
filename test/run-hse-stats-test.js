@@ -7,6 +7,7 @@ function ok(name, cond, detail) { if (cond) console.log('  ok   ' + name); else 
 (async function () {
     var browser = await chromium.launch(), page = await browser.newPage({ viewport: { width: 1300, height: 950 } }), errors = [];
     page.on('pageerror', function (e) { errors.push(e.message); });
+    await page.route('**/xlsx.full.min.js', function (r) { r.fulfill({ path: path.join(ROOT, 'node_modules/xlsx/dist/xlsx.full.min.js') }); });
     await page.route('**/jquery.min.js', function (r) { r.fulfill({ path: path.join(ROOT, 'node_modules/jquery/dist/jquery.min.js') }); });
     await page.goto('file://' + path.join(ROOT, 'dist/take5.standalone.html'));
     await page.waitForSelector('#t5List .wrow');
@@ -38,6 +39,27 @@ function ok(name, cond, detail) { if (cond) console.log('  ok   ' + name); else 
     await page.click('.side [data-view="page"]');
     ok('switching back shows the Take 5 page', await page.locator('#viewPage').isVisible() && await page.locator('#viewHse').isHidden());
     ok('Take 5 styles are untouched by the section', (await page.locator('#t5 .tab.on').textContent()) === 'Daily Capture');
+    console.log('\nLeadership KPIs');
+    var XLSX = require('xlsx'), os = require('os'), fs = require('fs');
+    var sheet = XLSX.utils.aoa_to_sheet([['Type', 'Doc No', 'Start Date', 'Created By', 'Template'],
+        ['LIF', 1, '10/19/2026', 'alex.sample', 'pthaReview'], ['LIF', 2, '10/20/2026', 'alex.sample', 'qsiRecord'], ['AREA_INSP', 3, '10/21/2026', 'alex.sample', 'generalInspection'],
+        ['LIF', 4, '10/22/2026', 'jo.example', 'qsiRecord'], ['SRA', 5, '10/22/2026', 'jo.example', 'journey']]);
+    var book = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(book, sheet, 'Export');
+    var tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'kpi-')), 'synthetic-export.xlsx'); XLSX.writeFile(book, tmp);
+    await page.click('.side [data-view="kpi"]');
+    await page.waitForSelector('#lkEmpty');
+    await page.setInputFiles('#lkFile', tmp);
+    await page.waitForSelector('#lkTable');
+    ok('export is recognised and counted', /SAI 360 · 5 documents, 4 count towards a KPI, 1 are other/.test(await page.locator('#lkSummary').textContent()), await page.locator('#lkSummary').textContent());
+    ok('as-at date defaults to the latest document', (await page.inputValue('#lkAsAt')) === '2026-10-22');
+    ok('people with no group are flagged', /2 people in the export have no leadership group/.test(await page.locator('#lkCheck').textContent()));
+    await page.locator('#lkTable tbody tr', { hasText: 'Alex Sample' }).locator('select').selectOption('Superintendents');
+    var alexRow = await page.locator('#lkTable tbody tr', { hasText: 'Alex Sample' }).locator('td').allTextContents();
+    ok('choosing a group applies its targets', alexRow[2] === '1 / 1' && alexRow[3] === '1 / 1' && alexRow[5] === '1 / 1' && alexRow[6] === 'Complete', alexRow.slice(2, 8).join(' | '));
+    await page.locator('#lkTable tbody tr', { hasText: 'Jo Example' }).locator('select').selectOption('');
+    ok('"Not a leader" hides the person', (await page.locator('#lkTable tbody tr').count()) === 1);
+    ok('group choices are remembered', await page.evaluate(function () { return Object.keys(JSON.parse(localStorage.getItem('leadershipKpi.groups'))).length === 2; }));
+    await page.click('.side [data-view="page"]');
     ok('no uncaught page errors', errors.length === 0, errors.join(' | '));
     await browser.close();
     if (failed) { console.log('\nFAILED: ' + failed + ' check(s)'); process.exit(1); }

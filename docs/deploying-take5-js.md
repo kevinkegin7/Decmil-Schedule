@@ -99,3 +99,14 @@ at the top of `take5.js` is the fallback for a page with no config; it also live
 `src/take5-role-classification.js`, and the tests assert the two are identical. When the
 server-side C# from the spec is written, read the same JSON there, or the capture tab
 and the dashboard will disagree with each other.
+
+## Other sections in the preview page
+
+These sit beside Take 5 Compliance in the preview's left menu. Each is a self-contained script that mounts into one element, so it can be dropped into its own Site Diary view.
+
+| Section | Files | What IT still needs to provide |
+|---|---|---|
+| **Daily HSE Stats** (capture, dashboard, early warning, daily report) | `src/daily-hse-stats.js`, `src/daily-hse-stats.css`, `src/daily-hse-stats.data.json` | An endpoint to read and save the daily figures. Today the figures are the seeded STATS sheet (to 4 Jul 2026) and typed numbers are kept in the browser only. Call `DailyHseStats.mount(element, data, cssText)`. |
+| **Leadership KPIs** (import of the client-platform export) | `src/leadership-kpi.js`, `config/leadership-kpi-10265.json`, SheetJS | The roster (name and role) passed as `LeadershipKpi.mount(element, config, { roster })`, so leaders are grouped by role automatically and leaders with no documents are listed. Without it, groups are picked per person and remembered in the browser. CCVS and CCFV Reds are not in the export. Another platform (for example INX) is added as a `sources` block in the config once a sample export is available. |
+
+Dashboard also has a **Take 5 forecast** panel (part of `take5.js`): week and month projections per group from the captures already stored, no server change.

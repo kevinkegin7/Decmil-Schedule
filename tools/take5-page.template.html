@@ -122,14 +122,14 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 @media (prefers-reduced-motion: reduce) { .r-toast, #toastMock { transition: none; } }
 </style>
 
-<div class="mock-note"><b>Test environment.</b> The Site Diary <b>Take 5 Compliance</b> page running the proposed files against a fake server: the real 9 Nov 2026 crews and roles with synthetic names. The date is pinned to Mon 9 Nov, counts you change stay in this tab, and Notify does not send a real email. <b>Daily HSE Stats</b> (left menu) runs on the figures from the site STATS sheet up to 4 Jul 2026; numbers you type are kept in this browser only.</div>
+<div class="mock-note"><b>Test environment.</b> The Site Diary <b>Take 5 Compliance</b> page running the proposed files against a fake server: the real 9 Nov 2026 crews and roles with synthetic names. The date is pinned to Mon 9 Nov, counts you change stay in this tab, and Notify does not send a real email. <b>Daily HSE Stats</b> (left menu) runs on the figures from the site STATS sheet up to 4 Jul 2026; numbers you type are kept in this browser only. <b>Leadership KPIs</b> reads a platform export you choose; the file stays in this browser.</div>
 <div class="shell">
   <aside class="side">
     <div><div class="brand">Site Diary R5</div><div class="proj">WASP WH Bulk Earthworks (10265)</div></div>
-    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on" data-view="page" href="#">Take 5 Compliance</a><a data-view="hse" href="#hse">Daily HSE Stats</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
+    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on" data-view="page" href="#">Take 5 Compliance</a><a data-view="hse" href="#hse">Daily HSE Stats</a><a data-view="kpi" href="#kpi">Leadership KPIs</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
   </aside>
   <div class="main">
-    <div class="topbar"><div class="viewseg" role="tablist"><button type="button" class="on" data-view="page" role="tab" aria-selected="true">Take 5 Compliance</button><button type="button" data-view="hse" role="tab" aria-selected="false">Daily HSE Stats</button></div><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
+    <div class="topbar"><div class="viewseg" role="tablist"><button type="button" class="on" data-view="page" role="tab" aria-selected="true">Take 5 Compliance</button><button type="button" data-view="hse" role="tab" aria-selected="false">Daily HSE Stats</button><button type="button" data-view="kpi" role="tab" aria-selected="false">Leadership KPIs</button></div><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
     <div id="viewPage">
     <div id="t5" class="mt-2 mb-4">
       <div class="hdr">
@@ -157,11 +157,13 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     </div>
     </div>
     <div id="viewHse" hidden><div id="hseMount"></div></div>
+    <div id="viewKpi" hidden><div id="kpiMount"></div></div>
   </div>
 </div>
 <div id="toastMock" role="status"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ---- fake server: the two endpoints take5.js calls, built from the example roster ---- */
 (function () {
@@ -232,14 +234,17 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 <script>window.Take5SiteConfig = /*@@CONFIG@@*/;</script>
 <script>/*@@TAKE5@@*/</script>
 <script>/*@@HSE_JS@@*/</script>
+<script>/*@@KPI_JS@@*/</script>
 <script>
-/* ---- Site Diary section switch: Take 5 Compliance or Daily HSE Stats ---- */
+/* ---- Site Diary section switch: Take 5 Compliance, Daily HSE Stats or Leadership KPIs ---- */
 (function () {
   'use strict';
-  var HSE_DATA = /*@@HSE_DATA@@*/, HSE_CSS = /*@@HSE_CSS@@*/, mounted = false;
+  var HSE_DATA = /*@@HSE_DATA@@*/, HSE_CSS = /*@@HSE_CSS@@*/, KPI_CFG = /*@@KPI_CONFIG@@*/, mounted = false, kpiMounted = false;
   function show(view) {
     document.getElementById('viewPage').hidden = view !== 'page';
     document.getElementById('viewHse').hidden = view !== 'hse';
+    document.getElementById('viewKpi').hidden = view !== 'kpi';
+    if (view === 'kpi' && !kpiMounted) { kpiMounted = true; window.LeadershipKpi.mount(document.getElementById('kpiMount'), KPI_CFG, {}); }
     if (view === 'hse' && !mounted) { mounted = true; window.DailyHseStats.mount(document.getElementById('hseMount'), HSE_DATA, HSE_CSS); }
     Array.prototype.forEach.call(document.querySelectorAll('[data-view]'), function (el) {
       var on = el.getAttribute('data-view') === view;
@@ -253,5 +258,6 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     e.preventDefault(); show(el.getAttribute('data-view'));
   });
   if (location.hash === '#hse') show('hse');
+  if (location.hash === '#kpi') show('kpi');
 }());
 </script>

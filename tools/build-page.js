@@ -8,7 +8,7 @@
  *   node tools/build-page.js  -> dist/take5.html (artifact form: no document wrapper)
  *                                dist/take5.standalone.html (double-click form)
  *
- * jQuery loads from cdnjs at run time; everything else is inline.
+ * jQuery and SheetJS load from cdnjs at run time; everything else is inline.
  */
 'use strict';
 var fs = require('fs'), path = require('path');
@@ -25,6 +25,8 @@ var out = read('tools/take5-page.template.html')
     .replace('/*@@SITE_REPORT@@*/', function () { return safeJs(read('src/take5-site-report.js')); })
     .replace('/*@@VISUALS@@*/', function () { return safeJs(read('src/take5-visuals.js')); })
     .replace('/*@@CONFIG@@*/', function () { return safeJson(JSON.parse(read('config/site-10265.json'))); })
+    .replace('/*@@KPI_JS@@*/', function () { return safeJs(read('src/leadership-kpi.js')); })
+    .replace('/*@@KPI_CONFIG@@*/', function () { return safeJson(JSON.parse(read('config/leadership-kpi-10265.json'))); })
     .replace('/*@@HSE_JS@@*/', function () { return safeJs(read('src/daily-hse-stats.js')); })
     .replace('/*@@HSE_DATA@@*/', function () { return safeJson(JSON.parse(read('src/daily-hse-stats.data.json'))); })
     .replace('/*@@HSE_CSS@@*/', function () { return safeJson(read('src/daily-hse-stats.css')); })

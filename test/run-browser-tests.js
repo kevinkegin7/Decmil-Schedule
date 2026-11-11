@@ -185,7 +185,7 @@ function assert(desc, cond, detail) {
 
     // Email Report panel (the register's Email Report sheet, on the page).
     check('Daily Capture carries no report panel or Notify button', await page.locator('#t5Capture #t5EmailPanel, #t5Capture #t5EmailOpen').count(), 0);
-    check('Analytics tab sits between Daily Capture and Dashboard', await page.locator('#t5 .tab').allTextContents(), ['Daily Capture', 'Analytics', 'Dashboard']);
+    check('Analytic tab comes after Dashboard', await page.locator('#t5 .tab').allTextContents(), ['Daily Capture', 'Dashboard', 'Analytic']);
     await page.click('#t5 .tab[data-tab="analytics"]');
     await page.waitForSelector('#t5EmailPanel .panel');
     await page.waitForFunction(function () { return document.querySelector('#t5EmailPanel') && document.querySelector('#t5EmailPanel').textContent.indexOf('…') < 0; });
@@ -195,7 +195,7 @@ function assert(desc, cond, detail) {
     var panelRep = Report.buildReport(panelRows, siteCfg, { date: await page.evaluate(function () { return document.getElementById('t5Date').value; }) });
     assert('email panel title carries the sheet date', panelText.indexOf('Take 5 Report for the ' + panelRep.dateLabel) >= 0);
     assert('email panel banner shows TODAY zeros', panelText.indexOf('TODAY:') >= 0 && panelText.indexOf(panelRep.totals.zeros + ' with NO Take 5') >= 0);
-    assert('report panel opens with the greeting and intro', panelText.indexOf('Morning Team,') >= 0 && /Please see below the Take 5's stats for \w+day \d\d\/\d\d\/\d\d:/.test(panelText));
+    assert('report panel shows the figures only, no email greeting or sign-off', panelText.indexOf('Morning Team') < 0 && panelText.indexOf('Regards') < 0);
     assert('report panel has no copy buttons and no Daily Log row', (await page.locator('#t5PanelCopy, #t5PanelCopyHtml').count()) === 0 && panelText.indexOf('Daily Log') < 0);
     check('report panel has a Notify button', await page.locator('#t5PanelNotify').count(), 1);
     check('report panel shows a 14-day trend', await page.locator('#t5DailyTrend .tcol').count(), 14);
@@ -210,6 +210,7 @@ function assert(desc, cond, detail) {
     await page.waitForSelector('#t5EmailPreview');
     var expected = panelRep;
     var preview = await page.locator('#t5EmailPreview').textContent();
+    assert('notify preview opens with the greeting and intro', preview.indexOf('Morning Team,') >= 0 && /Please see below the Take 5's stats for \w+day \d\d\/\d\d\/\d\d:/.test(preview));
     assert('notify preview carries the report title', preview.indexOf('Take 5 Report for the ' + expected.dateLabel) >= 0);
     check('notify preview table has the four rows per group', await page.locator('#t5EmailPreview table').first().locator('tr').count(), 5);
     assert('notify preview table matches the module', (await page.locator('#t5EmailPreview table').first().textContent()).indexOf('Crew Size' + expected.groups.Maintenance.crewSize + 'Crew Size' + expected.groups.Operations.crewSize) >= 0);

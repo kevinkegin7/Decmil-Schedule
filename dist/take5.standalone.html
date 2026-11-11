@@ -1287,9 +1287,9 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 
         // HTML: tables and inline styles only, so Outlook renders it as sent
         var F = 'font-family:Aptos,Calibri,Arial,sans-serif;', c = 'border:1px solid #000;padding:6px 8px;' + F + 'font-size:13px;';
-        var H = '<div style="' + F + 'font-size:14.5px;color:#000;line-height:1.4">' +
-            '<p style="margin:0 0 14px">' + esc(greeting) + '</p><p style="margin:0 0 14px">' + esc(intro) + '</p>' +
-            '<p style="margin:0 0 6px;font-size:17px"><b>' + esc(title) + '</b></p>' +
+        var wrap = '<div style="' + F + 'font-size:14.5px;color:#000;line-height:1.4">';
+        var head = '<p style="margin:0 0 14px">' + esc(greeting) + '</p><p style="margin:0 0 14px">' + esc(intro) + '</p>';
+        var H = '<p style="margin:0 0 6px;font-size:17px"><b>' + esc(title) + '</b></p>' +
             '<table cellspacing="0" cellpadding="0" style="border-collapse:collapse;margin:0 0 14px">' +
             '<tr><td style="' + c + 'padding-top:16px;padding-bottom:16px;min-width:190px">' + esc(g0.label) + '</td><td style="' + c + 'text-align:right;min-width:150px">' + esc(rep.dateLabel) + '</td>' +
                 '<td style="' + c + 'min-width:120px">' + esc(g1.label) + '</td><td style="' + c + 'text-align:right;min-width:95px">' + esc(rep.dateLabel) + '</td></tr>' +
@@ -1308,9 +1308,10 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
                         '<td style="' + td + 'text-align:center">' + esc(r.last) + '</td><td style="' + td + 'text-align:center">' + esc(r.week) + '</td><td style="' + td + 'text-align:center">' + esc(r.cons) + '</td></tr>';
                 }).join('') + '</tbody></table>';
         } else H += '<p style="margin:0 0 14px">Everyone required on site met the minimum.</p>';
-        H += '<p style="margin:0 0 14px">' + esc(signOff) + '</p>' +
-            (signLines.length ? '<p style="margin:0"><b style="color:#1f396c">' + esc(signLines[0]) + '</b>' + signLines.slice(1).map(function (l) { return '<br>' + esc(l); }).join('') + '</p>' : '') + '</div>';
-        return { text: T.join('\n'), html: H, subject: title };
+        var tail = '<p style="margin:0 0 14px">' + esc(signOff) + '</p>' +
+            (signLines.length ? '<p style="margin:0"><b style="color:#1f396c">' + esc(signLines[0]) + '</b>' + signLines.slice(1).map(function (l) { return '<br>' + esc(l); }).join('') + '</p>' : '');
+        // `report` is the figures alone (what the Analytic tab shows); `html` is the full email.
+        return { text: T.join('\n'), html: wrap + head + H + tail + '</div>', report: wrap + H + '</div>', subject: title };
     }
     /* 14-day trend under the site rules: share of required people at the minimum
        each day, and the last 7 days against the 7 before. Days with nothing
@@ -1337,7 +1338,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
         }).join('');
         return '<div style="padding:12px 20px 0;font-size:13px">' + summary + '</div><div style="padding:0 20px 16px"><div class="trend" id="t5DailyTrend">' + bars + '</div></div>';
     }
-    /* Analytics tab: the register's Email Report sheet. Reads the same day's
+    /* Analytic tab: the register's Email Report sheet. Reads the same day's
        capture as the Daily Capture tab; nothing is entered here. */
     function renderAnalytics() {
         $('#t5Analytics').html('<div id="t5EmailPanel"></div><div id="t5AnalyticsModal"></div>');
@@ -1352,10 +1353,10 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
         var mail = dailyEmail(rep, loadRecipients().sign);
         var html =
             '<div class="panel">' +
-                '<div class="phead" style="gap:10px;flex-wrap:wrap"><div><h3>Daily report to management</h3><p>Built from the Daily Capture counts for ' + esc(prettyDate(state.date)) + ' under the site rules. This is the email management receives when you press Notify.</p></div>' +
+                '<div class="phead" style="gap:10px;flex-wrap:wrap"><div><h3>Daily Take 5 report</h3><p>' + esc(prettyDate(state.date)) + ' · from the Daily Capture counts under the site rules · Notify emails this report to management.</p></div>' +
                     '<div class="toolbar" style="margin-left:auto"><button class="xbtn" id="t5PanelNotify"><i class="fa-solid fa-envelope"></i> Notify</button></div></div>' +
                 banner +
-                '<div style="padding:16px 20px;overflow:auto" id="t5EmailPanelBody">' + mail.html + '</div>' +
+                '<div style="padding:16px 20px;overflow:auto" id="t5EmailPanelBody">' + mail.report + '</div>' +
                 '<div class="phead" style="border-top:1px solid var(--line)"><div><h3>Trend, last 14 days</h3><p>Required people at ' + state.min + ' or more Take 5s each day · today highlighted · this week is Sat–Fri</p></div></div>' +
                 trendHtml(rep) +
             '</div>';
@@ -2219,12 +2220,12 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
     }
 
     // -------------------------------------------------------------- events
-    /* The Analytics tab is added by this script (the page markup only has
+    /* The Analytic tab is added by this script (the page markup only has
        Daily Capture and Dashboard), so the server view needs no change. */
     function ensureAnalyticsTab() {
         if (!SITE || $('#t5Analytics').length) return;
-        $('#t5 .tab[data-tab="capture"]').after('<button class="tab" data-tab="analytics">Analytics</button>');
-        $('#t5Capture').after('<div id="t5Analytics" style="display:none;margin-top:18px"></div>');
+        $('#t5 .tab[data-tab="dashboard"]').after('<button class="tab" data-tab="analytics">Analytic</button>');
+        $('#t5Dashboard').after('<div id="t5Analytics" style="display:none;margin-top:18px"></div>');
     }
     function setTab(tab) {
         state.view = tab; state.showEmail = false;

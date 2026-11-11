@@ -2,7 +2,8 @@
 /*
  * Builds the single Take 5 page: the Site Diary Take 5 Compliance page mock
  * (the proposed take5.js and its modules against a fake server, with the
- * anonymised 9 Nov roster).
+ * anonymised 9 Nov roster), plus the Daily HSE Stats section
+ * (src/daily-hse-stats.*) behind the left-menu switch.
  *
  *   node tools/build-page.js  -> dist/take5.html (artifact form: no document wrapper)
  *                                dist/take5.standalone.html (double-click form)
@@ -24,6 +25,9 @@ var out = read('tools/take5-page.template.html')
     .replace('/*@@SITE_REPORT@@*/', function () { return safeJs(read('src/take5-site-report.js')); })
     .replace('/*@@VISUALS@@*/', function () { return safeJs(read('src/take5-visuals.js')); })
     .replace('/*@@CONFIG@@*/', function () { return safeJson(JSON.parse(read('config/site-10265.json'))); })
+    .replace('/*@@HSE_JS@@*/', function () { return safeJs(read('src/daily-hse-stats.js')); })
+    .replace('/*@@HSE_DATA@@*/', function () { return safeJson(JSON.parse(read('src/daily-hse-stats.data.json'))); })
+    .replace('/*@@HSE_CSS@@*/', function () { return safeJson(read('src/daily-hse-stats.css')); })
     .replace('/*@@TAKE5@@*/', function () { return safeJs(read('src/take5.js')); });
 if (/\/\*@@\w+@@\*\//.test(out)) throw new Error('unfilled placeholder: ' + out.match(/\/\*@@\w+@@\*\//)[0]);
 fs.mkdirSync(path.join(ROOT, 'dist'), { recursive: true });

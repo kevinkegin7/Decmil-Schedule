@@ -114,17 +114,22 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 #toastMock { position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); background:#1c2230; color:#fff; padding:8px 14px; border-radius:8px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
 #toastMock.show { opacity:1; }
 
+.side .nav a[data-view] { cursor:pointer; }
+.viewseg { display:none; }
+@media (max-width:700px){ .viewseg { display:inline-flex; margin-right:auto; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .viewseg button { border:0; background:#fff; color:var(--grey); font:inherit; font-size:12px; font-weight:600; padding:7px 9px; } .viewseg button.on { background:var(--navy); color:#fff; } }
+@media print { .mock-note, .side, .topbar, #viewPage { display:none !important; } .main { padding:0 !important; } }
 @media (prefers-reduced-motion: reduce) { .r-toast, #toastMock { transition: none; } }
 </style>
 
-<div class="mock-note"><b>Test environment.</b> The Site Diary <b>Take 5 Compliance</b> page running the proposed files against a fake server: the real 9 Nov 2026 crews and roles with synthetic names. The date is pinned to Mon 9 Nov, counts you change stay in this tab, and Notify does not send a real email.</div>
+<div class="mock-note"><b>Test environment.</b> The Site Diary <b>Take 5 Compliance</b> page running the proposed files against a fake server: the real 9 Nov 2026 crews and roles with synthetic names. The date is pinned to Mon 9 Nov, counts you change stay in this tab, and Notify does not send a real email. <b>Daily HSE Stats</b> (left menu) runs on the figures from the site STATS sheet up to 4 Jul 2026; numbers you type are kept in this browser only.</div>
 <div class="shell">
   <aside class="side">
     <div><div class="brand">Site Diary R5</div><div class="proj">WASP WH Bulk Earthworks (10265)</div></div>
-    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on">Take 5 Compliance</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
+    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on" data-view="page" href="#">Take 5 Compliance</a><a data-view="hse" href="#hse">Daily HSE Stats</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
   </aside>
   <div class="main">
-    <div class="topbar"><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
+    <div class="topbar"><div class="viewseg" role="tablist"><button type="button" class="on" data-view="page" role="tab" aria-selected="true">Take 5 Compliance</button><button type="button" data-view="hse" role="tab" aria-selected="false">Daily HSE Stats</button></div><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
     <div id="viewPage">
     <div id="t5" class="mt-2 mb-4">
       <div class="hdr">
@@ -151,6 +156,7 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
       <div id="t5Dashboard" style="margin-top:18px;display:none"></div>
     </div>
     </div>
+    <div id="viewHse" hidden><div id="hseMount"></div></div>
   </div>
 </div>
 <div id="toastMock" role="status"></div>
@@ -225,4 +231,27 @@ body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",sy
 <script>/*@@VISUALS@@*/</script>
 <script>window.Take5SiteConfig = /*@@CONFIG@@*/;</script>
 <script>/*@@TAKE5@@*/</script>
-
+<script>/*@@HSE_JS@@*/</script>
+<script>
+/* ---- Site Diary section switch: Take 5 Compliance or Daily HSE Stats ---- */
+(function () {
+  'use strict';
+  var HSE_DATA = /*@@HSE_DATA@@*/, HSE_CSS = /*@@HSE_CSS@@*/, mounted = false;
+  function show(view) {
+    document.getElementById('viewPage').hidden = view !== 'page';
+    document.getElementById('viewHse').hidden = view !== 'hse';
+    if (view === 'hse' && !mounted) { mounted = true; window.DailyHseStats.mount(document.getElementById('hseMount'), HSE_DATA, HSE_CSS); }
+    Array.prototype.forEach.call(document.querySelectorAll('[data-view]'), function (el) {
+      var on = el.getAttribute('data-view') === view;
+      el.classList.toggle('on', on);
+      if (el.getAttribute('role') === 'tab') el.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-view]'); if (!el) return;
+    e.preventDefault(); show(el.getAttribute('data-view'));
+  });
+  if (location.hash === '#hse') show('hse');
+}());
+</script>

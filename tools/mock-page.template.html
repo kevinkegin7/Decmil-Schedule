@@ -1,0 +1,223 @@
+<title>Take 5 Page Mock</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
+<style>
+/* A single committed look: the Site Diary R5 page chrome, light only, painted explicitly. */
+:root { --navy:#1f396c; --navy2:#0054a6; --teal:#3f96b4; --good:#1F8A4C; --good-d:#1C7D45; --good-bg:#E6F3EC; --warn:#E08B00; --warn-d:#B26A00; --warn-bg:#FBF0DC;
+        --bad:#C0392B; --bad-d:#C0392B; --bad-bg:#FBE6E9; --faint:#8A909C; --grey:#5B6270; --line:#DDE0E5; --bg:#f0f2f5; --panel:#ffffff; --ink:#1c2230; color-scheme: light; }
+body { background:var(--bg); color:var(--ink); font-family:Poppins,"Segoe UI",system-ui,sans-serif; font-size:14px; }
+.mock-note { background:#fff3cd; color:#5c4400; font-size:12.5px; padding:8px 16px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); border-bottom:1px solid #f0d58a; }
+.mock-note b { font-weight:600; }
+.shell { display:flex; min-height:100vh; }
+.side { width:220px; flex:none; background:var(--navy); color:#fff; padding:18px 14px; display:flex; flex-direction:column; gap:14px; }
+.side .brand { font-weight:700; font-size:15px; } .side .proj { font-size:12px; opacity:.85; }
+.side .nav a { display:block; color:#fff; text-decoration:none; font-size:13px; padding:7px 10px; border-radius:8px; opacity:.85; }
+.side .nav a.on { background:rgba(255,255,255,.14); opacity:1; }
+.main { flex:1; min-width:0; padding-block:18px 48px; padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px)); }
+.topbar { display:flex; justify-content:flex-end; align-items:center; gap:12px; font-size:12px; color:var(--grey); margin-bottom:12px; }
+.topbar .btn { background:var(--navy2); color:#fff; border:0; border-radius:8px; padding:7px 12px; font:inherit; font-size:12px; }
+@media (max-width:700px){ .side{display:none;} }
+
+/* ---- take5.css approximation (the live page ships its own) ---- */
+#t5 .hdr { background:var(--navy); color:#fff; border-radius:14px; padding:22px 26px 0; }
+#t5 .hdr-top { display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; align-items:flex-start; }
+#t5 .eyebrow { font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; font-weight:600; }
+#t5 .hdr .eyebrow { opacity:.75; }
+#t5 h1 { margin:4px 0 2px; font-size:26px; font-weight:800; letter-spacing:-.01em; }
+#t5 .sub { font-size:13px; opacity:.85; }
+#t5 .daynav { text-align:right; }
+#t5 .dlabel { font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; font-weight:600; opacity:.75; margin-bottom:6px; }
+#t5 .dctrl { display:flex; gap:8px; align-items:center; justify-content:flex-end; }
+#t5 .dctrl input[type=date] { font:inherit; font-size:13px; font-weight:600; padding:8px 10px; border:0; border-radius:8px; background:#fff; color:var(--navy); }
+#t5 .dbtn { width:36px; height:38px; border:1px solid rgba(255,255,255,.35); background:transparent; color:#fff; border-radius:8px; font-size:18px; cursor:pointer; }
+#t5 .dsep { opacity:.8; }
+#t5 .tabs { display:flex; gap:22px; margin-top:16px; }
+#t5 .tab { background:none; border:0; color:#fff; opacity:.7; font:inherit; font-weight:600; font-size:14px; padding:10px 2px 12px; border-bottom:3px solid transparent; cursor:pointer; }
+#t5 .tab.on { opacity:1; border-bottom-color:var(--teal); }
+.strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.cell { background:var(--panel); padding:16px 20px; } .cell.dark { background:var(--navy); color:#fff; }
+.cell .eyebrow { color:var(--faint); } .cell.dark .eyebrow { color:#fff; opacity:.8; }
+.num { font-size:30px; font-weight:700; margin-top:4px; }
+.mono { font-variant-numeric:tabular-nums; }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; margin-bottom:16px; }
+.panel.empty, .empty { padding:22px; color:var(--faint); text-align:center; font-size:13px; }
+.phead { display:flex; align-items:flex-start; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--line); gap:10px; }
+.phead h3 { margin:0; font-size:15px; font-weight:700; } .phead p { margin:2px 0 0; font-size:12.5px; color:var(--grey); }
+.toolbar { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.field { font:inherit; font-size:13px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:#fff; color:var(--ink); }
+.seg { display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.seg button { border:0; background:#fff; color:var(--grey); font:inherit; font-size:12.5px; padding:8px 12px; cursor:pointer; }
+.seg button.on { background:var(--navy); color:#fff; }
+.xbtn { border:1px solid var(--navy); background:#fff; color:var(--navy); font:inherit; font-size:12.5px; font-weight:600; padding:8px 12px; border-radius:8px; cursor:pointer; }
+.xbtn:hover { background:var(--navy); color:#fff; }
+.wrow { display:grid; grid-template-columns:4px minmax(160px,1fr) 100px 110px 130px 70px; gap:12px; align-items:center; padding:10px 20px 10px 0; border-bottom:1px solid var(--line); }
+.wrow .rail { width:4px; height:40px; border-radius:0 3px 3px 0; }
+.wrow .nm { font-weight:600; font-size:14px; } .wrow .meta { font-size:12px; color:var(--faint); }
+.stat-tag { font-size:12.5px; font-weight:600; }
+.pips { display:flex; gap:4px; align-items:center; } .pip { width:22px; height:7px; border-radius:4px; display:inline-block; } .over { font-size:11px; color:var(--faint); font-weight:600; }
+.stepper { display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.sbtn { width:36px; height:36px; border:0; background:#fff; font-size:18px; cursor:pointer; color:var(--navy); } .sbtn.plus { background:var(--navy); color:#fff; }
+.sval { width:36px; text-align:center; line-height:36px; font-weight:700; }
+.setmin { border:1px solid var(--navy); background:#fff; color:var(--navy); font:inherit; font-size:12px; font-weight:600; padding:8px 10px; border-radius:8px; cursor:pointer; }
+@media (max-width:900px){ .wrow { grid-template-columns:4px 1fr 90px; } .wrow .pips, .wrow .setmin { display:none; } }
+/* dashboard */
+.t5-hero .gauge-wrap { display:grid; grid-template-columns:auto 1fr 2fr; gap:22px; align-items:center; }
+@media (max-width:900px){ .t5-hero .gauge-wrap { grid-template-columns:auto 1fr; } .t5-hero-kpis { grid-column:1 / -1; } }
+.gauge { width:120px; height:120px; border-radius:50%; background:conic-gradient(var(--gauge) calc(var(--pct) * 1%), #e4e7ec 0); display:grid; place-items:center; }
+.gauge .hole { width:88px; height:88px; border-radius:50%; background:#fff; display:grid; place-items:center; text-align:center; }
+.pctnum { font-size:24px; font-weight:800; color:var(--navy); line-height:1; } .pctlbl { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); }
+.t5-hero-big { font-size:20px; font-weight:700; margin-top:4px; } .t5-hero-sub { font-size:12.5px; color:var(--grey); }
+.t5-hero-kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; }
+.t5-kpi { background:#f7f8fa; border-radius:8px; padding:10px 12px; }
+.t5-kpi-l { font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); font-weight:600; }
+.t5-kpi-v { font-size:24px; font-weight:800; } .t5-kpi-s { font-size:11.5px; color:var(--faint); }
+.t5-actions .xbtn { margin-left:6px; }
+.lrow { display:flex; align-items:center; gap:12px; padding:10px 20px; border-bottom:1px solid var(--line); }
+.lrow .nm { font-weight:600; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .lrow .mt, .mt { font-size:11.5px; color:var(--faint); }
+.badge { min-width:30px; text-align:center; padding:4px 8px; border-radius:8px; font-weight:700; font-size:12px; }
+.count-chip { padding:3px 10px; border-radius:999px; font-weight:700; font-size:12px; }
+.t5-spark { display:inline-flex; align-items:flex-end; gap:3px; height:30px; } .t5-spark-bar { width:7px; border-radius:2px 2px 0 0; display:inline-block; }
+.t5-spark-sm .t5-spark-bar { width:6px; } .t5-spark-l { font-size:10.5px; color:var(--faint); margin-right:8px; }
+.crewbar .top { display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:4px; } .crewbar .c { font-weight:600; }
+.crewbar .track { height:8px; background:#eceff3; border-radius:4px; overflow:hidden; } .crewbar .track div { height:100%; border-radius:4px; }
+.t5-crewdd summary { cursor:pointer; font-size:12.5px; border:1px solid var(--line); border-radius:8px; padding:6px 10px; list-style:none; }
+.t5-crewdd-list { position:absolute; background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px; z-index:5; max-height:240px; overflow:auto; font-size:12.5px; }
+.t5-crewdd-item { display:block; padding:3px 4px; } .t5-crewdd-clear { margin-top:6px; font:inherit; font-size:12px; }
+.t5-crewdd { position:relative; }
+.t5-lb-row { display:flex; gap:10px; align-items:center; padding:9px 20px; border-bottom:1px solid var(--line); }
+.t5-lb-medal { width:22px; height:22px; border-radius:50%; color:#fff; font-size:11px; font-weight:700; display:grid; place-items:center; flex:none; }
+.t5-lb-top { display:flex; justify-content:space-between; font-size:13px; } .t5-lb-name { font-weight:600; } .t5-lb-val { font-weight:700; }
+.t5-lb-track { height:6px; background:#eceff3; border-radius:3px; overflow:hidden; margin:4px 0; } .t5-lb-track div { height:100%; }
+.t5-lb-sub { font-size:11.5px; color:var(--faint); }
+.t5-lb-toggle { display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.t5-lb-btn { border:0; background:#fff; font:inherit; font-size:12px; padding:6px 10px; cursor:pointer; } .t5-lb-btn.on { background:var(--navy); color:#fff; }
+.trend-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.trend { display:flex; gap:8px; align-items:flex-end; height:150px; padding-top:10px; }
+.tcol { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-width:0; }
+.tv { font-size:11px; font-weight:600; } .tbar { width:100%; max-width:34px; border-radius:4px 4px 0 0; } .tl { font-size:10px; color:var(--faint); margin-top:4px; white-space:nowrap; }
+.tbl { width:100%; border-collapse:collapse; font-size:13px; } .tbl th { text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); padding:10px 14px; border-bottom:1px solid var(--line); }
+.tbl td { padding:9px 14px; border-bottom:1px solid var(--line); } .cnum { text-align:center; font-weight:600; }
+.chip { display:inline-flex; align-items:center; gap:6px; padding:3px 9px; border-radius:999px; font-size:11.5px; font-weight:600; } .dot { width:7px; height:7px; border-radius:50%; display:inline-block; }
+.t5-lookup-empty { padding:16px 20px; color:var(--faint); font-size:13px; }
+.t5-lookup-card { display:grid; grid-template-columns:minmax(160px,1.4fr) repeat(5,minmax(70px,1fr)) minmax(140px,1fr) auto; gap:10px; align-items:center; padding:12px 20px; border-bottom:1px solid var(--line); }
+.t5-stat-l { font-size:10.5px; color:var(--faint); text-transform:uppercase; letter-spacing:.08em; } .t5-stat-v { font-size:18px; font-weight:700; }
+/* modal */
+.t5-modal-bg { position:fixed; inset:0; background:rgba(20,30,50,.45); display:grid; place-items:center; padding:16px; z-index:50; }
+.t5-modal { background:#fff; border-radius:14px; padding:20px 22px; width:min(100%,640px); max-height:92vh; overflow:auto; box-shadow:0 20px 60px rgba(0,0,0,.25); }
+.t5-modal-h { font-size:17px; font-weight:700; } .t5-modal-sub { font-size:12.5px; color:var(--grey); margin:4px 0 12px; }
+.t5-modal-lbl { display:block; font-size:11.5px; color:var(--faint); margin:10px 0 4px; } .t5-modal-opt { font-weight:400; }
+.t5-modal-in, .t5-modal-ta { width:100%; box-sizing:border-box; font:inherit; font-size:13px; padding:8px 10px; border:1px solid var(--line); border-radius:8px; }
+.t5-modal-ta { min-height:160px; }
+.t5-modal-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:14px; flex-wrap:wrap; }
+.t5-btn-ghost { border:1px solid var(--line); background:#fff; font:inherit; font-size:13px; padding:8px 14px; border-radius:8px; cursor:pointer; }
+.t5-btn-primary { border:0; background:var(--navy); color:#fff; font:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:8px; cursor:pointer; }
+#toastMock { position:fixed; right:16px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); background:#1c2230; color:#fff; padding:8px 14px; border-radius:8px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
+#toastMock.show { opacity:1; }
+</style>
+
+<div class="mock-note"><b>Test environment.</b> This is the Site Diary Take 5 page running the proposed files against a fake server. The roster is the real 9 Nov 2026 crews and roles with synthetic names. Counts you change here are kept in this tab only. Date: Mon 9 Nov 2026 (the Dashboard range is 3 to 9 Nov).</div>
+<div class="shell">
+  <aside class="side">
+    <div><div class="brand">Site Diary R5</div><div class="proj">WASP WH Bulk Earthworks (10265)</div></div>
+    <div class="nav"><a>Roster</a><a>Forecast</a><a>Prestart</a><a class="on">Take 5 Compliance</a><a>Fatigue Self Assessments</a><a>Reports</a></div>
+  </aside>
+  <div class="main">
+    <div class="topbar"><span>hse.advisor@example · HSE Advisor</span><button class="btn" type="button">Sign out</button></div>
+    <div id="t5" class="mt-2 mb-4">
+      <div class="hdr">
+        <div class="hdr-top">
+          <div>
+            <div class="eyebrow">HSE · Site Diary</div>
+            <h1>Take 5 Compliance</h1>
+            <div class="sub">Minimum <span id="t5MinCopy">3</span> Take 5 tags per worker, per day on site.</div>
+          </div>
+          <div class="daynav">
+            <div id="t5DayNav">
+              <div class="dlabel">Reporting date</div>
+              <div class="dctrl"><button class="dbtn" id="t5Prev" title="Previous day">‹</button><input type="date" id="t5Date"><button class="dbtn" id="t5Next" title="Next day">›</button></div>
+            </div>
+            <div id="t5RangeNav" style="display:none">
+              <div class="dlabel">Date range</div>
+              <div class="dctrl"><input type="date" id="t5Start" title="From date"><span class="dsep">to</span><input type="date" id="t5End" title="To date"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tabs"><button class="tab on" data-tab="capture">Daily Capture</button><button class="tab" data-tab="dashboard">Dashboard</button></div>
+      </div>
+      <div id="t5Capture" style="margin-top:18px"></div>
+      <div id="t5Dashboard" style="margin-top:18px;display:none"></div>
+    </div>
+  </div>
+</div>
+<div id="toastMock" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+/* ---- fake server: the two endpoints take5.js calls, built from the example roster ---- */
+(function () {
+  'use strict';
+  var FX = /*@@SAMPLE@@*/;
+  var MIN = 3, DATE = '2026-11-09';
+  var people = FX.rows.map(function (r, i) {
+    return { EmployeeId: r.EmployeeId, Name: r.Name, Gender: r.Gender, Role: r.Role, Crew: r.Crew, Company: r.Company, OnSite: true, TagCount: Number(r.TagCount || 0) };
+  });
+  function statusOf(n) { return n >= MIN ? 'compliant' : (n > 0 ? 'partial' : 'missed'); }
+  function dayShift(iso, n) { var d = new Date(iso + 'T00:00:00Z'); return new Date(d.getTime() + n * 86400000).toISOString().slice(0, 10); }
+  // deterministic prior-day counts so the dashboard range has history
+  function priorCount(p, k) { var base = p.TagCount; if (base === 0) return (p.EmployeeId + k) % 4 === 0 ? 1 : 0; return Math.max(0, base + (((p.EmployeeId * 7 + k * 3) % 5) - 2)); }
+  function capture(date) {
+    var off = date !== DATE ? (date > DATE ? 1 : -1) : 0;
+    return { MinPerDay: MIN, Rows: people.map(function (p) {
+      var t = off === 0 ? p.TagCount : (off > 0 ? 0 : priorCount(p, Math.abs(Math.round((new Date(date) - new Date(DATE)) / 86400000))));
+      return { EmployeeId: p.EmployeeId, Name: p.Name, Gender: p.Gender, Role: p.Role, Crew: p.Crew, Company: p.Company, OnSite: true, TagCount: t, Status: statusOf(t) };
+    }) };
+  }
+  function dashboard(start, end) {
+    var days = Math.max(1, Math.round((new Date(end) - new Date(start)) / 86400000) + 1);
+    var rows = people.map(function (p) {
+      var totals = 0, comp = 0, spark = [];
+      for (var k = days - 1; k >= 0; k--) { var d = dayShift(end, -k); var t = d === DATE ? p.TagCount : (d > DATE ? 0 : priorCount(p, k)); totals += t; if (t >= MIN) comp++; if (k < 5) spark.push(t); }
+      return { EmployeeId: p.EmployeeId, Name: p.Name, Role: p.Role, Crew: p.Crew, OnSite: true, RangeTotal: totals, WeekTotal: totals, Lifetime: totals * 4 + (p.EmployeeId % 9),
+               OnSiteDays: days, CompliantDays: comp, Status: statusOf(p.TagCount), Spark: spark };
+    });
+    var onSiteDays = rows.length * days, compDays = rows.reduce(function (a, r) { return a + r.CompliantDays; }, 0), tags = rows.reduce(function (a, r) { return a + r.RangeTotal; }, 0);
+    var action = rows.filter(function (r) { return r.CompliantDays < days; }).map(function (r) {
+      return { EmployeeId: r.EmployeeId, Name: r.Name, Crew: r.Crew, DaysBelow: days - r.CompliantDays, OnSiteDays: days, TagCount: r.RangeTotal, Status: r.Status, Spark: r.Spark };
+    });
+    var crews = {}; rows.forEach(function (r) { var c = crews[r.Crew] || (crews[r.Crew] = { Crew: r.Crew, Compliant: 0, OnSite: 0 }); c.OnSite++; if (r.Status === 'compliant') c.Compliant++; });
+    var trend = []; for (var k = 13; k >= 0; k--) { var d = dayShift(end, -k); var n = 0, c = 0; people.forEach(function (p) { var t = d === DATE ? p.TagCount : (d > DATE ? 0 : priorCount(p, k)); n++; if (t >= MIN) c++; }); trend.push({ Label: d.slice(5), Pct: d > DATE ? -1 : Math.round(c / n * 100) }); }
+    return { MinPerDay: MIN, OnSiteCount: rows.length, ToActionCount: action.length, CompliantPct: Math.round(compDays / onSiteDays * 100), RosterCount: rows.length, OnLeaveCount: 0,
+             RangeTagTotal: tags, AvgPerWorker: (tags / onSiteDays).toFixed(1), OnSiteDayCount: onSiteDays, CompliantDayCount: compDays, ActionList: action,
+             CrewRollup: Object.keys(crews).map(function (k) { var c = crews[k]; c.Pct = Math.round(c.Compliant / c.OnSite * 100); return c; }), Trend: trend, TableRows: rows };
+  }
+  window.__mockToast = function (msg) { var t = document.getElementById('toastMock'); t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2200); };
+  $.getJSON = function (url, params) {
+    var d = $.Deferred();
+    setTimeout(function () {
+      if (url === '/Take5/GetCapture') d.resolve(capture(params.date));
+      else if (url === '/Take5/GetDashboard') d.resolve(dashboard(params.startDate, params.endDate));
+      else d.reject();
+    }, 120);
+    return d.promise();
+  };
+  $.ajax = function (opts) {
+    var d = $.Deferred();
+    setTimeout(function () {
+      if (opts.url === '/Take5/SaveCount') { var p = people.filter(function (x) { return x.EmployeeId === Number(opts.data.EmployeeId); })[0]; if (p && opts.data.Take5Date === DATE) p.TagCount = Number(opts.data.TagCount); d.resolve({}); }
+      else if (opts.url === '/Take5/Notify') { window.__mockToast('Mock: email would go to ' + opts.data.To); d.resolve({ Sent: 1 }); }
+      else d.resolve({});
+    }, 120);
+    return d.promise();
+  };
+  window.kendo = { ooxml: { Workbook: function (cfg) { this.toDataURLAsync = function () { window.__mockToast('Mock: Excel export built (' + cfg.sheets.length + ' sheet' + (cfg.sheets.length > 1 ? 's' : '') + ', ' + cfg.sheets[0].rows.length + ' rows). Downloads are disabled in this preview.'); return new Promise(function () {}); }; } }, saveAs: function () {} };
+  window.toastr = { info: function (m) { window.__mockToast(m); }, error: function (m) { window.__mockToast(m); }, success: function (m) { window.__mockToast(m); }, warning: function (m) { window.__mockToast(m); } };
+  // the page opens on today's date; pin it to the roster's date
+  var RealDate = Date; var fixed = new RealDate(DATE + 'T08:00:00');
+  window.Date = function (a, b, c) { if (arguments.length === 0) return new RealDate(fixed.getTime()); return arguments.length === 1 ? new RealDate(a) : new RealDate(a, b, c); };
+  window.Date.prototype = RealDate.prototype; window.Date.now = function () { return fixed.getTime(); }; window.Date.UTC = RealDate.UTC; window.Date.parse = RealDate.parse;
+}());
+</script>
+<script>/*@@SITE_REPORT@@*/</script>
+<script>/*@@VISUALS@@*/</script>
+<script>window.Take5SiteConfig = /*@@CONFIG@@*/;</script>
+<script>/*@@TAKE5@@*/</script>

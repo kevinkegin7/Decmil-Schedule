@@ -823,7 +823,7 @@
                 '</div>' +
                 '<div class="trend">' + trendCols + '</div></div>' +
             // Stats and trend under the site rules (per-day captures)
-            (SITE ? '<div id="t5StatsPanel"></div>' : '') +
+            (SITE ? '<div id="t5ForecastPanel"></div><div id="t5StatsPanel"></div>' : '') +
             // Running totals
             '<div class="panel t5-web-only">' +
                 '<div class="phead" style="gap:10px;flex-wrap:wrap"><div><h3>Running totals — every worker</h3><p id="t5TotalsSub">' + req.length + ' required on site in range · ' + m.exemptN + ' exempt shown but not counted · in-range / this week / lifetime tags</p></div>' +
@@ -838,7 +838,7 @@
             '<div id="t5ModalMount"></div>';
 
         $('#t5Dashboard').html(actions + '<div id="t5DashBody">' + body + '</div>');
-        if (SITE) renderStatsPanel();
+        if (SITE) { renderForecastPanel(); renderStatsPanel(); }
     }
 
     // ------------------------------------------------ Stats + trend (site rules)
@@ -874,6 +874,126 @@
         });
         return out;
     }
+    // ------------------------------------------------ Take 5 forecast
+    /* Where the week and the month are heading, from the captures already in
+       Site Diary. Run rate = Take 5s per required person per day over the last
+       7 logged days; the projection carries that rate and the current crew size
+       through the days left in the period. Days with nothing entered are not
+       counted as zeros, they are left out. */
+    function monthEndOf(d) { var p = d.split('-'); return p[0] + '-' + p[1] + '-' + String(new Date(+p[0], +p[1], 0).getDate()).padStart(2, '0'); }
+    function forecastData() {
+        var end = state.end, from = addDays(end, -27), ms = monthStartOf(end);
+        if (ms < from) from = ms;
+        var dates = dateRange(from, end);
+        if (dates.length > STATS_MAX_DAYS) dates = dates.slice(-STATS_MAX_DAYS);
+        return { end: end, dates: dates };
+    }
+    function buildForecast(dates, end) {
+        var logged = [];
+        dates.forEach(function (d) { var r = dayReport(d); if (r && r.totals.take5s > 0 && r.totals.included > 0) logged.push({ d: d, r: r }); });
+        if (logged.length < 3) return null;
+        var recent = logged.slice(-7), order = recent[recent.length - 1].r.groupOrder;
+        function sum(list, key, fn) { return list.reduce(function (a, x) { return a + fn(key ? x.r.groups[key] : x.r.totals, x.r); }, 0); }
+        function scope(key, label) {
+            var crewDays = sum(recent, key, function (g) { return key ? g.crewSize : g.included; });
+            var t5 = sum(recent, key, function (g) { return g.take5s; });
+            var rate = crewDays ? t5 / crewDays : 0, crew = crewDays / recent.length;
+            function period(name, a, b) {
+                var inP = logged.filter(function (x) { return x.d >= a && x.d <= b; });
+                var soFar = sum(inP, key, function (g) { return g.take5s; });
+                var tgtSoFar = sum(inP, key, function (g) { return (key ? g.crewSize : g.included) * state.min; });
+                var left = b > end ? dateRange(addDays(end, 1), b).length : 0;
+                var projected = soFar + rate * crew * left, target = tgtSoFar + crew * state.min * left;
+                var needed = left && crew ? (target - soFar) / (crew * left) : null;
+                return { name: name, label: label, logged: inP.length, left: left, soFar: soFar, tgtSoFar: tgtSoFar, projected: Math.round(projected), target: Math.round(target),
+                    pct: target ? Math.round(projected / target * 100) : 0, gap: Math.round(projected - target), needed: needed, rate: rate };
+            }
+            var ws = weekStartOf(end);
+            return { label: label, rate: rate, crew: crew, week: period('This week', ws, addDays(ws, 6)), month: period('This month', monthStartOf(end), monthEndOf(end)) };
+        }
+        var scopes = order.map(function (k) { return scope(k, recent[recent.length - 1].r.groups[k].label); });
+        scopes.push(scope(null, 'All required'));
+        // direction: least-squares slope of the daily % at minimum over the last 14 logged days
+        var series = logged.slice(-14).map(function (x) { return x.r.totals.compliancePct; }), n = series.length, mx = (n - 1) / 2, my = series.reduce(function (a, b) { return a + b; }, 0) / n, num = 0, den = 0;
+        series.forEach(function (y, i) { num += (i - mx) * (y - my); den += (i - mx) * (i - mx); });
+        var slope = den ? num / den : 0, now = series[n - 1], in7 = Math.max(0, Math.min(100, Math.round(my + slope * (n - 1 - mx + 7))));
+        // what the shortfall is made of, repeat zeros, weakest crews and weekday (last 7 logged days)
+        var shortZero = 0, shortBelow = 0, zeroDays = {}, crews = {};
+        recent.forEach(function (x) {
+            x.r.people.forEach(function (p) {
+                if (!p.cls.included) return;
+                if (p.tags === 0) { shortZero += state.min; zeroDays[p.name] = (zeroDays[p.name] || 0) + 1; }
+                else if (p.tags < state.min) shortBelow += state.min - p.tags;
+                var c = crews[p.crew] || (crews[p.crew] = { crew: p.crew, n: 0, t: 0 }); c.n++; c.t += p.tags;
+            });
+        });
+        var repeat = Object.keys(zeroDays).filter(function (k) { return zeroDays[k] >= 3; }).sort(function (a, b) { return zeroDays[b] - zeroDays[a] || (a < b ? -1 : 1); })
+            .map(function (k) { return { name: k, days: zeroDays[k] }; });
+        var weakCrews = Object.keys(crews).map(function (k) { return crews[k]; }).filter(function (c) { return c.n >= recent.length * 2; })
+            .map(function (c) { return { crew: c.crew, avg: c.t / c.n }; }).sort(function (a, b) { return a.avg - b.avg; }).slice(0, 3);
+        var dow = {}; logged.forEach(function (x) { var p = x.d.split('-'), k = new Date(+p[0], +p[1] - 1, +p[2]).getDay(); (dow[k] || (dow[k] = [])).push(x.r.totals.compliancePct); });
+        var names = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'], weakDay = null;
+        Object.keys(dow).forEach(function (k) { if (dow[k].length < 2) return; var a = dow[k].reduce(function (s, v) { return s + v; }, 0) / dow[k].length; if (!weakDay || a < weakDay.avg) weakDay = { name: names[k], avg: Math.round(a) }; });
+        return { loggedDays: logged.length, recentDays: recent.length, scopes: scopes, slope: slope, now: now, in7: in7, avg14: Math.round(my),
+            shortZero: shortZero, shortBelow: shortBelow, repeat: repeat, weakCrews: weakCrews, weakDay: weakDay, overallAvg: Math.round(logged.reduce(function (a, x) { return a + x.r.totals.compliancePct; }, 0) / logged.length) };
+    }
+    function outlook(p) {
+        if (!p.logged && !p.left) return { w: '—', c: 'var(--faint)' };
+        if (p.pct >= 100) return { w: p.left ? 'On course' : 'Target met', c: 'var(--good-d)' };
+        if (p.pct >= 95) return { w: p.left ? 'Close, at risk' : 'Just short', c: 'var(--warn-d)' };
+        return { w: p.left ? 'Will miss' : 'Missed', c: 'var(--bad-d)' };
+    }
+    function renderForecastPanel() {
+        var mount = $('#t5ForecastPanel'); if (!mount.length) return;
+        var fd = forecastData();
+        var ready = fd.dates.every(function (d) { return d === state.date || state.dayCache[d] !== undefined; });
+        var headHtml = '<div class="phead"><div><h3>Take 5 forecast (site rules)</h3><p>';
+        if (!ready) {
+            mount.html('<div class="panel" style="margin-bottom:16px">' + headHtml + 'Reading the last ' + fd.dates.length + ' days of captures…</p></div></div></div>');
+            loadDays(fd.dates, function () { if (state.view === 'dashboard') renderForecastPanel(); });
+            return;
+        }
+        var F = buildForecast(fd.dates, fd.end);
+        if (!F) { mount.html('<div class="panel" style="margin-bottom:16px">' + headHtml + 'Needs at least 3 days with Take 5s entered up to ' + esc(shortDate(fd.end)) + '.</p></div></div></div>'); return; }
+        function rows(which) {
+            return F.scopes.map(function (s) {
+                var p = s[which], o = outlook(p), all = s.label === 'All required';
+                var need = p.needed == null ? '—' : (p.needed <= 0 ? 'already there' : p.needed.toFixed(2) + (p.needed > s.rate + 0.005 ? ' (now ' + s.rate.toFixed(2) + ')' : ''));
+                return '<tr' + (all ? ' style="font-weight:600;background:#f7f8fa"' : '') + '><td>' + esc(s.label) + '</td><td class="cnum mono">' + p.soFar + ' / ' + p.tgtSoFar + '</td><td class="cnum mono">' + p.logged + ' + ' + p.left + '</td>' +
+                    '<td class="cnum mono">' + p.projected + ' / ' + p.target + '</td><td class="cnum mono">' + p.pct + '%</td>' +
+                    '<td class="cnum mono" style="color:' + (p.gap < 0 ? 'var(--bad-d)' : 'var(--good-d)') + '">' + (p.gap > 0 ? '+' : '') + p.gap + '</td><td class="cnum mono">' + need + '</td>' +
+                    '<td style="font-weight:600;color:' + o.c + '">' + o.w + '</td></tr>';
+            }).join('');
+        }
+        var thead = '<thead><tr><th>Group</th><th style="text-align:center">So far / target so far</th><th style="text-align:center">Days logged + left</th><th style="text-align:center">Projected finish / target</th><th style="text-align:center">Projected %</th><th style="text-align:center">Projected gap</th><th style="text-align:center">Needed per person per day from here</th><th>Outlook</th></tr></thead>';
+        function section(title, which) { return '<div class="phead" style="border-top:1px solid var(--line)"><div><h3 style="font-size:13px">' + title + '</h3></div></div><div style="overflow:auto"><table class="tbl">' + thead + '<tbody>' + rows(which) + '</tbody></table></div>'; }
+        var all = F.scopes[F.scopes.length - 1], ws = weekStartOf(fd.end);
+        var dir = Math.abs(F.slope) < 0.3 ? 'flat' : (F.slope > 0 ? 'rising' : 'falling');
+        var short = F.shortZero + F.shortBelow, bullets = [];
+        bullets.push('<strong>Direction:</strong> the share of required people at the minimum is ' + dir + (dir === 'flat' ? '' : ' by about ' + Math.abs(F.slope).toFixed(1) + ' points a day') +
+            ' over the last ' + Math.min(14, F.loggedDays) + ' logged days (average ' + F.avg14 + '%, latest ' + F.now + '%). Held for another week, that path gives about <strong>' + F.in7 + '%</strong>.');
+        bullets.push('<strong>Run rate:</strong> ' + all.rate.toFixed(2) + ' Take 5s per required person per day over the last ' + F.recentDays + ' logged days against a target of ' + state.min + ' (' +
+            F.scopes.slice(0, -1).map(function (s) { return esc(s.label) + ' ' + s.rate.toFixed(2); }).join(', ') + ').');
+        if (short > 0) bullets.push('<strong>Where the shortfall is:</strong> ' + Math.round(F.shortZero / short * 100) + '% of the missing Take 5s in the last ' + F.recentDays + ' days come from people who logged none at all, ' +
+            Math.round(F.shortBelow / short * 100) + '% from people who logged 1 or 2. ' + (F.shortZero >= F.shortBelow ? 'Getting the zeros to start will move the figure more than pushing the 1s and 2s.' : 'Most people are starting; the gain is in getting 1s and 2s up to ' + state.min + '.'));
+        if (F.repeat.length) bullets.push('<strong>Repeat zeros:</strong> ' + F.repeat.length + ' required ' + (F.repeat.length === 1 ? 'person has' : 'people have') + ' logged no Take 5 on 3 or more of the last ' + F.recentDays + ' logged days: ' +
+            F.repeat.slice(0, 6).map(function (r) { return esc(r.name) + ' (' + r.days + ')'; }).join(', ') + (F.repeat.length > 6 ? ' and ' + (F.repeat.length - 6) + ' more' : '') + '.');
+        if (F.weakCrews.length) bullets.push('<strong>Lowest crews:</strong> ' + F.weakCrews.map(function (c) { return esc(c.crew) + ' ' + c.avg.toFixed(2) + ' per person per day'; }).join(' · ') + '.');
+        if (F.weakDay && F.weakDay.avg < F.overallAvg - 3) bullets.push('<strong>Weakest day:</strong> ' + F.weakDay.name + ' average ' + F.weakDay.avg + '% at the minimum against ' + F.overallAvg + '% overall.');
+        var wk = outlook(all.week), mo = outlook(all.month);
+        function tile(label, p, o, sub) { return '<div class="t5-kpi"><div class="t5-kpi-l">' + label + '</div><div class="t5-kpi-v" style="color:' + o.c + '">' + p.pct + '%</div><div class="t5-kpi-s">' + o.w + ' · ' + sub + '</div></div>'; }
+        mount.html('<div class="panel" style="margin-bottom:16px">' + headHtml + 'Where the week and the month finish if the last ' + F.recentDays + ' logged days continue · as at ' + esc(shortDate(fd.end)) + ' · projected % is Take 5s against crew × ' + state.min + ' × days · days with nothing entered are left out</p></div></div>' +
+            '<div class="t5-hero-kpis" id="t5ForecastTiles" style="padding:14px 20px">' +
+                tile('Week finish (to ' + esc(shortDate(addDays(ws, 6))) + ')', all.week, wk, all.week.projected + ' of ' + all.week.target) +
+                tile('Month finish (to ' + esc(shortDate(monthEndOf(fd.end))) + ')', all.month, mo, all.month.projected + ' of ' + all.month.target) +
+                '<div class="t5-kpi"><div class="t5-kpi-l">Run rate per person per day</div><div class="t5-kpi-v">' + all.rate.toFixed(2) + '</div><div class="t5-kpi-s">target ' + state.min + '.00</div></div>' +
+                '<div class="t5-kpi"><div class="t5-kpi-l">At minimum in 7 days</div><div class="t5-kpi-v">' + F.in7 + '%</div><div class="t5-kpi-s">' + dir + ' · latest ' + F.now + '%</div></div>' +
+            '</div>' +
+            '<ul id="t5ForecastNotes" style="margin:0;padding:0 20px 14px 38px;font-size:13px;line-height:1.6">' + bullets.map(function (b) { return '<li>' + b + '</li>'; }).join('') + '</ul>' +
+            section('This week (Sat–Fri)', 'week') + section('This month', 'month') +
+            '</div>');
+    }
+
     function statusWord(pct) { return pct >= 100 ? 'On target' : (pct >= 67 ? 'Close' : 'Below target'); }
     function statusColor(pct) { return pct >= 100 ? 'var(--good-d)' : (pct >= 67 ? 'var(--warn-d)' : 'var(--bad-d)'); }
     function renderStatsPanel() {

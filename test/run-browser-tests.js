@@ -317,6 +317,14 @@ function assert(desc, cond, detail) {
     var firstStats = await page.locator('#t5StatsPanel table').first().locator('tbody tr').first().textContent();
     assert('stats rows carry target status', /On target|Close|Below target/.test(firstStats), firstStats);
 
+    // Forecast panel: week and month projections per group plus the notes.
+    await page.waitForSelector('#t5ForecastTiles');
+    check('forecast shows four headline tiles', await page.locator('#t5ForecastTiles .t5-kpi').count(), 4);
+    check('forecast has week and month tables with both groups and the total', [await page.locator('#t5ForecastPanel table').nth(0).locator('tbody tr').count(), await page.locator('#t5ForecastPanel table').nth(1).locator('tbody tr').count()], [3, 3]);
+    var fcRow = await page.locator('#t5ForecastPanel table').nth(1).locator('tbody tr').last().locator('td').allTextContents();
+    var fcParts = fcRow[3].split(' / ').map(Number);
+    assert('forecast projected % is projected finish over target', Math.abs(Math.round(fcParts[0] / fcParts[1] * 100) - parseInt(fcRow[4], 10)) <= 1, fcRow.join(' | '));
+    assert('forecast notes cover direction and run rate', /Direction:/.test(await page.locator('#t5ForecastNotes').textContent()) && /Run rate:/.test(await page.locator('#t5ForecastNotes').textContent()));
     // Exclude crews: the list stays open while several crews are ticked.
     await page.click('.t5-crewdd > summary');
     await page.locator('.t5-crew-ex').nth(0).check();

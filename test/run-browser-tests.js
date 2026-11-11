@@ -184,42 +184,42 @@ function assert(desc, cond, detail) {
     check('optional-at-zero rows are labelled Optional', await page.locator('#t5List .wrow.t5-exempt .stat-tag:has-text("Optional")').count(), optionalAtZero);
 
     // Email Report panel (the register's Email Report sheet, on the page).
+    check('Daily Capture carries no report panel or Notify button', await page.locator('#t5Capture #t5EmailPanel, #t5Capture #t5EmailOpen').count(), 0);
+    check('Analytics tab sits between Daily Capture and Dashboard', await page.locator('#t5 .tab').allTextContents(), ['Daily Capture', 'Analytics', 'Dashboard']);
+    await page.click('#t5 .tab[data-tab="analytics"]');
     await page.waitForSelector('#t5EmailPanel .panel');
     await page.waitForFunction(function () { return document.querySelector('#t5EmailPanel') && document.querySelector('#t5EmailPanel').textContent.indexOf('…') < 0; });
     var panelText = await page.locator('#t5EmailPanel').textContent();
-    var panelRows = people.filter(function (p) { return p.OnSite; }).map(function (p) {
-        return p.EmployeeId === firstReq.EmployeeId ? Object.assign({}, p, { TagCount: p.TagCount + 1 }) : p;
-    });
+    // Opening the tab re-reads the day from the server, and the mock does not keep the stepper edit above.
+    var panelRows = people.filter(function (p) { return p.OnSite; });
     var panelRep = Report.buildReport(panelRows, siteCfg, { date: await page.evaluate(function () { return document.getElementById('t5Date').value; }) });
     assert('email panel title carries the sheet date', panelText.indexOf('Take 5 Report for the ' + panelRep.dateLabel) >= 0);
     assert('email panel banner shows TODAY zeros', panelText.indexOf('TODAY:') >= 0 && panelText.indexOf(panelRep.totals.zeros + ' with NO Take 5') >= 0);
-    assert('email panel carries the sentence', panelText.indexOf(panelRep.sentence) >= 0);
-    assert('email panel carries the Daily Log row', panelText.indexOf(panelRep.dailyLogRow.join(' | ')) >= 0);
+    assert('report panel opens with the greeting and intro', panelText.indexOf('Morning Team,') >= 0 && /Please see below the Take 5's stats for \w+day \d\d\/\d\d\/\d\d:/.test(panelText));
+    assert('report panel has no copy buttons and no Daily Log row', (await page.locator('#t5PanelCopy, #t5PanelCopyHtml').count()) === 0 && panelText.indexOf('Daily Log') < 0);
+    check('report panel has a Notify button', await page.locator('#t5PanelNotify').count(), 1);
+    check('report panel shows a 14-day trend', await page.locator('#t5DailyTrend .tcol').count(), 14);
+    assert('trend today matches the module compliance %', (await page.locator('#t5DailyTrend .tcol').last().textContent()).indexOf(panelRep.totals.compliancePct + '%') >= 0);
     var fuTable = page.locator('#t5EmailPanel table').nth(1);
     var fuRows = await fuTable.locator('tbody tr').count();
     check('follow-up table lists zeros + below-min', fuRows, panelRep.totals.zeros + panelRep.totals.belowMin);
     var firstFu = await fuTable.locator('tbody tr').first().textContent();
     assert('follow-up ranks NO TAKE 5 first', panelRep.totals.zeros === 0 || firstFu.indexOf('NO TAKE 5') >= 0);
     assert('follow-up shows last Take 5 and consistency', /\d+ of \d+ day/.test(firstFu) && /%|—/.test(firstFu));
-    await page.click('#t5EmailOpen');
-    await page.waitForSelector('#t5EmailBody');
-    // The stepper test above added one tag to firstReq, so expect the page's current counts.
-    var pageRows = people.filter(function (p) { return p.OnSite; }).map(function (p) {
-        return p.EmployeeId === firstReq.EmployeeId ? Object.assign({}, p, { TagCount: p.TagCount + 1 }) : p;
-    });
-    var expected = Report.buildReport(pageRows, siteCfg, { date: await page.evaluate(function () { return document.getElementById('t5Date').value; }) });
-    var body = await page.inputValue('#t5EmailBody');
-    assert('email body starts with the report header', body.indexOf('Take 5 Report for the ' + expected.dateLabel) === 0, body.split('\n')[0]);
-    assert('email body has the sentence', body.indexOf(expected.sentence) > 0, expected.sentence.slice(0, 60));
-    assert('email body table matches the module', new RegExp('Crew Size\\s+' + expected.groups.Maintenance.crewSize + '\\s+Crew Size\\s+' + expected.groups.Operations.crewSize).test(body));
-    check('email card rendered with hero %', await page.locator('#t5EmailCard .t5v-hero').count(), 1);
-    assert('email card hero shows the module compliance %', (await page.locator('#t5EmailCard .t5v-hero').textContent()).indexOf(expected.totals.compliancePct + '%') >= 0);
-    check('email card has crew meters and the segmented bar', [await page.locator('#t5EmailCard .t5v-seg').count(), await page.locator('#t5EmailCard .t5v-crews').count()], [1, 1]);
-    assert('copy buttons present', (await page.locator('#t5EmailCopy').count()) === 1 && (await page.locator('#t5EmailCopyHtml').count()) === 1);
+    await page.click('#t5PanelNotify');
+    await page.waitForSelector('#t5EmailPreview');
+    var expected = panelRep;
+    var preview = await page.locator('#t5EmailPreview').textContent();
+    assert('notify preview carries the report title', preview.indexOf('Take 5 Report for the ' + expected.dateLabel) >= 0);
+    check('notify preview table has the four rows per group', await page.locator('#t5EmailPreview table').first().locator('tr').count(), 5);
+    assert('notify preview table matches the module', (await page.locator('#t5EmailPreview table').first().textContent()).indexOf('Crew Size' + expected.groups.Maintenance.crewSize + 'Crew Size' + expected.groups.Operations.crewSize) >= 0);
+    assert('no copy buttons in the notify dialog', (await page.locator('#t5EmailCopy, #t5EmailCopyHtml').count()) === 0);
+    await page.fill('#t5EmailSign', 'Test Sender\nHSE Advisor');
+    assert('sign-off appears in the preview', (await page.locator('#t5EmailPreview').textContent()).indexOf('Regards,Test Sender') >= 0);
     await page.click('#t5EmailClose');
     check('email modal closes', await page.locator('#t5EmailBg').count(), 0);
     // Send from Site Diary: posts the email text to the page's mail endpoint and remembers the recipients.
-    await page.click('#t5EmailOpen');
+    await page.click('#t5PanelNotify');
     check('daily email subject defaults to the report title', await page.inputValue('#t5EmailSubject'), 'Take 5 Report for the ' + expected.dateLabel);
     await page.click('#t5EmailSend');
     assert('daily email is not sent without a recipient', !(await page.evaluate(function () { return window.__ajax.some(function (a) { return a.url === '/Take5/Notify'; }); })));
@@ -227,11 +227,15 @@ function assert(desc, cond, detail) {
     await page.click('#t5EmailSend');
     await page.waitForFunction(function () { return window.__ajax.some(function (a) { return a.url === '/Take5/Notify'; }); });
     var dailySent = await page.evaluate(function () { return window.__ajax.filter(function (a) { return a.url === '/Take5/Notify'; })[0].data; });
-    assert('daily email posts the report text', dailySent.Body === body && dailySent.To === 'management@example.com' && dailySent.Subject === 'Take 5 Report for the ' + expected.dateLabel);
+    assert('daily report is posted to the recipient with the title as subject', dailySent.To === 'management@example.com' && dailySent.Subject === 'Take 5 Report for the ' + expected.dateLabel);
+    assert('daily report text has greeting, title, TODAY line and sign-off', dailySent.Body.indexOf('Morning Team,') === 0 && dailySent.Body.indexOf('Take 5 Report for the ' + expected.dateLabel) > 0 &&
+        dailySent.Body.indexOf('TODAY: ' + expected.totals.zeros + ' with NO Take 5 | ' + expected.totals.belowMin + ' below minimum') > 0 && /Regards,\nTest Sender\nHSE Advisor$/.test(dailySent.Body));
+    assert('daily report HTML carries the follow-up table', dailySent.IsHtml === true && (dailySent.BodyHtml.match(/NO TAKE 5<\/td>|BELOW MIN<\/td>/g) || []).length === expected.totals.zeros + expected.totals.belowMin);
     await page.waitForSelector('#t5EmailBg', { state: 'detached', timeout: 5000 }).catch(function () {});
     check('daily email modal closes after sending', await page.locator('#t5EmailBg').count(), 0);
-    await page.click('#t5EmailOpen');
+    await page.click('#t5PanelNotify');
     check('daily email recipients are remembered', await page.inputValue('#t5EmailTo'), 'management@example.com');
+    check('sign-off is remembered', await page.inputValue('#t5EmailSign'), 'Test Sender\nHSE Advisor');
     await page.click('#t5EmailClose');
     await page.evaluate(function () { window.__ajax = window.__ajax.filter(function (a) { return a.url !== '/Take5/Notify'; }); });
 
@@ -312,6 +316,16 @@ function assert(desc, cond, detail) {
     var firstStats = await page.locator('#t5StatsPanel table').first().locator('tbody tr').first().textContent();
     assert('stats rows carry target status', /On target|Close|Below target/.test(firstStats), firstStats);
 
+    // Exclude crews: the list stays open while several crews are ticked.
+    await page.click('.t5-crewdd > summary');
+    await page.locator('.t5-crew-ex').nth(0).check();
+    await page.locator('.t5-crew-ex').nth(1).check();
+    assert('crew filter stays open across selections', await page.evaluate(function () { return document.querySelector('.t5-crewdd').open; }));
+    check('crew filter kept both selections', await page.locator('.t5-crew-ex:checked').count(), 2);
+    await page.click('#t5CrewExClear');
+    check('crew filter clears', await page.locator('.t5-crew-ex:checked').count(), 0);
+    await page.mouse.click(5, 5);
+    assert('crew filter closes on an outside click', !(await page.evaluate(function () { return document.querySelector('.t5-crewdd').open; })));
     // Notify supervisors: body built from the filtered list.
     await page.click('#t5NotifyOpen');
     var body = await page.inputValue('#t5NotifyBody');

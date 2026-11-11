@@ -24,6 +24,9 @@
     "sentence": "The {zeroCount} people who didn't do take 5s are {zeroNames}",
     "noZerosSentence": "All crew members completed Take 5s",
     "tableRows": ["Crew Size", "Take 5s", "Ratio", "Crew members Completing Zero"],
-    "dateFormat": "d/M/yy"
+    "dateFormat": "d/M/yy",
+    "greeting": "Morning Team,",
+    "intro": "Please see below the Take 5's stats for {weekday} {date}:",
+    "signOff": "Regards,"
   }
 }

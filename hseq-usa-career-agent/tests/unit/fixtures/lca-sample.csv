@@ -1,0 +1,7 @@
+CASE_NUMBER,CASE_STATUS,VISA_CLASS,JOB_TITLE,SOC_CODE,SOC_TITLE,EMPLOYER_NAME,EMPLOYER_FEIN,WORKSITE_STATE,WAGE_RATE_OF_PAY_FROM,WAGE_UNIT_OF_PAY
+I-200-1,Certified,H-1B,EHS Manager,19-5011.00,Occupational Health and Safety Specialists,Example Mining Inc.,12-3456789,NV,"$120,000.00",Year
+I-200-2,Certified,E-3 Australian,Safety Engineer,17-2111.00,Health and Safety Engineers,Example Mining Inc.,123456789,AZ,"$61.00",Hour
+I-200-3,Withdrawn,H-1B,EHS Manager,19-5011.00,Occupational Health and Safety Specialists,Example Mining Inc.,12-3456789,NV,"$120,000.00",Year
+I-200-4,Certified,H-1B,Software Engineer,15-1252.00,Software Developers,Example Mining Inc.,12-3456789,NV,"$150,000.00",Year
+I-200-5,Certified,H-1B,Safety Specialist,19-5011.00,Occupational Health and Safety Specialists,Other Builders LLC,,TX,"$95,000.00",Year
+I-200-6,Certified,H-2B,Laborer,19-5011.00,Occupational Health and Safety Specialists,Other Builders LLC,,TX,"$40,000.00",Year

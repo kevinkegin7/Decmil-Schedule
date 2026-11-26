@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import {
-  Award, Briefcase, Gauge, Menu, Settings, ShieldCheck, SlidersHorizontal, UserRound, Wrench,
+  Award, Briefcase, Building2, Database, Gauge, Menu, Scale, Search, Settings, ShieldCheck, SlidersHorizontal, UserRound, Wrench,
 } from "lucide-react";
 import { Dialog, DialogTrigger, SheetContent } from "@/components/ui/dialog";
 import { Dialog as DialogPrimitive } from "radix-ui";
@@ -17,6 +17,10 @@ export const NAV_ITEMS = [
   { href: "/dashboard/qualifications", label: "Qualifications", icon: Award },
   { href: "/dashboard/skills", label: "Skills & Competencies", icon: Wrench },
   { href: "/dashboard/preferences", label: "Recruitment Preferences", icon: SlidersHorizontal },
+  { href: "/dashboard/employers", label: "Employers", icon: Building2 },
+  { href: "/dashboard/jobs", label: "Jobs", icon: Search },
+  { href: "/dashboard/immigration", label: "Immigration Pathways", icon: Scale },
+  { href: "/dashboard/sources", label: "Data Sources", icon: Database },
   { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ] as const;
 
@@ -34,12 +38,24 @@ function Brand() {
   );
 }
 
+/** usePathname() is request data on dynamic routes, so it must sit inside <Suspense>. */
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
-  const pathname = usePathname();
+  return (
+    <Suspense fallback={<NavList pathname={null} onNavigate={onNavigate} />}>
+      <ActiveNavLinks onNavigate={onNavigate} />
+    </Suspense>
+  );
+}
+
+function ActiveNavLinks({ onNavigate }: { onNavigate?: () => void }) {
+  return <NavList pathname={usePathname()} onNavigate={onNavigate} />;
+}
+
+function NavList({ pathname, onNavigate }: { pathname: string | null; onNavigate?: () => void }) {
   return (
     <nav aria-label="Main" className="flex flex-col gap-0.5 px-2">
       {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
-        const active = href === "/dashboard" ? pathname === href : pathname.startsWith(href);
+        const active = pathname !== null && (href === "/dashboard" ? pathname === href : pathname.startsWith(href));
         return (
           <Link
             key={href}
@@ -65,7 +81,7 @@ export function SidebarNav() {
     <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground lg:flex">
       <Brand />
       <NavLinks />
-      <p className="mt-auto px-4 py-4 text-xs text-sidebar-muted">Milestone 1 · Profile foundation</p>
+      <p className="mt-auto px-4 py-4 text-xs text-sidebar-muted">Milestone 2 · Employer & job intelligence</p>
     </aside>
   );
 }

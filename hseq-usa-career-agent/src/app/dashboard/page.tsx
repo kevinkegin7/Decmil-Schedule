@@ -12,6 +12,8 @@ import { industryLabel, qualificationTypeLabel } from "@/lib/config/reference-da
 import { PageHeader, PageSkeleton } from "@/components/dashboard/page-header";
 import { CompletionRing } from "@/components/dashboard/completion-ring";
 import { StarterProfileBanner } from "@/components/dashboard/starter-profile-banner";
+import { JobIntelSummary } from "@/components/dashboard/job-intel-summary";
+import { Skeleton } from "@/components/ui/card";
 import { VerificationBadge } from "@/components/qualifications/verification-badge";
 import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/primitives";
@@ -124,6 +126,10 @@ async function Overview() {
           sub={readiness.detail}
         />
       </section>
+
+      <Suspense fallback={<Skeleton className="h-40 w-full rounded-xl" />}>
+        <JobIntelSummary />
+      </Suspense>
 
       {missing.length > 0 && (
         <Card>

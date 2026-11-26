@@ -99,6 +99,8 @@ export async function setProfileStatus(db: Db, userId: string, status: ProfileSt
 export async function loadStarterProfile(db: Db): Promise<{ employment_added: number; qualifications_added: number }> {
   const { data, error } = await db.rpc("load_starter_profile");
   if (error) throw toServiceError(error, "Could not load the starter profile.");
+  const { error: immigrationError } = await db.rpc("load_starter_immigration_profile");
+  if (immigrationError) throw toServiceError(immigrationError, "Could not load the starter immigration profile.");
   if (!data || typeof data !== "object" || Array.isArray(data)) throw new ServiceError("Unexpected response.");
   const d = data as Record<string, unknown>;
   return { employment_added: Number(d.employment_added ?? 0), qualifications_added: Number(d.qualifications_added ?? 0) };

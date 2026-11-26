@@ -8,9 +8,9 @@ without explicit approval.**
 | # | Milestone | Scope | Status |
 |---|---|---|---|
 | 0 | Architecture & target design | Six-agent design, safeguards, target schema (`docs/design/`) | ✅ Done |
-| 1 | Foundation, career profile, dashboard | Auth, profile, employment, qualifications + private evidence, skills, preferences, dashboard, RLS, audit log, tests | ✅ Built — awaiting owner acceptance |
-| 2 | Employer intelligence & job opportunities *(proposed)* | Employer database, public ATS job feeds (Greenhouse/Lever/Ashby), fit scoring against the verified profile, job pages. No outreach. | Not started |
-| 3 | Sponsorship & immigration intelligence *(proposed)* | DOL LCA/PERM disclosure import, sponsorship evidence with honest labels, E-3 / H-1B / EB-2 / EB-2 NIW / EB-3 / L-1 assessments citing government sources, immigration tracker. Not legal advice. | Not started |
+| 1 | Foundation, career profile, dashboard | Auth, profile, employment, qualifications + private evidence, skills, preferences, dashboard, RLS, audit log, tests | ✅ Built |
+| 2 | Employer & job intelligence | Employer database, public ATS job discovery, salary screening, sponsorship evidence (4 classes), pathway assessment incl. E-3 currently ineligible, explainable matching, search/filter/sort, saves, audit, sample data | ✅ Built — awaiting owner acceptance |
+| 3 | *(to be agreed)* | Candidates: USCIS H-1B hub and PERM importers, scheduled refresh, Claude-assisted posting analysis (labelled, optional), immigration case tracker. Not started until Milestone 2 is accepted. | Not started |
 | 4 | Outlook / Microsoft 365 integration | MFA first. Microsoft Graph OAuth with read scopes; inbox classification; reply drafts; approval workflow with content-hash binding; then, **only after owner approval**, Mail.Send with rate limits, suppression list and emergency pause enforcement | Not started |
 | 5 | Applications, interviews, offers *(proposed)* | Application tracker, interview scheduling, offer comparison, binding-action confirmations | Not started |
 | 6 | Agents & hardening *(proposed)* | Claude-powered agents on the above, activity page, nightly audit verification, security review, go-live | Not started |
@@ -38,3 +38,18 @@ without explicit approval.**
 2. Create the hosted Supabase project and push migrations (README §3).
 3. Confirm the proposed Milestone 2 scope.
 4. Open decisions carried from Milestone 0: add the E-3 pathway (ADR-008); move this project to its own private repository (ADR-001).
+
+## Milestone 2 acceptance checklist
+
+| Requirement | Evidence |
+|---|---|
+| Updated architecture and migrations | `docs/ARCHITECTURE.md` (M2 section), migration `20261126000200_…` |
+| Employer and job data models | `docs/DATABASE.md` (M2 tables), `src/types/database.types.ts` |
+| Source and evidence tracking | `sponsorship_evidence`, job source fields, `data_sources`, `ref_authoritative_sources`; `docs/DATA-SOURCES.md` |
+| Matching and ranking methodology | `docs/MATCHING.md`; job page breakdown |
+| Unit, integration, E2E tests | 87 new unit (153 total), 18 new integration (46 total), 4 new E2E (9 total), all passing |
+| Security and RLS testing | Integration RLS suite for all 9 new tables + mutation check; `check:secrets` |
+| Dashboard with sample data clearly identified | Employers, Jobs, Immigration, Data Sources pages; SAMPLE badges; E2E asserts the label on every sample card |
+| Data sourced / refreshed / verified docs | `docs/DATA-SOURCES.md` |
+| E-3 classified `currently_ineligible — Australian citizenship required` | Unit, integration and E2E tests |
+| Repository migration plan | `docs/REPO-MIGRATION.md`, `scripts/export-to-private-repo.sh` (dry run passed) |

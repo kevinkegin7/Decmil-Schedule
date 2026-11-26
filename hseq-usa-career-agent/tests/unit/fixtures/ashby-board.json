@@ -1,0 +1,4 @@
+{"jobs":[
+ {"id":"9f8e","title":"HSEQ Manager","department":"Operations","employmentType":"FullTime","publishedAt":"2026-09-15T00:00:00Z","jobUrl":"https://jobs.ashbyhq.com/exampleco/9f8e","isRemote":false,"address":{"postalAddress":{"addressLocality":"Denver","addressRegion":"Colorado","addressCountry":"United States"}},"descriptionPlain":"HSEQ Manager for renewable projects. NEBOSH or CSP. 8+ years experience.","compensation":{"summaryComponents":[{"compensationType":"Salary","interval":"1 YEAR","currencyCode":"USD","minValue":120000,"maxValue":150000}]}},
+ {"id":"7a6b","title":"Health and Safety Technician","department":"Field","employmentType":"FullTime","publishedAt":"2026-09-16T00:00:00Z","jobUrl":"https://jobs.ashbyhq.com/exampleco/7a6b","isRemote":true,"location":"Remote","address":{"postalAddress":{"addressCountry":"United States"}},"descriptionPlain":"Field technician. $30 - $36 per hour."}
+]}

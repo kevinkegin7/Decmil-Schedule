@@ -18,4 +18,11 @@ test("dashboard works on a phone: sign in, navigate by menu, no horizontal scrol
   await expect(page.getByLabel("Minimum (USD)")).toBeVisible();
   const prefsOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   expect(prefsOverflow).toBeLessThanOrEqual(0);
+
+  for (const path of ["/dashboard/employers", "/dashboard/jobs", "/dashboard/immigration", "/dashboard/sources"]) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    const o = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    expect(o, path).toBeLessThanOrEqual(0);
+  }
 });

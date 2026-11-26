@@ -111,3 +111,32 @@ It creates `owner@hseq.local` and calls `load_starter_profile()` as that user.
 Add a new timestamped file in `supabase/migrations/`, then run `npm run db:reset`
 locally, `npm run db:types`, and the test suites. Production changes go through
 `supabase db push` only.
+
+---
+
+# Milestone 2 tables
+
+Migration: `supabase/migrations/20261126000200_milestone2_employer_job_intelligence.sql`.
+Every user table has RLS (select/insert/update/delete on `user_id = auth.uid()`)
+and the audit trigger. A `fn_assert_same_owner` trigger also stops anyone
+attaching jobs, evidence, saves or rankings to an employer or job they don't own.
+
+| Table | Purpose | Key rules |
+|---|---|---|
+| `data_sources` (shared, read-only) | Registry of permitted sources and how each may be used | Seeded by migration; users have SELECT only |
+| `ref_authoritative_sources` (shared, read-only) | Official USCIS / DOL / DOS pages cited by assessments | `last_verified_at` is NULL until `verify:sources` gets HTTP 200 |
+| `employers` | Employer profile, official careers URL, ATS board, FEIN | Names normalised by trigger (unique per user); state codes checked; `is_sample` |
+| `job_opportunities` | Discovered postings | `source` + `source_url` + `retrieved_at` required; salary source and confidence; min ≤ max; unique per (user, source, external id); `status` open/closed |
+| `sponsorship_evidence` | Every sponsorship claim with source, dates, confidence | `category` is GENERATED from `evidence_type`; URL required except written confirmation; written confirmation must be user-verified; history needs a fiscal year |
+| `saved_employers`, `saved_jobs` | Your shortlists | Unique per user and item |
+| `immigration_profiles` | Citizenship(s), country of birth, Australian status, degree, post-degree years, employer US affiliate | AU citizenship and "citizen" status must agree |
+| `pathway_assessments` | Latest result per pathway | Must cite at least one source code; algorithm version and inputs hash |
+| `job_matches` | Latest ranking per job, with components and flags | Score 0–100; band; algorithm version; inputs hash; `run_id` |
+| `agent_runs` | Each research / ranking / assessment run | Status, trigger (user/script), input and output summaries, error |
+
+`fn_audit_redact` now also hashes `description_text`, `description`, `excerpt`
+and `notes` in the audit log.
+
+`load_starter_immigration_profile()` records the owner's stated citizenship
+(non-Australian), bachelor's degree and field. It does **not** assume country of
+birth, Australian residence status or experience years.

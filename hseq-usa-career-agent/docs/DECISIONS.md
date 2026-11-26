@@ -72,7 +72,7 @@ ID is per-agent config, so a cheaper model can be tried on a route (for example
 inbound classification) once an evaluation set exists and shows quality holds.
 
 ## ADR-008 — Add the E-3 visa to the pathways
-**Status:** proposed for user confirmation · 2026-11-26
+**Status:** accepted with classification — see ADR-018 · 2026-11-26
 
 The brief lists EB-2, EB-2 NIW, EB-3, H-1B and L-1. The **E-3** is a
 specialty-occupation visa available only to Australian citizens. It has its own
@@ -167,3 +167,49 @@ used later where the registry is reachable.
 Integration and E2E tests use the Supabase CLI's Docker stack, not mocks, so
 RLS, storage policies, triggers and Auth are exercised for real. Test helpers
 refuse to run against a non-local URL, because they create and delete users.
+
+---
+
+## ADR-018 — E-3 tracked as currently ineligible
+**Status:** accepted · Milestone 2 (owner decision)
+
+The owner holds a non-Australian passport. E-3 requires Australian citizenship,
+and an Australian 485 visa or permanent residency does not qualify. E-3 is
+tracked and classified `currently_ineligible — Australian citizenship
+required`, to be reconsidered if citizenship is acquired. The rule reads the
+recorded citizenships, so it updates automatically if that changes. The owner's
+citizenship is stored in `immigration_profiles` (private, RLS) and loaded by
+`load_starter_immigration_profile()`. Country of birth, which decides
+green-card chargeability, is not assumed.
+
+## ADR-019 — Deterministic "agents" in Milestone 2; no LLM yet
+**Status:** accepted · Milestone 2
+
+Ranking, sponsorship classification and pathway assessment are rule-based and
+recorded as `agent_runs`. Every output is reproducible, explainable line by
+line, and testable, which matters for decisions about visas and pay. A
+Claude-assisted step (for example reading unusual posting wording) can be added
+later as a separate, labelled input, never as a silent override.
+
+## ADR-020 — Job sources: public job-board APIs only; careers pages link-only
+**Status:** accepted · Milestone 2
+
+Greenhouse, Lever and Ashby publish read-only APIs intended for showing an
+employer's jobs. Those are used; arbitrary careers pages are not scraped. Workday
+and similar systems without a public API are handled by linking to the
+official page and recording statements manually.
+
+## ADR-021 — Personal-scale data: filter in TypeScript
+**Status:** accepted · Milestone 2
+
+Lists load once per table and are filtered, sorted and classified in tested
+TypeScript, which keeps classification logic in one place. Move filtering into
+SQL views if volumes exceed a few thousand rows.
+
+## ADR-022 — Repository separation prepared, not executed
+**Status:** accepted · Milestone 2 (execution awaits owner approval)
+
+`scripts/export-to-private-repo.sh` extracts the project with history into a
+standalone repo, refusing to continue if any Decmil Take 5 file or secret is
+found. PR #4 and its branch stay until the new repository is verified. See
+`docs/REPO-MIGRATION.md`.

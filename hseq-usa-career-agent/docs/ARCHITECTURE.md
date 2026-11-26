@@ -71,3 +71,42 @@ their own folder. Everything else goes through Server Actions.
 Agents, the Claude API, employer discovery, job feeds, Outlook/Microsoft Graph,
 outbound email and immigration tracking. The `user_controls.external_comms_enabled`
 column has a CHECK constraint that keeps it `false` in Milestone 1.
+
+---
+
+# Milestone 2 — Employer and job intelligence
+
+Research, analysis and ranking only. **No outward action exists:** no email,
+no contact, no application submission, no immigration representation, no
+offer handling. `user_controls.external_comms_enabled` stays locked by a
+database CHECK.
+
+```
+ Public job-board APIs ──GET──▶ lib/ingestion/ats.ts ──▶ normalize.ts (HSEQ + US filter,
+ (Greenhouse/Lever/Ashby)        (one read-only request)   salary, sponsorship/citizenship signals)
+                                                                     │
+ DOL OFLC disclosure CSV ─▶ scripts/import-dol-lca.mts ─▶ lib/ingestion/dol-lca.ts (historical evidence)
+                                                                     ▼
+                         Postgres: employers · job_opportunities · sponsorship_evidence (RLS, audited)
+                                                                     │
+                lib/sponsorship/classify.ts  (4 separate classifications, conflict + staleness flags)
+                lib/matching/match.ts        (6-component explainable score → job_matches)
+                lib/immigration/pathways.ts  (eligibility / requirements / uncertainty → pathway_assessments)
+                                                                     ▼
+                Pages: Employers · Employer profile · Jobs · Job detail · Immigration · Data sources
+```
+
+| Layer | Milestone 2 additions |
+|---|---|
+| Pure domain logic (`src/lib/**`) | `jobs/` (title filter, salary, text signals), `ingestion/` (ATS adapters, DOL importer, location, names), `sponsorship/classify.ts`, `matching/match.ts`, `immigration/pathways.ts`, `intel/views.ts` (search/filter/sort), `sample/sample-dataset.ts`. All unit-tested with recorded fixtures. |
+| Services | `intel.service.ts` (views, ranking agent, evidence, saves), `ingestion.service.ts` (ATS refresh, sample data), `immigration.service.ts` (profile, assessment agent, references, agent runs) |
+| Actions | `src/app/dashboard/intel-actions.ts`, via the same `runAction()` (auth, Zod, refresh) |
+| "Agents" | Deterministic, auditable runs recorded in `agent_runs`: `employer_intelligence` (ATS refresh, DOL import), `job_matching`, `immigration_intelligence`. No LLM in Milestone 2 (see ADR-019). |
+| Scripts | `import:lca` (DOL disclosure import), `verify:sources` (records verification dates only on HTTP 200) |
+
+Search and filter state lives in the URL (plain GET forms), so result pages can
+be bookmarked and work without JavaScript. Filtering happens in TypeScript
+after one query per table, which suits personal-scale data (hundreds to a few
+thousand rows); revisit with SQL-side filtering if volumes grow.
+
+Details: [DATA-SOURCES.md](DATA-SOURCES.md) · [MATCHING.md](MATCHING.md) · [IMMIGRATION.md](IMMIGRATION.md).

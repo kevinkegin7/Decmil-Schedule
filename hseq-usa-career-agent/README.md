@@ -4,12 +4,20 @@ Private recruitment workspace for an Australian HSEQ professional targeting
 Senior HSEQ Advisor, HSEQ Manager, EHS Manager and Safety Manager roles across
 the United States.
 
-**Milestone 1 — foundation, career profile and dashboard.** Secure sign-in, an
-editable career profile, employment history, qualifications with private
-evidence documents, skills, recruitment preferences, a dashboard, Row Level
-Security and an append-only audit log.
-**No employer outreach, job scraping, email sending or immigration case work exists yet.**
-External communications are locked off in the database.
+**Milestone 1 — foundation:** secure sign-in, editable career profile, employment
+history, qualifications with private evidence documents, skills, recruitment
+preferences, dashboard, Row Level Security, append-only audit log.
+
+**Milestone 2 — employer and job intelligence:** employer database with official
+careers links, HSEQ job discovery from public job-board APIs, salary screening
+(USD 120–150k base), sponsorship evidence in four separate classifications with
+sources and dates, immigration pathway assessment (E-3 currently ineligible),
+explainable job ranking, search, filters, saved items, and clearly labelled
+sample data.
+
+**Research only.** Nothing sends email, contacts employers or recruiters, submits
+applications, makes immigration representations or accepts offers. External
+communications are locked off in the database.
 
 | | |
 |---|---|
@@ -19,7 +27,9 @@ External communications are locked off in the database.
 | Tests | Vitest (unit, integration against a real local Supabase), Playwright (E2E, desktop and mobile) |
 
 Docs: [Architecture](docs/ARCHITECTURE.md) · [Database](docs/DATABASE.md) ·
-[Security](docs/SECURITY.md) · [Decisions](docs/DECISIONS.md) · [Roadmap](docs/ROADMAP.md)
+[Security](docs/SECURITY.md) · [Data sources](docs/DATA-SOURCES.md) · [Matching](docs/MATCHING.md) ·
+[Immigration](docs/IMMIGRATION.md) · [Decisions](docs/DECISIONS.md) · [Roadmap](docs/ROADMAP.md) ·
+[Repository migration](docs/REPO-MIGRATION.md)
 
 ---
 
@@ -106,14 +116,26 @@ npm run test:all           # lint, typecheck, all of the above
 E2E needs a Chromium build: run `npx playwright install chromium` once, or set
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an existing Chromium binary.
 
-## 6. Deploying to Vercel (preparation)
+## 6. Employer and job data
+
+- **Try it:** Employers → **Load sample data** (fictional, labelled SAMPLE, removable).
+- **Real employers:** Employers → **Add employer** with the official careers page
+  and, if the employer uses Greenhouse, Lever or Ashby, the board name. Then
+  **Refresh jobs** on its page.
+- **Sponsorship history:** download a DOL OFLC LCA disclosure file, save as CSV, then
+  `npm run import:lca -- --file <csv> --fiscal-year 2025 --user you@example.com`
+- **Verify official references:** `npm run verify:sources` (needs normal internet access).
+
+See [docs/DATA-SOURCES.md](docs/DATA-SOURCES.md).
+
+## 7. Deploying to Vercel (preparation)
 
 - Root directory: `hseq-usa-career-agent`
 - Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
   The service-role key is **not** required by the app in Milestone 1; do not add it.
 - Add the Vercel URL to Supabase Auth's Site URL and redirect URLs.
 
-## 7. Project layout
+## 8. Project layout
 
 ```
 src/

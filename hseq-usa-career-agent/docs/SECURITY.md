@@ -48,3 +48,19 @@
 
 Single-user private system. If a credential is exposed, rotate it in the
 Supabase dashboard (API keys, JWT secret) and review the audit log.
+
+---
+
+# Milestone 2 controls
+
+| Requirement | How it is met | Proven by |
+|---|---|---|
+| No external actions | No code path sends email, contacts anyone, submits applications or makes representations. The only outbound requests are read-only GETs to public job-board APIs. The UI has no such buttons; external links open the employer's own pages. `external_comms_enabled` still locked. | E2E `expectNoExternalActions` on employer and job pages; integration "external communications remain locked" |
+| Only permitted sources | Public, documented APIs and official government files; careers pages are link-only; descriptive User-Agent; 15 s timeout; one request per refresh | Unit tests on adapters (exact URLs, single GET); `docs/DATA-SOURCES.md` |
+| RLS on all new tables | Owner policies; shared reference tables read-only; anonymous gets nothing | Integration "RLS on Milestone 2 tables"; mutation check (RLS off on `employers` → tests fail) |
+| No cross-user linking | `fn_assert_same_owner` trigger | Integration: Bob cannot attach evidence or saves to Alice's employer |
+| Honest sponsorship labels | Generated `category`; historical never "confirmed"; conflicts and staleness flagged | Unit + integration tests |
+| Sample data identifiable | `is_sample`, `Sample —` names, example.com URLs, `sample` source, badge everywhere, one-click removal | Unit, integration and E2E tests |
+| Agent recommendations audited | `job_matches`, `pathway_assessments`, `agent_runs` audited; `app.agent.*` events | Integration "audit of agent recommendations" (chain verifies) |
+| Untrusted external text | Posting HTML is converted to text (scripts and tags stripped) and rendered as text, never as HTML. Links use `rel="noopener noreferrer"`. | Unit `htmlToText` test |
+| Service-role key | Used only by CLI scripts (`import:lca`, `verify:sources`, `user:create`), never by `src/` | `check:secrets` |

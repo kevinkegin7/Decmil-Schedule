@@ -23,7 +23,21 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "audit_logs": {
+            "agent_runs": {
+                  Row: {
+                    "agent": string,"error": string | null,"finished_at": string | null,"id": string,"input_summary": NonNullable<Json>,"output_summary": NonNullable<Json>,"run_type": string,"started_at": string,"status": string,"triggered_by": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "agent": string,"error"?: string | null,"finished_at"?: string | null,"id"?: string,"input_summary"?: NonNullable<Json>,"output_summary"?: NonNullable<Json>,"run_type": string,"started_at"?: string,"status"?: string,"triggered_by": string,"user_id": string
+                  }
+                  Update: {
+                    "agent"?: string,"error"?: string | null,"finished_at"?: string | null,"id"?: string,"input_summary"?: NonNullable<Json>,"output_summary"?: NonNullable<Json>,"run_type"?: string,"started_at"?: string,"status"?: string,"triggered_by"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"audit_logs": {
                   Row: {
                     "action": string,"created_at": string,"details": NonNullable<Json>,"entity_id": string | null,"entity_type": string,"hash": string,"id": string,"prev_hash": string,"seq": number,"user_id": string | null
                   }
@@ -65,6 +79,34 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"data_sources": {
+                  Row: {
+                    "access_method": string,"base_url": string | null,"category": string,"code": string,"documentation_url": string | null,"name": string,"permitted_use_note": string,"refresh_cadence": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "access_method": string,"base_url"?: string | null,"category": string,"code": string,"documentation_url"?: string | null,"name": string,"permitted_use_note": string,"refresh_cadence": string
+                  }
+                  Update: {
+                    "access_method"?: string,"base_url"?: string | null,"category"?: string,"code"?: string,"documentation_url"?: string | null,"name"?: string,"permitted_use_note"?: string,"refresh_cadence"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"employers": {
+                  Row: {
+                    "ats_board_token": string | null,"ats_provider": string | null,"careers_url": string | null,"careers_url_source": string | null,"careers_url_verified_at": string | null,"created_at": string,"description": string | null,"fein": string | null,"hq_city": string | null,"hq_state": string | null,"id": string,"industries": (string)[],"is_sample": boolean,"last_refreshed_at": string | null,"name": string,"normalized_name": string,"operating_states": (string)[],"size_band": string | null,"updated_at": string,"user_id": string,"website_url": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "ats_board_token"?: string | null,"ats_provider"?: string | null,"careers_url"?: string | null,"careers_url_source"?: string | null,"careers_url_verified_at"?: string | null,"created_at"?: string,"description"?: string | null,"fein"?: string | null,"hq_city"?: string | null,"hq_state"?: string | null,"id"?: string,"industries"?: (string)[],"is_sample"?: boolean,"last_refreshed_at"?: string | null,"name": string,"normalized_name": string,"operating_states"?: (string)[],"size_band"?: string | null,"updated_at"?: string,"user_id": string,"website_url"?: string | null
+                  }
+                  Update: {
+                    "ats_board_token"?: string | null,"ats_provider"?: string | null,"careers_url"?: string | null,"careers_url_source"?: string | null,"careers_url_verified_at"?: string | null,"created_at"?: string,"description"?: string | null,"fein"?: string | null,"hq_city"?: string | null,"hq_state"?: string | null,"id"?: string,"industries"?: (string)[],"is_sample"?: boolean,"last_refreshed_at"?: string | null,"name"?: string,"normalized_name"?: string,"operating_states"?: (string)[],"size_band"?: string | null,"updated_at"?: string,"user_id"?: string,"website_url"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
                 },"employment_history": {
                   Row: {
                     "achievements": string | null,"country": string | null,"created_at": string,"employer_name": string,"end_date": string | null,"id": string,"industry": string | null,"is_current": boolean,"job_title": string,"location": string | null,"needs_review": boolean,"project_name": string | null,"responsibilities": string | null,"start_date": string | null,"updated_at": string,"user_id": string
@@ -75,6 +117,86 @@ export type Database = {
                   }
                   Update: {
                     "achievements"?: string | null,"country"?: string | null,"created_at"?: string,"employer_name"?: string,"end_date"?: string | null,"id"?: string,"industry"?: string | null,"is_current"?: boolean,"job_title"?: string,"location"?: string | null,"needs_review"?: boolean,"project_name"?: string | null,"responsibilities"?: string | null,"start_date"?: string | null,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"immigration_profiles": {
+                  Row: {
+                    "australian_residence_status": string,"citizenships": (string)[],"country_of_birth": string | null,"current_employer_has_us_affiliate": string,"degree_field": string | null,"highest_degree": string,"notes": string | null,"post_degree_experience_years": number | null,"updated_at": string,"us_degree_equivalency_evaluated": boolean,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "australian_residence_status"?: string,"citizenships"?: (string)[],"country_of_birth"?: string | null,"current_employer_has_us_affiliate"?: string,"degree_field"?: string | null,"highest_degree"?: string,"notes"?: string | null,"post_degree_experience_years"?: number | null,"updated_at"?: string,"us_degree_equivalency_evaluated"?: boolean,"user_id": string
+                  }
+                  Update: {
+                    "australian_residence_status"?: string,"citizenships"?: (string)[],"country_of_birth"?: string | null,"current_employer_has_us_affiliate"?: string,"degree_field"?: string | null,"highest_degree"?: string,"notes"?: string | null,"post_degree_experience_years"?: number | null,"updated_at"?: string,"us_degree_equivalency_evaluated"?: boolean,"user_id"?: string
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"job_matches": {
+                  Row: {
+                    "algorithm_version": string,"band": string,"components": NonNullable<Json>,"computed_at": string,"flags": (string)[],"id": string,"inputs_hash": string,"job_id": string,"run_id": string | null,"score": number,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "algorithm_version": string,"band": string,"components": NonNullable<Json>,"computed_at"?: string,"flags"?: (string)[],"id"?: string,"inputs_hash": string,"job_id": string,"run_id"?: string | null,"score": number,"user_id": string
+                  }
+                  Update: {
+                    "algorithm_version"?: string,"band"?: string,"components"?: NonNullable<Json>,"computed_at"?: string,"flags"?: (string)[],"id"?: string,"inputs_hash"?: string,"job_id"?: string,"run_id"?: string | null,"score"?: number,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "job_matches_job_id_fkey"
+      columns: ["job_id"]
+isOneToOne: false
+      referencedRelation: "job_opportunities"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "job_matches_run_id_fkey"
+      columns: ["run_id"]
+isOneToOne: false
+      referencedRelation: "agent_runs"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"job_opportunities": {
+                  Row: {
+                    "city": string | null,"created_at": string,"department": string | null,"description_text": string | null,"employer_id": string,"employment_type": string | null,"external_id": string,"first_seen_at": string,"id": string,"is_remote": boolean,"is_sample": boolean,"last_seen_at": string,"location_text": string | null,"posted_at": string | null,"requires_security_clearance": boolean,"requires_us_citizenship": boolean,"retrieved_at": string,"salary_confidence": string,"salary_currency": string,"salary_max": number | null,"salary_min": number | null,"salary_period": string | null,"salary_source": string,"source": string,"source_url": string,"sponsorship_excerpt": string | null,"sponsorship_statement": string,"state": string | null,"status": string,"title": string,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "city"?: string | null,"created_at"?: string,"department"?: string | null,"description_text"?: string | null,"employer_id": string,"employment_type"?: string | null,"external_id": string,"first_seen_at"?: string,"id"?: string,"is_remote"?: boolean,"is_sample"?: boolean,"last_seen_at"?: string,"location_text"?: string | null,"posted_at"?: string | null,"requires_security_clearance"?: boolean,"requires_us_citizenship"?: boolean,"retrieved_at": string,"salary_confidence"?: string,"salary_currency"?: string,"salary_max"?: number | null,"salary_min"?: number | null,"salary_period"?: string | null,"salary_source"?: string,"source": string,"source_url": string,"sponsorship_excerpt"?: string | null,"sponsorship_statement"?: string,"state"?: string | null,"status"?: string,"title": string,"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "city"?: string | null,"created_at"?: string,"department"?: string | null,"description_text"?: string | null,"employer_id"?: string,"employment_type"?: string | null,"external_id"?: string,"first_seen_at"?: string,"id"?: string,"is_remote"?: boolean,"is_sample"?: boolean,"last_seen_at"?: string,"location_text"?: string | null,"posted_at"?: string | null,"requires_security_clearance"?: boolean,"requires_us_citizenship"?: boolean,"retrieved_at"?: string,"salary_confidence"?: string,"salary_currency"?: string,"salary_max"?: number | null,"salary_min"?: number | null,"salary_period"?: string | null,"salary_source"?: string,"source"?: string,"source_url"?: string,"sponsorship_excerpt"?: string | null,"sponsorship_statement"?: string,"state"?: string | null,"status"?: string,"title"?: string,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "job_opportunities_employer_id_fkey"
+      columns: ["employer_id"]
+isOneToOne: false
+      referencedRelation: "employers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "job_opportunities_source_fkey"
+      columns: ["source"]
+isOneToOne: false
+      referencedRelation: "data_sources"
+      referencedColumns: ["code"]
+    }
+                  ]
+                },"pathway_assessments": {
+                  Row: {
+                    "algorithm_version": string,"assessed_at": string,"attorney_review_recommended": boolean,"eligibility": string,"headline": string,"id": string,"inputs_hash": string,"pathway": string,"reason": string,"reconsider_when": string | null,"requirements": NonNullable<Json>,"run_id": string | null,"source_codes": (string)[],"uncertainty_flags": (string)[],"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "algorithm_version": string,"assessed_at"?: string,"attorney_review_recommended"?: boolean,"eligibility": string,"headline": string,"id"?: string,"inputs_hash": string,"pathway": string,"reason": string,"reconsider_when"?: string | null,"requirements"?: NonNullable<Json>,"run_id"?: string | null,"source_codes": (string)[],"uncertainty_flags"?: (string)[],"user_id": string
+                  }
+                  Update: {
+                    "algorithm_version"?: string,"assessed_at"?: string,"attorney_review_recommended"?: boolean,"eligibility"?: string,"headline"?: string,"id"?: string,"inputs_hash"?: string,"pathway"?: string,"reason"?: string,"reconsider_when"?: string | null,"requirements"?: NonNullable<Json>,"run_id"?: string | null,"source_codes"?: (string)[],"uncertainty_flags"?: (string)[],"user_id"?: string
                   }
                   Relationships: [
                     
@@ -107,6 +229,92 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"ref_authoritative_sources": {
+                  Row: {
+                    "authority": string,"code": string,"last_verified_at": string | null,"title": string,"topics": (string)[],"url": string,"verification_note": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "authority": string,"code": string,"last_verified_at"?: string | null,"title": string,"topics"?: (string)[],"url": string,"verification_note"?: string | null
+                  }
+                  Update: {
+                    "authority"?: string,"code"?: string,"last_verified_at"?: string | null,"title"?: string,"topics"?: (string)[],"url"?: string,"verification_note"?: string | null
+                  }
+                  Relationships: [
+                    
+                  ]
+                },"saved_employers": {
+                  Row: {
+                    "created_at": string,"employer_id": string,"id": string,"note": string | null,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"employer_id": string,"id"?: string,"note"?: string | null,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"employer_id"?: string,"id"?: string,"note"?: string | null,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "saved_employers_employer_id_fkey"
+      columns: ["employer_id"]
+isOneToOne: false
+      referencedRelation: "employers"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"saved_jobs": {
+                  Row: {
+                    "created_at": string,"id": string,"job_id": string,"note": string | null,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"job_id": string,"note"?: string | null,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"job_id"?: string,"note"?: string | null,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "saved_jobs_job_id_fkey"
+      columns: ["job_id"]
+isOneToOne: false
+      referencedRelation: "job_opportunities"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"sponsorship_evidence": {
+                  Row: {
+                    "category": string | null,"confidence": string,"created_at": string,"employer_id": string,"evidence_type": string,"excerpt": string | null,"filing_count": number | null,"fiscal_year": number | null,"id": string,"is_sample": boolean,"job_id": string | null,"notes": string | null,"retrieved_at": string,"soc_codes": (string)[],"source": string,"source_title": string | null,"source_url": string | null,"updated_at": string,"user_id": string,"verified_at": string | null,"verified_by": string | null,"visa_classes": (string)[]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "category"?: never,"confidence": string,"created_at"?: string,"employer_id": string,"evidence_type": string,"excerpt"?: string | null,"filing_count"?: number | null,"fiscal_year"?: number | null,"id"?: string,"is_sample"?: boolean,"job_id"?: string | null,"notes"?: string | null,"retrieved_at": string,"soc_codes"?: (string)[],"source": string,"source_title"?: string | null,"source_url"?: string | null,"updated_at"?: string,"user_id": string,"verified_at"?: string | null,"verified_by"?: string | null,"visa_classes"?: (string)[]
+                  }
+                  Update: {
+                    "category"?: never,"confidence"?: string,"created_at"?: string,"employer_id"?: string,"evidence_type"?: string,"excerpt"?: string | null,"filing_count"?: number | null,"fiscal_year"?: number | null,"id"?: string,"is_sample"?: boolean,"job_id"?: string | null,"notes"?: string | null,"retrieved_at"?: string,"soc_codes"?: (string)[],"source"?: string,"source_title"?: string | null,"source_url"?: string | null,"updated_at"?: string,"user_id"?: string,"verified_at"?: string | null,"verified_by"?: string | null,"visa_classes"?: (string)[]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "sponsorship_evidence_employer_id_fkey"
+      columns: ["employer_id"]
+isOneToOne: false
+      referencedRelation: "employers"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "sponsorship_evidence_job_id_fkey"
+      columns: ["job_id"]
+isOneToOne: false
+      referencedRelation: "job_opportunities"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "sponsorship_evidence_source_fkey"
+      columns: ["source"]
+isOneToOne: false
+      referencedRelation: "data_sources"
+      referencedColumns: ["code"]
+    }
+                  ]
                 },"user_controls": {
                   Row: {
                     "agents_paused": boolean,"external_comms_enabled": boolean,"outbound_paused": boolean,"pause_reason": string | null,"paused_at": string | null,"updated_at": string,"user_id": string
@@ -138,6 +346,9 @@ export type Database = {
                            },
 "industry_codes":
 { Args: Record<PropertyKey, never>; Returns: (string)[]
+                           },
+"load_starter_immigration_profile":
+{ Args: Record<PropertyKey, never>; Returns: undefined
                            },
 "load_starter_profile":
 { Args: Record<PropertyKey, never>; Returns: Json

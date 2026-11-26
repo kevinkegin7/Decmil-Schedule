@@ -37,5 +37,6 @@ begin
   perform set_config('request.jwt.claims',
     jsonb_build_object('sub', v_uid::text, 'email', v_email, 'role', 'authenticated')::text, true);
   perform public.load_starter_profile();
+  perform public.load_starter_immigration_profile();
   update public.profiles set full_name = 'Kevin' where id = v_uid and full_name is null;
 end $$;

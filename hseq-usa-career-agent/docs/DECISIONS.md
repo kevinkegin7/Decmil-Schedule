@@ -5,7 +5,7 @@ are marked, not deleted.
 
 ---
 
-## ADR-001 — Project lives in `hseq-career-agent/` inside this repository
+## ADR-001 — Project lives in `hseq-usa-career-agent/` inside this repository
 **Status:** accepted (provisional) · 2026-11-26
 
 This repository holds the unrelated Decmil Take 5 compliance tool. The session
@@ -37,7 +37,7 @@ route cannot bypass them; they fail closed. The cost is more complex SQL, which
 is covered by a dedicated SQL test suite.
 
 ## ADR-004 — Every outbound message needs approval in v1
-**Status:** accepted · 2026-11-26
+**Status:** amended by ADR-013 · 2026-11-26
 
 The brief requires approval for initial outreach. Replies and follow-ups can also
 carry commitments (salary, availability, sponsorship statements), and
@@ -99,3 +99,71 @@ long-lived store of personal data. Diffs are stored in full, except
 `body_text`, `description` and token ciphertext, which are replaced by SHA-256
 hashes. This still proves what was approved and sent (it matches the content
 hash) without duplicating the content.
+
+---
+
+## ADR-011 — Follow Next.js 16 conventions: `proxy.ts`, Cache Components
+**Status:** accepted · Milestone 1
+
+The brief's layout lists `src/middleware.ts`. Next.js 16 deprecates it in
+favour of `src/proxy.ts`, with identical behaviour, so the app uses `proxy.ts`.
+The scaffold enables Cache Components. Pages are therefore a static shell, with
+session-reading content behind `<Suspense>` (which also provides the loading
+states). `createClient()` calls `connection()`, so personal data is always
+rendered per request and never cached.
+
+## ADR-012 — MFA deferred to the email milestone
+**Status:** accepted · Milestone 1
+
+The Milestone 0 roadmap put TOTP MFA in Milestone 1. The Milestone 1 brief
+doesn't require it, and nothing outward-facing exists yet. Sign-in is email and
+password with sign-up disabled and a 12-character policy. MFA, plus `aal2` for
+approvals, becomes a precondition of enabling email (Milestone 4).
+
+## ADR-013 — Email autonomy: approval first, limited routine follow-ups later
+**Status:** accepted · Milestone 1 (amends ADR-004)
+
+The owner chose `approval_then_limited_followups`. Initial outreach always needs
+approval. A narrow class of routine follow-ups may later be sent automatically,
+within the database rate limits in the target design (at most 2–3 follow-ups,
+at least 3–5 days apart, stopped by any reply). This needs its own sign-off when
+email is enabled. The setting is stored and editable now; nothing acts on it in
+Milestone 1.
+
+## ADR-014 — Milestone 1 tables follow the brief; target schema kept as design
+**Status:** accepted · Milestone 1
+
+The Milestone 1 brief specifies exact table and field names (`profiles`,
+`career_profiles`, `audit_logs` with uuid ids, …). These supersede the
+equivalent Milestone 0 tables. The Milestone 0 schema (outreach, approvals, send
+gate) moves to `docs/design/` and will be added in later milestones as new
+migrations. Additions beyond the brief, each for a safeguard: `needs_review`
+flags, `verified_at`, audit `seq`/`prev_hash`/`hash`, `user_controls`,
+`salary_basis_note`.
+
+## ADR-015 — Starter profile from owner-supplied facts only
+**Status:** accepted · Milestone 1
+
+`load_starter_profile()` holds only what the owner stated (Decmil, HSE Advisor,
+Curtin Occupational Safety and Health degree, NEBOSH and ICAM credentials, the
+industries). Exact titles are marked "confirm exact title". There are no dates,
+numbers, memberships or achievements. Every record is flagged for review, every
+qualification is unverified, and the profile can't be marked complete until
+each is reviewed. The same function backs the local seed and the dashboard's
+"Load starter profile" button.
+
+## ADR-016 — shadcn/ui-style components written in-repo
+**Status:** accepted · Milestone 1
+
+The shadcn registry (`ui.shadcn.com`) was not reachable from the build
+environment. shadcn components are copied source by design, so the needed
+primitives were written in `src/components/ui` on the same packages (`radix-ui`,
+`class-variance-authority`, `tailwind-merge`). `npx shadcn add` can still be
+used later where the registry is reachable.
+
+## ADR-017 — Tests run against a real local Supabase stack
+**Status:** accepted · Milestone 1
+
+Integration and E2E tests use the Supabase CLI's Docker stack, not mocks, so
+RLS, storage policies, triggers and Auth are exercised for real. Test helpers
+refuse to run against a non-local URL, because they create and delete users.
